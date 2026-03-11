@@ -1,0 +1,9 @@
+package_name,path,description,repo_url,last_update
+pi-mono,.,Pi Mono monorepo for AI agents,https://github.com/badlogic/pi-mono,2026-03-11
+ai,packages/ai,Unified multi-provider LLM API,https://github.com/badlogic/pi-mono/tree/main/packages/ai,2026-03-11
+agent,packages/agent,Agent runtime with tool calling and state management,https://github.com/badlogic/pi-mono/tree/main/packages/agent,2026-03-11
+coding-agent,packages/coding-agent,Interactive coding agent CLI,https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent,2026-03-11
+mom,packages/mom,Slack bot delegating messages to coding agent,https://github.com/badlogic/pi-mono/tree/main/packages/mom,2026-03-11
+tui,packages/tui,Terminal UI library with differential rendering,https://github.com/badlogic/pi-mono/tree/main/packages/tui,2026-03-11
+web-ui,packages/web-ui,Web UI components for AI chat interfaces,https://github.com/badlogic/pi-mono/tree/main/packages/web-ui,2026-03-11
+pods,packages/pods,CLI for managing GPU pods running vLLM,https://github.com/badlogic/pi-mono/tree/main/packages/pods,2026-03-11
