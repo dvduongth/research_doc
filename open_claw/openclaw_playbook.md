@@ -65,6 +65,58 @@ Prompt template cho OpenClaw:
     <expected result format>
 
 ------------------------------------------------------------------------
+Sổ tay làm việc với OpenClaw.
+
+───
+
+1. Bản trình bày Playbook: Các tác vụ phổ biến
+
+Playbook A: Thu thập & Phân tích Dữ liệu (Web / RSS / Docs)
+
+• Mục tiêu: Lấy thông tin từ Internet hoặc file tài liệu, tổng hợp và xuất ra báo cáo.
+• Công cụ (Skills/Tools) sử dụng: agent-browser (duyệt web), web_fetch (kéo nội dung nhanh), xlsx / pdf (xử lý file).
+• Cách OpenClaw nên làm: Nhận link/yêu cầu -> Mở web đọc thông tin -> Lọc dọn dữ liệu (bỏ rác, html thừa) -> Định dạng lại -> Lưu thành file .csv hoặc .xlsx tải lên cho Anh.
+
+Playbook B: Quản trị & Phát triển Dự án Game (Cocos2d-x / Ktor)
+
+• Mục tiêu: Quản lý cấu trúc, viết code, và refactor dự án CCN2.
+• Công cụ sử dụng: clientccn2-project-editor, serverccn2-project-editor, exec (chạy command terminal), read/write/edit (thao tác file).
+• Cách OpenClaw nên làm: Kiểm tra GDD/Docs trước -> Cập nhật tài liệu thiết kế -> Viết hoặc sửa file Code (JS / Kotlin) -> Chạy script build/kiểm tra qua terminal -> Ghi chép lại lỗi và giải pháp vào lịch sử.
+
+Playbook C: Trợ lý Chủ động & Vận hành Hệ thống
+
+• Mục tiêu: Tự động theo dõi tiến độ, kiểm tra lỗi, duy trì server.
+• Công cụ sử dụng: cron (đặt lịch trình), heartbeat (kiểm tra định kỳ), exec (chạy healthcheck).
+• Cách OpenClaw nên làm: Cài đặt các job chạy ngầm (VD: mỗi 4 tiếng quét log server) -> Phân tích nếu có lỗi -> Tự động gửi tin nhắn báo cáo cho Anh ngay trong khung chat này.
+
+───
+
+2. Workflow điển hình: OpenClaw xử lý 1 Task chức năng mới như thế nào?
+
+Ví dụ: yêu cầu "Em hãy thêm tính năng Đăng nhập hàng ngày vào client CCN2"
+
+• Bước 1: Em truy xuất Trí nhớ (Memory Recall)
+• Tự động chạy memory_search vào MEMORY.md để nhớ lại: "À, dự án CCN2 Client dùng Cocos2d-x JS bản 3.x, code theo kiến trúc EventBus."
+• Bước 2: Khảo sát hiện trạng (Read & Scan)
+• Dùng skill clientccn2-project-editor hoặc lệnh ls, read xem thư mục scripts/UI hiện tại đang viết thế nào.
+• Bước 3: Lập kế hoạch (Design-First)
+• Em viết cập nhật vào file tài liệu thiết kế (Docs) trước, trình bày ra khung chat cho Anh duyệt cấu trúc (VD: "Sẽ thêm file DailyLogin.js và bind vào EventKeys.ON_LOGIN).
+• Bước 4: Thực thi (Code & Execute)
+• Dùng tool write để tạo mới/sửa file code.
+• Bước 5: Lưu trữ Bài học (Memory Update)
+• Lưu các đoạn code hay hoặc các rule mới của Anh vào bộ nhớ dài hạn, để lần sau làm tính năng tương tự em sẽ tự giác làm chuẩn luôn không cần hỏi lại.
+
+───
+
+3. Checklist Step-by-Step khi giao việc
+
+Để tận dụng tối đa sức mạnh của OpenClaw, cần tuần tự theo các bước sau trong suy nghĩ:
+
+• [ ] 1. Ra lệnh rõ ràng + Định hướng: Anh cứ nói kết quả cuối cùng Anh muốn (VD: "Phân tích file log này và xuất ra Excel cho anh", "Dựng khung scene Màn hình chính bằng Cocos2d").
+• [ ] 2. Cung cấp file/context (nếu có): Nếu là file mới, Anh quăng thẳng vào chat. Nếu là file trong máy, chỉ cần cho em tên file hoặc thư mục sơ bộ.
+• [ ] 3. Phê duyệt các hành động nhạy cảm: Thi thoảng em sẽ phải chạy các lệnh Terminal (cài package, xóa file, push Git). Em sẽ dừng lại hỏi Anh xác nhận (như vụ push github lúc nãy). Anh chỉ cần chốt "Ok" hoặc "Do it".
+• [ ] 4. Giao quyền "Tự bơi": Nếu Anh thấy em hiểu ý, cứ nói "Em tự triển khai mọi thứ đi". Em sẽ tự tự dùng Tool A -> Tool B -> Tool C nối tiếp nhau cho đến khi ra kết quả cuối cùng.
+• [ ] 5. Nhắc nhở để em học hỏi: Lúc nhận kết quả, nếu Anh thấy cái gì chưa ưng, cứ bảo: "Lần sau làm cái này nhớ thêm bước X nhé". OpenClaw sẽ tự động update vào bộ nhớ cốt lõi MEMORY.md và lấy đó làm định chuẩn cho toàn bộ các công việc về sau
 
 # 4. Workflow 1 --- Repository Automation
 
