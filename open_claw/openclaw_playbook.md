@@ -114,7 +114,7 @@ C --> D[Người dùng duyệt]
 **Ví dụ**: "Thêm tính năng Đăng nhập hàng ngày vào client CCN2"  
 
 1. **Ra lệnh rõ ràng**:  
-   - "Phân tích file log này và xuất ra Excel cho anh"  
+   - "Phân tích file log này và xuất ra Excel"  
    - "Dựng khung scene Màn hình chính bằng Cocos2d"  
 
 2. **Khảo sát hiện trạng**:  
@@ -123,7 +123,7 @@ C --> D[Người dùng duyệt]
 
 3. **Lập kế hoạch (Design-First)**:  
    - Viết cập nhật vào file tài liệu thiết kế trước  
-   - Trình bày khung chat cho Anh duyệt:  
+   - Trình bày khung chat chờ duyệt:  
 ```markdown  
 [Sẽ thêm file DailyLogin.js và bind vào EventKeys.ON_LOGIN]  
 ```  
@@ -140,13 +140,13 @@ C --> D[Người dùng duyệt]
 
 ## ✅ 6. Checklist Step-by-Step  
 
-| **Bước** | **Hành động** | **Trạng thái** |  
-|----------|---------------|----------------|  
-| 1 | Ra lệnh rõ ràng + Định hướng | ✔ |  
-| 2 | Cung cấp file/context | ✔ |  
-| 3 | Phê duyệt các hành động nhạy cảm | ✔ |  
-| 4 | Giao quyền "Tự bơi" | ✔ |  
-| 5 | Nhắc nhở để em học hỏi | ✔ |  
+| **Bước** | **Hành động**             | **Trạng thái** |  
+|----------|---------------------------|----------------|  
+| 1 | Ra lệnh rõ ràng + Định hướng      | ✔              |  
+| 2 | Cung cấp file/context             | ✔              |  
+| 3 | Phê duyệt các hành động nhạy cảm  | ✔              |  
+| 4 | Giao quyền "Tự bơi"               | ✔              |  
+| 5 | Nhắc nhở để OpenClaw học hỏi      | ✔              |  
 
 ---
 
@@ -235,5 +235,3 @@ D --> E[Infrastructure]
 - **File được lưu tại**: `D:\PROJECT\CCN2\research_doc\open_claw\open_claw_playbook_v2.md`  
 - **Commit hash**: `f921e274` (branch: `production`)  
 - **GitLab**: [https://gitlab.zingplay.com/newone/clientccn2](https://gitlab.zingplay.com/newone/clientccn2)  
-
-Anh có cần điều chỉnh gì thêm không ạ?
