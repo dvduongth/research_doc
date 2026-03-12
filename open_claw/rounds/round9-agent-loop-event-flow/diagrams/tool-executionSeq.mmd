@@ -1,0 +1,26 @@
+```mermaid
+sequenceDiagram
+    participant A as Agent
+    participant Tool as Tool
+    participant ES as EventStream
+
+    A->>Tool: execute(toolCallId, params, signal, onUpdate)
+    Tool->>Tool: tool logic
+    alt onUpdate provided & tool streams
+        Tool->>A: onUpdate(partialResult)
+        A->>ES: tool_execution_update (partialResult)
+    end
+    Tool-->>A: return { content, details }
+    A->>ES: tool_execution_end (result, isError)
+    A->>A: Create ToolResultMessage
+    A->>ES: message_start (toolResult)
+    A->>ES: message_end (toolResult)
+```
+
+---
+
+**Notes**:
+- Tool execution synchronous (await) but can stream via `onUpdate`.
+- Agent captures errors: if `tool.execute()` throws, catch → result with error text, isError=true.
+- Events: start (before execute), update (optional), end (after).
+- ToolResultMessage then injected into context and emitted as message events.

@@ -1,0 +1,24 @@
+flowchart LR
+    A[Agent messages<br/>from context] --> B[transformContext hook chain]
+    B --> C{Modified messages}
+    C --> D[convertToLlm<br/>default or overridden]
+    D --> E[LLM messages<br/>provider format]
+    E --> F[before_provider_request<br/>hook]
+    F --> G[Provider request<br/>HTTP]
+    G --> H[LLM response]
+    H --> I[streamAssistantResponse<br/>events]
+    I --> J[executeToolCalls<br/>if tool calls]
+    J --> K[Tool results]
+    K --> L[turn_end]
+    L --> M{check steering}
+    M -->|steering| N[inner loop continues<br/>inject steering]
+    M -->|no steering| O[check follow-up]
+    O -->|follow-up| P[outer loop continues]
+    O -->|none| Q[agent_end]
+
+    subgraph Hooks
+        B
+        F
+    end
+
+    style Hooks fill:#e1f5e1

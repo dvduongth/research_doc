@@ -1,0 +1,45 @@
+mindmap
+  root((Agent Loop<br/>Concepts))
+    Purpose & Evolution
+      Simple Request-Response
+      Function Calling
+      Agent Loop(双队列)
+    Core Abstractions
+      Turn
+      Message(User, Assistant, ToolResult)
+      Tool Call
+      Steering vs Follow-up
+      Context(messages)
+    Double Loop
+      Inner Loop(Turn + tools + steering)
+      Outer Loop(Follow-up)
+      Why two loops?
+    State & Streaming
+      AgentState fields
+      Streaming partials
+      Abort signal
+    Hook System
+      transformContext
+      convertToLlm
+      getSteeringMessages / getFollowUpMessages
+      before_provider_request
+      context event
+    Tool Execution
+      Sequential
+      Validation
+      Error handling (isError)
+      Steering skip
+    Context Management
+      Compaction
+      Branching
+      Retrieval(RAG)
+    Comparison
+      ReAct(one tool per turn)
+      OpenAI Function Calling(parallel batch)
+      LangChain(AgentExecutor)
+      pi-agent(batch + steering)
+    Design Principles
+      Interruptibility
+      Extensibility(hooks, events)
+      Determinism(sequential order)
+      Transparency(event stream)

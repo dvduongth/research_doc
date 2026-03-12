@@ -1,0 +1,26 @@
+flowchart TD
+    A[User Request] --> B[Agent.prompt(messages)]
+    B --> C{Outer Loop}
+    C --> D[Inner Loop: Turn]
+    D --> E[Inject pending<br/>(steering/follow-up)?]
+    E --> F[Stream Assistant<br/>via streamFn]
+    F --> G{Has tool calls?}
+    G -->|Yes| H[Execute Tools<br/>Sequential]
+    H --> I{After each tool:<br/>Steering queued?}
+    I -->|Yes| J[Set steeringAfterTools<br/>Skip remaining]
+    I -->|No| K[Continue next tool]
+    J --> L
+    K --> H
+    H -->|All done| L[Push ToolResults<br/>Emit events]
+    L --> M[Emit turn_end]
+    M --> N{Check steering<br/>(getSteeringMessages)}
+    N -->|Steering| O[pendingMessages = steering<br/>Continue inner]
+    N -->|No| P{Outer: getFollowUpMessages}
+    P -->|Follow-up| Q[pending = follow-up<br/>Repeat outer]
+    P -->|None| R[Emit agent_end<br/>Return]
+    O --> D
+    Q --> D
+
+    style C fill:#e1f5e1
+    style D fill:#f5e1e1
+    style H fill:#e1f5e1

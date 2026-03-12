@@ -1,0 +1,73 @@
+sequenceDiagram
+    actor User
+    participant App as Application (SessionManager)
+    participant Agent as Agent (Agent class)
+    participant Loop as agentLoop()
+    participant Stream as EventStream
+    participant Provider as LLM Provider
+    participant Tool as Tool execution
+
+    User->>App: pi.prompt(input)
+    App->>Agent: agent.prompt(input)
+    Agent->>Agent: _runLoop(msgs)
+    Note over Agent: isStreaming=true,<br/>streamMessage=null
+    Agent->>Loop: agentLoop(context, msgs)
+    Loop->>Stream: emit("agent_start")
+    Loop->>Loop: newMessages = [...msgs]
+    Loop->>Loop: currentContext.messages = [...context.messages, ...msgs]
+    Loop->>Stream: message_start(prompt) (for each prompt)
+    Loop->>Stream: message_end(prompt)
+    Loop->>Loop: runLoop(currentContext, newMessages)
+    Note over Loop: inner loop start
+    Loop->>Stream: turn_start (if not first turn)
+    alt pendingMessages from steering?
+        Loop->>Loop: inject pendingMessages (steering)
+        Loop->>Stream: message_start/end (steering)
+    end
+    Loop->>Agent: streamAssistantResponse()
+    Agent->>Agent: transformContext(messages)?
+    Agent->>Agent: convertToLlm(messages)?
+    Agent->>Provider: streamFn(model, llmContext)
+    Provider-->>Loop: EventStream (text_delta, thinking_delta, etc.)
+    Loop->>Stream: message_start(partial)
+    Loop->>Stream: message_update(delta) x N
+    Provider-->>Loop: done
+    Loop->>Agent: response.result()
+    Agent->>Loop: finalMessage
+    Loop->>Stream: message_end(finalMessage)
+    alt finalMessage has toolCall?
+        Loop->>Loop: executeToolCalls()
+        Loop->>Tool: tool.execute() sequentially
+        Tool-->>Loop: result
+        Loop->>Stream: tool_execution_start
+        Loop->>Stream: tool_execution_update (optional)
+        Loop->>Stream: tool_execution_end
+        Loop->>Stream: message_start(toolResult)
+        Loop->>Stream: message_end(toolResult)
+        Loop->>Loop: Check steering after each tool
+        alt steering queued?
+            Loop->>Loop: pendingMessages = steering, skip remaining tools
+        end
+    end
+    Loop->>Stream: turn_end (with toolResults)
+    alt pendingMessages (steering)?
+        Loop->>Loop: pendingMessages already set, inner loop continues
+    else
+        Loop->>Loop: getSteeringMessages() -> pendingMessages
+    end
+    Note over Loop: inner loop condition:<br/>hasMoreToolCalls || pendingMessages.length>0
+    alt pendingMessages.length > 0
+        Loop->>Loop: next inner iteration (new turn) with pending injected
+    else
+        Note over Loop: inner loop ends
+        Loop->>Loop: getFollowUpMessages()
+        alt follow-up exists?
+            Loop->>Loop: pendingMessages = follow-up
+            Loop->>Loop: continue (outer loop)
+        else
+            Loop->>Stream: agent_end (with newMessages)
+            Loop-->>Agent: stream closed
+            Agent-->>App: resolved
+            App-->>User: return result
+        end
+    end

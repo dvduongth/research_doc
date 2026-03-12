@@ -1,0 +1,58 @@
+```mermaid
+graph TD
+    subgraph Tier3 [@mariozechner/pi-coding-agent]
+        CA[pi-coding-agent]
+        EXT[Extensions<br/>load via jiti]
+    end
+
+    subgraph Tier2 [@mariozechner/pi-agent-core]
+        AC[pi-agent-core]
+    end
+
+    subgraph Tier1 [@mariozechner/pi-ai]
+        AI[pi-ai]
+    end
+
+    subgraph Support [Supporting Packages]
+        TUI[pi-tui]
+    end
+
+    CA --> AC
+    AC --> AI
+    CA --> TUI
+
+    EXT -->|imports| CA
+    EXT -->|imports| AC
+    EXT -->|imports| AI
+    EXT -->|imports| TUI
+
+    CA -->|provides| EXT[ExtensionAPI]
+
+    style EXT fill:#e1f5e1,stroke:#4caf50,stroke-width:2px
+    style CA fill:#e1f5e1
+    style AC fill:#e1f5e1
+    style AI fill:#e1f5e1
+    style TUI fill:#f5e1e1
+
+    classDef tier3 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    classDef tier2 fill:#c5cae9,stroke:#3f51b5,stroke-width:2px
+    classDef tier1 fill:#ffccbc,stroke:#d84315,stroke-width:2px
+    classDef support fill:#fff9c4,stroke:#fbc02d,stroke-width:2px
+    classDef ext fill:#dcedc8,stroke:#689f38,stroke-width:2px
+
+    class CA tier3
+    class AC tier2
+    class AI tier1
+    class TUI support
+    class EXT ext
+```
+
+---
+
+**Explanation**:
+- Extensions are user-loaded code (TypeScript) that import from pi packages (coding-agent, agent-core, ai, tui) to use APIs.
+- `ExtensionAPI` is provided by `pi-coding-agent` to extensions.
+- Extensions run in the same process (no sandbox), so they can call any pi API.
+- Dependencies direction: extensions depend on pi packages (not vice versa). This is safe because extensions are plug-ins.
+- Extensions do NOT create new package dependencies for the core packages; they are optional and loaded at runtime.
+- Hot-reload: extensions can be reloaded without restarting the whole app (they are re-instantiated).

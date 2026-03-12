@@ -1,0 +1,51 @@
+```mermaid
+graph TD
+    subgraph Tier3 [@mariozechner/pi-coding-agent (CLI)]
+        CA[pi-coding-agent]
+        CA_Deps[External Libs<br/>chalk, diff, extract-zip,<br/>glob, yaml, cli-highlight, ...]
+    end
+
+    subgraph Tier2 [@mariozechner/pi-agent-core (Agent Runtime)]
+        AC[pi-agent-core]
+    end
+
+    subgraph Tier1 [@mariozechner/pi-ai (LLM Abstraction)]
+        AI[pi-ai]
+        AI_Ext[Provider SDKs<br/>@anthropic-ai/sdk, openai,<br/>@google/genai, @mistralai/mistralai,<br/>@aws-sdk/client-bedrock-runtime]
+    end
+
+    subgraph Support [Supporting Packages]
+        TUI[pi-tui (Terminal UI)]
+    end
+
+    CA --> AC
+    AC --> AI
+    CA --> TUI
+
+    AI --> AI_Ext
+
+    style CA fill:#e1f5e1
+    style AC fill:#e1f5e1
+    style AI fill:#e1f5e1
+    style TUI fill:#f5e1e1
+    style AI_Ext fill:#f5f5e1
+
+    classDef tier3 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    classDef tier2 fill:#c5cae9,stroke:#3f51b5,stroke-width:2px
+    classDef tier1 fill:#ffccbc,stroke:#d84315,stroke-width:2px
+    classDef support fill:#fff9c4,stroke:#fbc02d,stroke-width:2px
+
+    class CA tier3
+    class AC tier2
+    class AI tier1
+    class TUI support
+```
+
+---
+
+**Explanation**:
+- Direction: Top-down dependencies (Tier3 → Tier2 → Tier1).
+- `pi-tui` is independent support package used by Tier3.
+- Provider SDKs are external dependencies of Tier1 (`pi-ai`).
+- No cyclic dependencies: Each tier only depends on lower tiers.
+- `pi-coding-agent` also has many external utility libraries (chalk, diff, extract-zip, glob, yaml, ...) for CLI/application functionality.

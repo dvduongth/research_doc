@@ -1,0 +1,63 @@
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant A as Agent
+    participant L as LLM (pi-ai)
+    participant T as Tool
+
+    U->>A: prompt(message)
+    A->>A: _runLoop(messages)
+    A->>A: agent_start
+    A->>A: turn_start
+    A->>A: message_start (user)
+    A->>A: message_end (user)
+    
+    A->>L: streamAssistantResponse()
+    L-->>A: message_start (assistant partial)
+    loop streaming
+        L-->>A: text_delta / thinking_delta / toolcall_delta
+        A-->>U: message_update (render)
+    end
+    L-->>A: done
+    A->>A: final = response.result()
+    A->>A: Append final assistant message
+    A-->>U: message_end (assistant)
+
+    alt assistant có tool calls
+        A->>T: executeToolCalls()
+        loop từng tool call
+            A->>T: tool_execution_start
+            T->>T: tool.execute()
+            T-->>A: tool_execution_end (result)
+            A->>A: Tạo ToolResultMessage
+            A-->>U: message_start (toolResult)
+            A-->>U: message_end (toolResult)
+            Note over A,T: Sau mỗi tool, check steering
+            alt steering có
+                A->>A: pendingMessages = steering
+                A->>T: skip còn lại (skipToolCall)
+                break
+            end
+        end
+        A-->>U: turn_end
+    else không có tool calls
+        A-->>U: turn_end
+    end
+
+    alt follow-up có (ngoài outer loop)
+        A->>A: pendingMessages = follow-up
+        A->>A: Outer loop tiếp tục (inner loop mới)
+    elsekhông có
+        A->>A: agent_end
+        A-->>U: (Promise resolves)
+    end
+```
+
+---
+
+**Giải thích**:
+- Sequence bắt đầu từ `agent.prompt(message)`.
+- Inner loop: stream assistant, nếu có tools → execute tuần tự, sau mỗi tool check steering.
+- Steering: interrupts, skip remaining tools, set pendingMessages để next turn ngay.
+- Sau inner loop, outer loop check follow-up. Nếu có, outer loop tiếp tục (inner loop mới với pending messages).
+- Nếu không, `agent_end`.

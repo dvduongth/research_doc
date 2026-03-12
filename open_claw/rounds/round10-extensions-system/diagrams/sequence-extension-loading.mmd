@@ -1,0 +1,22 @@
+sequenceDiagram
+    actor CLI/App
+    participant EM as ExtensionManager
+    participant FS as Filesystem
+    participant Ext as Extension Instance
+    participant Agent as Agent
+
+    CLI/App->>EM: loadExtensions()
+    EM->>FS: discover extension dirs
+    FS-->>EM: list of extension paths
+    EM->>EM: read manifests (extension.json)
+    EM->>EM: build dependency graph
+    EM->>EM: topological sort
+    EM->>Ext: new Extension(context, manifest)
+    Ext->>Ext: constructor
+    EM->>Ext: init()
+    Ext->>Ext: setup internal state, register event listeners
+    EM->>Ext: enable()
+    Ext->>Ext: provide.tools/prompts/etc
+    Ext->>Agent: agent.setTools([...]) (or provide API)
+    EM->>EM: repeat for next extension (in order)
+    EM-->>CLI/App: all loaded

@@ -1,0 +1,45 @@
+```mermaid
+flowchart TD
+    Start[Start pi] --> Discover{Discover Extensions}
+    Discover --> Global[~/.pi/agent/extensions/]
+    Discover --> Project[.pi/extensions/]
+    Discover --> Packages[pi packages]
+    
+    Global --> Load[Load via jiti]
+    Project --> Load
+    Packages --> Load
+    
+    Load --> Init[Call extension fn<br/>ExtensionAPI provided]
+    Init --> Runtime[Extension Runtime]
+    
+    Runtime --> SessionStart[session_start event]
+    SessionStart --> AgentEvents[Agent Events<br/>tool_call, turn_end, ...]
+    SessionStart --> SessionEvents[Session Events<br/>/new, /fork, /compact, ...]
+    
+    AgentEvents --> Handler[User handlers]
+    SessionEvents --> Handler
+    
+    Handler --> Block{Can block?}
+    Block -->|Yes| BlockAction[Block/modify]
+    Block -->|No| Continue[Continue]
+    
+    Continue --> More{More events?}
+    More -->|Yes| AgentEvents
+    More -->|No| Shutdown[Shutdown /reload]
+    
+    Shutdown --> session_shutdown[session_shutdown event]
+    session_shutdown --> Reload{Reload?}
+    Reload -->|Yes| Discover
+    Reload -->|No| End[Exit]
+```
+
+---
+
+**Mô tả**:
+1. **Discovery**: Extensions được tìm thấy từ global, project, packages.
+2. **Loading**: Dùng jiti để load TypeScript, gọi default function với `ExtensionAPI`.
+3. **Runtime**: ExtensionRuntime được tạo, quản lý extensions.
+4. **Session start**: Khi session được tạo, phát `session_start` event, extensions có thể initialize.
+5. **Events handling**: Trong agent run, các events được phát (agent, session, tool, model,...). Extensions subscribe và xử lý.
+6. **Blocking**: Một số events cho phép block (tool_call, session_before_*) bằng cách return `{ block: true }` hoặc `{ cancel: true }`.
+7. **Shutdown**: Khi `/reload` hoặc exit, phát `session_shutdown`, extensions cleanup, sau đó có thể reload (trở lại discovery).

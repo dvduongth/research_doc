@@ -1,0 +1,57 @@
+flowchart TD
+    Start([Start agentLoop<br/>_runLoop]) --> Init[Initialize:<br/>isStreaming=true,<br/>streamMessage=null,<br/>abortController]
+    Init --> A["outer loop (while true)"]
+    
+    A --> B["inner loop<br/>(while hasMoreToolCalls<br/>|| pendingMessages.length > 0)"]
+    B --> C{firstTurn?}
+    C -->|yes| D["set firstTurn=false<br/>(no turn_start)"]
+    C -->|no| E["emit turn_start"]
+    D --> F
+    E --> F["Inject pendingMessages<br/>(steering/follow-up)<br/>if any"]
+    F --> G["for each pendingMsg:<br/>emit message_start/end<br/>push to context & newMessages"]
+    G --> H["pendingMessages = []"]
+    H --> I["streamAssistantResponse()"]
+    I --> J["transformContext?<br/>convertToLlm?"]
+    J --> K["call provider.streamFn()"]
+    K --> L{stream events}
+    L -->|start| M["emit message_start(partial)"]
+    M --> L
+    L -->|text_delta/thinking_delta| N["emit message_update(delta)<br/>update streamMessage"]
+    N --> L
+    L -->|done/error| O["finalMessage = response.result()<br/>emit message_end(finalMessage)"]
+    O --> P["append finalMessage to context & newMessages"]
+    P --> Q{stopReason error/aborted?}
+    Q -->|yes| R["emit turn_end, agent_end<br/>return (error)"]
+    Q -->|no| S["extract toolCalls from finalMessage"]
+    S --> T{toolCalls.length > 0?}
+    T -->|no| U["hasMoreToolCalls = false"]
+    T -->|yes| V["executeToolCalls()"]
+    V --> W["for each toolCall (sequential):<br/>emit start, execute, emit end"]
+    W --> X{getSteeringMessages after tool?}
+    X -->|steering exists| Y["steeringAfterTools = steering<br/>skip remaining tools"]
+    X -->|no| Z["continue to next tool"]
+    Y --> AA["push toolResults (including skipped)"]
+    Z --> AA
+    AA --> AB["hasMoreToolCalls = true"]
+    
+    U --> AC["emit turn_end (toolResults empty)"]
+    AB --> AC
+    AC --> AD["check steeringAfterTools from tool execution"]
+    AD --> AE{steeringAfterTools?}
+    AE -->|yes| AF["pendingMessages = steeringAfterTools"]
+    AE -->|no| AG["pendingMessages = getSteeringMessages()"]
+    AF --> AH["inner loop continues (pendingMessages > 0)"]
+    AG --> AH
+    AH --> B
+    
+    AG --> AI{pendingMessages > 0?}
+    AI -->|no| AJ["inner loop ends"]
+    AJ --> AK["outer loop: getFollowUpMessages()"]
+    AK --> AL{follow-up exists?}
+    AL -->|yes| AM["pendingMessages = followUp<br/>continue outer loop"]
+    AL -->|no| AN["emit agent_end<br/>stream.end(newMessages)"]
+    AM --> B
+    AN --> AO["finally cleanup:<br/>isStreaming=false,<br/>streamMessage=null,<br/>pendingToolCalls cleared"]
+    AO --> AP([End])
+    
+    R --> AP

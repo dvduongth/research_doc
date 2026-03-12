@@ -1,0 +1,39 @@
+```mermaid
+flowchart TD
+    Start[Resource Loader<br/>DefaultResourceLoader.reload] --> Resolve{PackageManager.resolve}
+    Resolve --> PkgPkg[Package Resources<br/>extensions, skills,<br/>prompts, themes]
+    PkgPkg --> GetEnabled{getEnabledResources<br/>Filter by settings}
+    
+    GetEnabled --> EnvExt[Enabled Extensions Paths]
+    GetEnabled --> EnvSkills[Enabled Skills Paths]
+    GetEnabled --> EnvPrompts[Enabled Prompts Paths]
+    GetEnabled --> EnvThemes[Enabled Themes Paths]
+    
+    EnvExt --> LoadExt[loadExtensions<br/>via jiti]
+    EnvSkills --> LoadSkills[loadSkills]
+    EnvPrompts --> LoadPrompts[loadPromptTemplates]
+    EnvThemes --> LoadThemes[loadThemes]
+    
+    LoadExt --> Runtime[Extension Runtime]
+    LoadSkills --> Skills[Skills Array]
+    LoadPrompts --> Prompts[PromptTemplates]
+    LoadThemes --> Themes[Themes]
+    
+    Runtime --> Ctx[Context Files<br/>AGENTS.md, CLAUDE.md]
+    Ctx --> SysPrompt[System Prompt<br/>default/override/append]
+    
+    SysPrompt --> Done[Resources Ready]
+    Skills --> Done
+    Prompts --> Done
+    Themes --> Done
+```
+
+---
+
+**Explanation**:
+1. **Resolve**: PackageManager lấy resources từ installed packages.
+2. **Filter**: Lọc enabled resources dựa trên settings (`extensions.enabled`, `skills.disabled`, etc.).
+3. **Load**: Từng loại resource được load (extensions via jiti, skills/prompts/themes từ filesystem/package paths).
+4. **Context files**: Đã load sớm (trong `reload()` constructor? Actually `loadProjectContextFiles` gọi trong constructor, và `reload()` không gọi lại? Cần check: `DefaultResourceLoader` lưu `agentsFiles` và không reload chúng? Code cho thấy `loadProjectContextFiles` được gọi trong constructor; `reload()` không reload context files, chỉ reload extensions/skills/prompts/themes. Vậy context files chỉ load startup.
+5. **System prompt**: combine default, override, append.
+6. **Ready**: ResourceLoader now provides `getExtensions()`, `getSkills()`, etc.

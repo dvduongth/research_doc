@@ -1,0 +1,81 @@
+sequenceDiagram
+    actor User
+    participant Agent
+    participant Stream as EventStream
+    participant LLM as Provider
+    participant ToolA, ToolB as Tools
+
+    User->>Agent: agent.prompt([userMsg])
+    Agent->>Agent: _runLoop(msgs)
+    Agent->>Stream: agent_start
+    Agent->>Agent: context.messages = [...prev, ...msgs]
+    Agent->>Agent: newMessages = [...msgs]
+
+    Note over Agent: Inner Loop Start
+    Agent->>Stream: turn_start (if not first)
+    Agent->>Agent: inject any pendingMessages? (no)
+    Agent->>Agent: streamAssistantResponse()
+    Agent->>Agent: transformContext(messages)?
+    Agent->>Agent: convertToLlm(messages)?
+    Agent->>LLM: streamFn(model, llmContext)
+    LLM-->>Agent: Stream events
+    Agent->>Stream: message_start(partial)
+    LLM-->>Agent: text_delta, toolCall_delta...
+    Agent->>Stream: message_update(delta)
+    LLM-->>Agent: done
+    Agent->>Agent: finalMessage = response.result()
+    Agent->>Stream: message_end(finalMessage)
+    Agent->>Agent: Append final to context & newMessages
+
+    alt finalMessage has toolCalls
+        Agent->>Agent: executeToolCalls()
+        Agent->>ToolA: tool.execute(idA, argsA, signal)
+        ToolA->>ToolA: work...
+        ToolA-->>Agent: resultA
+        Agent->>Stream: tool_execution_start (A)
+        Agent->>Stream: tool_execution_end (A, resultA)
+        Agent->>Stream: message_start(toolResultA)
+        Agent->>Stream: message_end(toolResultA)
+        Agent->>Agent: Append toolResultA to context
+
+        Note over Agent: Check steering after tool A
+        Agent->>Agent: getSteeringMessages()
+        alt steering exists
+            Agent->>Agent: steeringAfterTools = steering
+        end
+
+        alt no steering interrupt
+            Agent->>ToolB: tool.execute(idB, argsB, signal)
+            ToolB->>ToolB: work...
+            ToolB-->>Agent: resultB
+            Agent->>Stream: tool_execution_start (B)
+            Agent->>Stream: tool_execution_end (B, resultB)
+            Agent->>Stream: message_start(toolResultB)
+            Agent->>Stream: message_end(toolResultB)
+            Agent->>Agent: Append toolResultB
+        else
+            Agent->>Agent: Skip remaining tools
+        end
+    end
+
+    Agent->>Stream: turn_end (with toolResults)
+    Agent->>Agent: After turn, check steering again
+    alt steeringAfterTools present
+        Agent->>Agent: pendingMessages = steeringAfterTools
+    else
+        Agent->>Agent: pendingMessages = getSteeringMessages()
+    end
+
+    alt pendingMessages > 0
+        Agent->>Agent: Inner loop continues (next turn)
+    else
+        Agent->>Agent: Inner loop ends
+        Agent->>Agent: Outer: getFollowUpMessages()
+        alt follow-up exists
+            Agent->>Agent: pendingMessages = follow-up
+            Agent->>Agent: Outer continues (inner loop repeats)
+        else
+            Agent->>Stream: agent_end (with newMessages)
+            Agent-->>User: Return
+        end
+    end

@@ -1,0 +1,32 @@
+sequenceDiagram
+    participant Agent as Agent
+    participant Ext as Extension
+    participant Provide as provide API
+    participant Consume as consume API
+
+    Note over Agent,Ext: During enable():
+    Ext->>Ext: context.provide.tool('my_tool', fn)
+    Provide->>Agent: add to agent.tools array
+    Ext->>Ext: context.on('turn_end', handler)
+    Agent->>Ext: event handler invoked later
+
+    Note over Agent,Ext: During agent run:
+    Agent->>Agent: emit('message_end', msg)
+    Agent->>Ext: on('message_end') called
+    Ext->>Ext: handler logic
+
+    Note over Agent,Ext: Resource consumption:
+    Ext->>Consume: context.consume('prompt:base')
+    Consume->>Provide: lookup provided resource
+    Provide-->>Ext: return definition
+    Ext->>Ext: use consumed resource
+
+    Note over Agent,Ext: Suppose another extension provides a transformContext hook:
+    Agent->>Agent: Before LLM call
+    Agent->>Provide: call all transformContext hooks in order
+    Provide->>Ext1: hook1(messages)
+    Ext1-->>Provide: modified
+    Provide->>Ext2: hook2(modified)
+    Ext2-->>Provide: further modified
+    Provide-->>Agent: final messages
+    Agent->>Agent: convertToLlm and send

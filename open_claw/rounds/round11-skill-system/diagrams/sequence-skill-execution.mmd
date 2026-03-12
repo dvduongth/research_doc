@@ -1,0 +1,24 @@
+sequenceDiagram
+    actor User
+    participant Agent as OpenClaw Agent
+    participant SC as Skill Catalog
+    participant FS as Filesystem
+    participant Skill as Skill Folder
+    participant Proc as External Process
+
+    User->>Agent: Request (e.g., "Build snake game")
+    Agent->>SC: findMatchingSkill(request)
+    SC->>SC: search SKILL.md frontmatter (name, description)
+    SC-->>Agent: coding-agent
+    Agent->>Skill: read SKILL.md
+    Skill-->>Agent: documentation content
+    Agent->>Agent: parse requirements (anyBins: ["claude","codex","pi"])
+    Agent->>FS: which("codex")? (check binary)
+    FS-->>Agent: "/usr/local/bin/codex"
+    Agent->>Agent: construct command:<br/>bash pty:true workdir:/tmp/snake command:"codex --full-auto exec 'Build a snake game...'"
+    Agent->>Proc: spawn(bash, args)
+    Proc->>Proc: run codex
+    Proc-->>Agent: stdout/stderr stream
+    Agent->>Agent: monitor via process:log, poll
+    Proc-->>Agent: exit(code=0)
+    Agent-->>User: result (snake game built)

@@ -1,0 +1,50 @@
+sequenceDiagram
+    actor User/Ext as User or Extension
+    participant App as Application
+    participant Agent as Agent
+    participant Loop as agentLoopContinue()
+    participant Stream as EventStream
+    participant Provider as LLM Provider
+
+    User/Ext->>Agent: agent.continue()
+    Agent->>Agent: _runLoop(undefined)
+    Note over Agent: isStreaming=true<br/>streamMessage=null
+    Agent->>Loop: agentLoopContinue(context)
+    Loop->>Loop: currentContext = [...context.messages]
+    Loop->>Stream: emit("agent_start")
+    Loop->>Loop: newMessages = []
+    Note over Loop: No prompts injected<br/>(context.messages already has<br/>last message as user or toolResult)
+    Loop->>Stream: turn_start (if not first turn)
+    Loop->>Agent: streamAssistantResponse()
+    Agent->>Agent: transformContext(currentContext.messages)
+    Agent->>Agent: convertToLlm(...)
+    Agent->>Provider: streamFn(...)
+    Provider-->>Loop: EventStream
+    Loop->>Stream: message_start(partial)
+    Loop->>Stream: message_update x N
+    Provider-->>Loop: done
+    Loop->>Agent: finalMessage
+    Loop->>Stream: message_end(finalMessage)
+    Loop->>Loop: append finalMessage to currentContext & newMessages
+    alt has tool calls
+        Loop->>Loop: executeToolCalls()
+        Loop->>Stream: tool_execution_* + message_start/end for each toolResult
+        Loop-->>Agent: toolResults pushed to context
+    end
+    Loop->>Stream: turn_end
+    Loop->>Loop: getSteeringMessages()
+    alt steering exists
+        Loop->>Loop: pendingMessages = steering
+        Loop-->>Stream: inner continues (next turn)
+    else
+        Loop->>Loop: getFollowUpMessages()
+        alt follow-up exists
+            Loop->>Loop: pendingMessages = follow-up
+            Loop->>Loop: continue outer loop
+        else
+            Loop->>Stream: agent_end
+            Loop-->>Agent: stream closed
+            Agent-->>App: resolved
+            App-->>User/Ext: return
+        end
+    end

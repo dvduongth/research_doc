@@ -1,0 +1,26 @@
+```mermaid
+flowchart TD
+    RL[Raw Resources<br/>from discovery] --> Filter{Settings Filter}
+
+    Filter -->|enabled non-empty| KeepOnly[Keep only in enabled list]
+    Filter -->|disabled non-empty| Exclude[Exclude items in disabled list]
+    Filter -->|both empty| All[Keep all]
+
+    KeepOnly --> Output[Filtered Resources]
+    Exclude --> Output
+    All --> Output
+
+    Output --> Metadata[Preserve PathMetadata<br/>source, origin, path]
+    Metadata --> Done[Ready for use]
+```
+
+---
+
+**Explanation**:
+- For each resource type (extensions, skills, prompts, themes), after discovery, the loader applies settings-based filtering.
+- Logic (in `getEnabledResources`):
+  - If `enabled` array is non-empty, only resources whose path is in `enabled` are kept.
+  - Else if `disabled` array is non-empty, resources in `disabled` are removed.
+  - Else all resources are kept.
+- Filtering respects `PathMetadata` so we still know origin for reload and diagnostics.
+- Filtered resources are then returned by `getExtensions()`, `getSkills()`, etc.

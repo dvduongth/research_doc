@@ -1,0 +1,56 @@
+```mermaid
+flowchart TD
+    Start[Start inner loop] --> CheckPending{Có pendingMessages?}
+    CheckPending -->|Có| Inject[Inject pending messages<br/>push message_start/end, add to context]
+    CheckPending -->|Không| Stream
+
+    Inject --> Stream[Stream assistant response]
+    
+    Stream --> Transform[transformContext (optional)]
+    Transform --> Convert[convertToLlm]
+    Convert --> LLM[LLM call via streamSimple]
+    LLM --> Build[Build AssistantMessage]
+    Build --> HasTools{Assistant có<br/>tool calls?}
+    
+    HasTools -->|Có| Exec[executeToolCalls()]
+    Exec --> LoopTools{Vòng lặp tools<br/>sequential}
+    LoopTools --> ToolStart[tool_execution_start]
+    ToolStart --> Validate[validateToolArguments]
+    Validate --> Execute[tool.execute()]
+    Execute --> HasUpdate{Có onUpdate?}
+    HasUpdate -->|Có| ToolUpdate[tool_execution_update]
+    HasUpdate -->|Không| AfterExec
+    AfterExec --> ToolEnd[tool_execution_end]
+    ToolEnd --> CreateResult[Tạo ToolResultMessage]
+    CreateResult --> PushToolMsg[push message_start/end<br/>(toolResult)]
+    PushToolMsg --> CheckSteering{Check steering<br/>sau mỗi tool}
+    CheckSteering -->|Có| SetSteering[Set pendingMessages = steering]
+    CheckSteering -->|Không| NextTool{Next tool?}
+    SetSteering --> SkipRest[Skip remaining tools<br/>via skipToolCall]
+    SkipRest --> Break[Break tool loop]
+    NextTool -->|Còn| LoopTools
+    NextTool -->|Hết| AfterTools
+    
+    AfterTools --> TurnEnd[push turn_end]
+    HasTools -->|Không| TurnEnd
+    
+    TurnEnd --> CheckSteerNow{Check steering<br/>lại sau turn?}
+    CheckSteerNow -->|Có| SetPending[Set pendingMessages = steering]
+    CheckSteerNow -->|Không| GetSteering[getSteeringMessages?]
+    GetSteering -->|Có| SetPending
+    GetSteering -->|Không| EndInner[Inner loop kết thúc<br/>(pendingMessages empty, no tools)]
+
+    SetPending --> EndInner
+
+    EndInner --> OuterCheck{Outer loop check<br/>follow-up}
+    OuterCheck -->|Có| OuterCont[Outer loop tiếp tục<br/>pendingMessages = follow-up]
+    OuterCheck -->|Không| Done[Done → agent_end]
+```
+
+---
+
+**Legend**:
+- Inner loop xử lý một turn: assistant response + tools (nếu có).
+- Steering check sau mỗi tool và sau turn.
+- Nếu steering có, pendingMessages được set, inner loop tiếp tục ngay (turn mới).
+- Outer loop chỉ check follow-up sau khi inner loop kết thúc (không còn tools, không có pending messages).

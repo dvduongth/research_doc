@@ -1,0 +1,29 @@
+flowchart TD
+    A[Agent Startup] --> B[Scan skills/ folders]
+    B --> C[For each folder with SKILL.md]
+    C --> D[Parse frontmatter<br/>name, description, requires]
+    D --> E[Add to Skill Catalog]
+    E --> F[Catalog ready]
+
+    F --> G[User request arrives]
+    G --> H{Match skill?}
+    H -->|Yes| I[Retrieve skill documentation]
+    I --> J[Check binary dependencies]
+    J --> K{All deps satisfied?}
+    K -->|No| L[Instruct user to install<br/>Show install steps]
+    K -->|Yes| M[Construct command<br/>from skill patterns]
+    M --> N[Spawn external process<br/>(bash/cli)]
+    N --> O[Stream output & monitor]
+    O --> P[Process completes]
+    P --> Q[Return result to user]
+    H -->|No| R[No applicable skill<br/>Handle directly or use other tools]
+    R --> Q
+
+    subgraph "ClawHub Management"
+        S[clawhub search] --> T[Query registry]
+        U[clawhub install] --> V[Download & extract to skills/]
+        W[clawhub update] --> X[Fetch new version]
+    end
+
+    V --> B
+    X --> B
