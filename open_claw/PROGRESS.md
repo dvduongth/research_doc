@@ -1,48 +1,102 @@
-# Tiến Độ Phân Tích Pi-Mono Deep Dive
+# Tiến Độ Phân Tích OpenClaw Deep Dive
 
-**Ngày bắt đầu**: 2026-03-11
-**Ngày hoàn thành**: 2026-03-11
-**Thư mục output**: `D:\PROJECT\CCN2\research_doc\pi-mono-research\drafts\`
-**Nguồn dữ liệu**: Local clone `D:\PROJECT\CCN2\pi-mono` + Web
+**Dự án phân tích**: OpenClaw — Personal AI Assistant Gateway
+**Ngày bắt đầu**: 2026-03-12
+**Ngày hoàn thành**: Đang thực hiện
+**Thư mục output**: `D:\PROJECT\CCN2\research_doc\open_claw\`
+**Nguồn dữ liệu**: Local clone `D:\PROJECT\CCN2\openclaw\`
 
 ---
 
-## Trạng thái từng bước
+## Thông tin dự án OpenClaw
 
-| # | Bước | File output | Trạng thái |
-|---|------|------------|------------|
-| 1 | Khởi tạo PROGRESS.md | `PROGRESS.md` | ✅ Xong |
-| 2 | Tổng quan dự án | `01_tong_quan_du_an.md` | ✅ Xong |
-| 3 | Kiến trúc Monorepo | `02_kien_truc_monorepo.md` | ✅ Xong |
-| 4 | Hệ thống LLM (pi-ai) | `03_he_thong_llm_pi_ai.md` | ✅ Xong |
-| 5 | Agent Runtime | `04_agent_runtime.md` | ✅ Xong |
-| 6 | Coding Agent | `05_coding_agent.md` | ✅ Xong |
-| 7 | Các package hỗ trợ | `06_cac_package_ho_tro.md` | ✅ Xong |
-| 8 | So sánh Benchmark | `07_so_sanh_benchmark.md` | ✅ Xong |
-| 9 | Bài học & Patterns | `08_bai_hoc_patterns.md` | ✅ Xong |
-| 10 | Báo cáo tổng hợp | `pi_mono_deep_dive_full.md` | ✅ Xong |
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| **Phiên bản** | 2026.3.11 |
+| **License** | MIT |
+| **Ngôn ngữ** | TypeScript (Node.js ≥22) |
+| **Package manager** | pnpm |
+| **Extensions** | ~40 extensions |
+| **Skills** | 52 built-in skills |
+| **Channels hỗ trợ** | 20+ (WhatsApp, Telegram, Slack, Discord, Signal, iMessage...) |
+| **Apps** | iOS, macOS, Android |
 
-**Kết quả: 10/10 hoàn thành**
+---
+
+## Cấu trúc tài liệu output
+
+| File | Nội dung | Trạng thái |
+|------|---------|-----------|
+| `PROGRESS.md` | File này — tracking tiến độ | 🔄 Đang cập nhật |
+| `01_tong_quan_du_an.md` | Tổng quan: OpenClaw là gì, tại sao tồn tại | ⬜ Chưa bắt đầu |
+| `02_kien_truc_tong_the.md` | Kiến trúc monorepo, pnpm workspace, build system | ⬜ Chưa bắt đầu |
+| `03_gateway_va_routing.md` | Gateway server — tim đập của OpenClaw | ⬜ Chưa bắt đầu |
+| `04_he_thong_kenh.md` | 20+ messaging channels integration | ⬜ Chưa bắt đầu |
+| `05_llm_providers.md` | LLM provider abstraction & model management | ⬜ Chưa bắt đầu |
+| `06_agent_va_skills.md` | Agent execution + 52 built-in skills | ⬜ Chưa bắt đầu |
+| `07_plugin_sdk.md` | Plugin SDK — cách extend OpenClaw | ⬜ Chưa bắt đầu |
+| `08_bao_mat.md` | Security model: sandbox, approval, auth | ⬜ Chưa bắt đầu |
+| `09_ung_dung_mobile.md` | iOS/macOS/Android companion apps | ⬜ Chưa bắt đầu |
+| `10_so_sanh_benchmark.md` | So sánh với ChatGPT, Claude, Siri, Gemini | ⬜ Chưa bắt đầu |
+| `11_bai_hoc_patterns.md` | Design patterns & lessons learned | ⬜ Chưa bắt đầu |
+| `openclaw_deep_dive_full.md` | Báo cáo tổng hợp toàn bộ | ⬜ Chưa bắt đầu |
+
+---
+
+## Trạng thái chi tiết từng bước
+
+| # | Wave | Bước | Trạng thái | Ghi chú |
+|---|------|------|-----------|---------|
+| 0 | Setup | Khởi tạo PROGRESS.md | 🔄 Đang làm | |
+| 1 | Wave 1 | Viết 01_tong_quan_du_an.md | ⬜ | Agent 1a |
+| 2 | Wave 1 | Viết 02_kien_truc_tong_the.md | ⬜ | Agent 1b |
+| 3 | Wave 2 | Viết 03_gateway_va_routing.md | ⬜ | Agent 2a |
+| 4 | Wave 2 | Viết 04_he_thong_kenh.md | ⬜ | Agent 2b |
+| 5 | Wave 3 | Viết 05_llm_providers.md | ⬜ | Agent 3a |
+| 6 | Wave 3 | Viết 06_agent_va_skills.md | ⬜ | Agent 3b |
+| 7 | Wave 4 | Viết 07_plugin_sdk.md | ⬜ | Agent 4a |
+| 8 | Wave 4 | Viết 08_bao_mat.md | ⬜ | Agent 4b |
+| 9 | Wave 5 | Viết 09_ung_dung_mobile.md | ⬜ | Agent 5a |
+| 10 | Wave 5 | Viết 10_so_sanh_benchmark.md | ⬜ | Agent 5b |
+| 11 | Wave 5 | Viết 11_bai_hoc_patterns.md | ⬜ | Agent 5c |
+| 12 | Final | Viết openclaw_deep_dive_full.md | ⬜ | Tổng hợp |
+| 13 | Final | Cập nhật PROGRESS.md + Memory | ⬜ | |
 
 ---
 
 ## Nhật ký hoạt động
 
-### 2026-03-11
-- ✅ Bước 1: Tạo PROGRESS.md
-- ✅ Bước 2: Đọc README.md, package.json, LICENSE → Viết 01_tong_quan_du_an.md
-- ✅ Bước 3: Đọc AGENTS.md, tsconfig.json → Viết 02_kien_truc_monorepo.md
-- ✅ Bước 4: Đọc packages/ai/src/ (types.ts, api-registry.ts, providers/) → Viết 03_he_thong_llm_pi_ai.md
-- ✅ Bước 5: Đọc packages/agent/src/ (agent-loop.ts, types.ts) → Viết 04_agent_runtime.md
-- ✅ Bước 6: Đọc packages/coding-agent/ (package.json, src/core/) → Viết 05_coding_agent.md
-- ✅ Bước 7: Tổng hợp từ WebFetch README các packages → Viết 06_cac_package_ho_tro.md
-- ✅ Bước 8: WebSearch benchmark data (Cursor, Aider 2026) → Viết 07_so_sanh_benchmark.md
-- ✅ Bước 9: Tổng hợp patterns từ tất cả phân tích → Viết 08_bai_hoc_patterns.md
-- ✅ Bước 10: Gộp 01-08 thành pi_mono_deep_dive_full.md + Cập nhật PROGRESS.md
+### 2026-03-12
 
-## Thống kê
+- 🔄 Bắt đầu phân tích OpenClaw repo tại `D:\PROJECT\CCN2\openclaw\`
+- ✅ Khám phá cấu trúc repo: 75 src modules, 40 extensions, 52 skills, 4 mobile apps
+- ✅ Đọc README.md, VISION.md, AGENTS.md, package.json
+- ✅ Xác định cấu trúc tài liệu 12 files + 1 tổng hợp
+- ✅ Tạo PROGRESS.md
+- ⬜ Dispatch Wave 1: 01 + 02
 
-- **Tổng files tạo**: 10 (PROGRESS + 8 reports + 1 tổng hợp)
-- **Source files đọc**: ~15 files từ local clone
-- **Web fetches**: 6 (README packages) + 1 (benchmark search)
-- **Tổng dung lượng report**: ~2,500 dòng markdown
+---
+
+## Cách tiếp tục nếu bị interrupt
+
+Nếu phiên bị gián đoạn, hãy:
+1. Đọc file này để biết bước nào đã xong (✅) và bước nào đang làm (🔄)
+2. Tìm files đã được tạo trong thư mục này
+3. Tiếp tục từ bước đầu tiên còn trạng thái ⬜
+
+**Repo nguồn**: `D:\PROJECT\CCN2\openclaw\`
+**Thư mục output**: `D:\PROJECT\CCN2\research_doc\open_claw\`
+**Key files đã đọc**:
+- `openclaw/README.md` ✅
+- `openclaw/VISION.md` ✅
+- `openclaw/AGENTS.md` ✅
+- `openclaw/package.json` ✅
+- `openclaw/src/entry.ts` ✅
+
+---
+
+## Thống kê (cập nhật liên tục)
+
+- **Files tạo**: 1/13
+- **Source files đọc**: ~8
+- **Độ dài ước tính**: ~3,000-4,000 dòng markdown tổng
