@@ -1,0 +1,24 @@
+DocId,DocName,Category,Finding,Severity,Status,Notes,Wave
+01,tong_quan_du_an,Core,OpenClaw purpose defined,✅,Complete,Self-hosted AI assistant,1
+02,kien_truc_tong_the,Architecture,Monorepo explained,✅,Complete,pnpm workspaces,1
+03,gateway_va_routing,Core,Gateway routing hub,✅,Complete,WebSocket + HTTP,1
+04,agent_runtime,Core,Agent orchestration,⬜,Pending,LLM execution engine,1
+05,llm_providers,Core,LLM abstraction,⬜,Pending,Model abstraction layer,1
+06,agent_va_skills,Core,52 built-in skills,⬜,Pending,Agent capabilities,2
+07,plugin_sdk,Extension,Plugin system,⬜,Pending,Extension mechanism,2
+08,bao_mat,Security,Security model,⬜,Pending,Sandbox + approval,2
+09,ung_dung_mobile,Apps,Mobile apps,⬜,Pending,iOS/macOS/Android,2
+10,benchmark_1,Comparison,Competitive analysis,⬜,Pending,vs ChatGPT/Claude,2
+11,patterns,Architecture,Design patterns,⬜,Pending,Architecture decisions,3
+12,channels,Integration,Channel integrations,⬜,Pending,20+ channels,3
+13,playbook,Guide,Operations guide,⬜,Pending,Usage guide,3
+14,deep_dive,Analysis,Deep dive analysis,⬜,Pending,Comprehensive review,3
+15,packages_summary,Reference,Package overview,⬜,Pending,Package structure,3
+16,packages_dataset,Data,7-package inventory complete,✅,Complete,Lockstep versioning + tier structure,4
+16,packages_dataset,Data,Tier structure (1→2→3) confirmed,✅,Complete,Foundation→Core→Application,4
+17,openclaw_playbook,Operations,3 professional playbooks documented,✅,Complete,Data+DevOps+Monitoring patterns,4
+17,openclaw_playbook,Best Practice,AI automation mindset defined,✅,Complete,Human designs→AI executes,4
+18,openclaw_report,Comparison,OpenClaw vs Claude Code positioning,✅,Complete,Agent worker vs coding assistant,4
+18,openclaw_report,Architecture,Autonomous workflow paradigm,✅,Complete,Goal→Planning→Execution→Result,4
+19,pi_mono_deep_dive,Analysis,5 core design patterns identified,✅,Complete,Provider Registry+Polymorphism+Dual-Loop+First-Class+Event-Driven,4
+19,pi_mono_deep_dive,Architecture,Package breakdown complete (7 packages),✅,Complete,Dependencies and cross-cutting analysis,4
