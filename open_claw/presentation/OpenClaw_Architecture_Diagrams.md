@@ -126,7 +126,7 @@ graph TD
 ## Diagram 4: Gateway Routing — 7-Tier Priority
 
 ```mermaid
-flowchart TD
+flowchart LR
     MSG[/"📩 Message Arrives"/] --> T1{Tier 1: binding.peer?}
     T1 -->|Match| A1["Route to peer-bound agent"]
     T1 -->|No| T2{Tier 2: binding.peer.parent?}
@@ -188,7 +188,7 @@ flowchart TD
 ## Diagram 6: Extension Ecosystem Layers
 
 ```mermaid
-graph TB
+graph TD
     subgraph Apps["📱 Applications Layer"]
         WEB["Web UI (Lit + 32 WC)"]
         CLI2["CLI (tui package)"]
@@ -230,7 +230,7 @@ graph TB
 ## Diagram 7: Security Model — 8 Layers
 
 ```mermaid
-graph TB
+graph TD
     USER[/"👤 User Request"/]
 
     subgraph SEC["🔒 8-Layer Security Stack"]
@@ -259,7 +259,7 @@ graph TB
 ## Diagram 8: Pi-Mono 3-Tier Architecture (Dependency Graph)
 
 ```mermaid
-graph TD
+graph LR
     subgraph T3["Tier 3 — Applications"]
         CA["coding-agent<br/>263 files | 6.51M dl/m"]
         MOM["mom<br/>Slack bot | 17 files"]
@@ -374,7 +374,7 @@ sequenceDiagram
 ## Diagram 11: Skills System Pipeline
 
 ```mermaid
-flowchart LR
+flowchart TD
     subgraph DISCOVER["1. DISCOVER"]
         D1["~/.openclaw/skills/"]
         D2["Bundled (52 built-in)"]
@@ -416,7 +416,7 @@ flowchart LR
 ## Diagram 12: LLM Provider Architecture (22+ Providers)
 
 ```mermaid
-graph TB
+graph LR
     APP["Application Code"]
     STREAM["stream() / complete()"]
 

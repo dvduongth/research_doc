@@ -1,12 +1,12 @@
 # OpenClaw — Buổi Thuyết Trình Kỹ Thuật Cho Developer
-> **Chủ đề**: Tại sao OpenClaw nổi bật, kiến trúc hoạt động thế nào, và vai trò của Pi-Mono
-> **Đối tượng**: Developer team
-> **Thời lượng**: ~35–45 phút nội dung + 10–15 phút Q&A
+> **Chủ đề**: Tại sao OpenClaw nổi bật, kiến trúc hoạt động thế nào, và vai trò của Pi-Mono.
+> **Đối tượng**: Developer team.
+> **Thời lượng**: ~35–45 phút nội dung + 10–15 phút Q&A.
 > **Ngày**: Tháng 3/2026
 
 ---
 
-## PHẦN MỞ ĐẦU — Hook (1–2 phút)
+## PHẦN MỞ ĐẦU — Hook
 
 > *"Hãy tưởng tượng bạn nhận tin nhắn WhatsApp lúc 2 giờ sáng — AI đang chủ động thông báo kết quả deploy vừa chạy xong, đồng thời đang xử lý 3 channel Telegram khác nhau với 3 agent chuyên biệt, và toàn bộ dữ liệu không rời khỏi máy của bạn. Đó là OpenClaw."*
 
@@ -24,7 +24,7 @@
 
 ---
 
-## PHẦN 1: TẠI SAO OPENCLAW NỔI BẬT? (5–7 phút)
+## PHẦN 1: TẠI SAO OPENCLAW NỔI BẬT?
 
 ### 1.1 Con Số Ấn Tượng
 
@@ -58,7 +58,7 @@
 
 ---
 
-### 1.3 Radar Chart — Điểm Mạnh/Yếu (thang 1–10)
+### 1.3 Radar Chart — Điểm Mạnh/Yếu (thang điểm 1–10)
 
 ```
                      Quyền riêng tư
@@ -122,7 +122,7 @@ Duy nhất hỗ trợ Zalo cá nhân lẫn Zalo doanh nghiệp — không có đ
 
 ---
 
-## PHẦN 2: KIẾN TRÚC — LÀM SAO NÓ LÀM ĐƯỢC MỌI THỨ? (8–10 phút)
+## PHẦN 2: KIẾN TRÚC
 
 ### 2.1 Kiến Trúc 5 Tầng
 
@@ -198,7 +198,7 @@ Khi message đến, Gateway thử từng tier theo thứ tự ưu tiên:
 
 ### 2.4 Dual-Loop Agent Execution
 
-Đây là cơ chế cốt lõi giúp OpenClaw "làm được mọi thứ":
+Đây là cơ chế cốt lõi giúp OpenClaw "làm được nhiều thứ":
 
 ```
 VÒNG NGOÀI (Follow-up Loop):
@@ -312,7 +312,7 @@ User (Telegram) ←── "Hà Nội hôm nay 28°C, nắng, ẩm 75%..."
 
 ---
 
-## PHẦN 3: PI-MONO — NỀN TẢNG CỦA OPENCLAW (10–12 phút)
+## PHẦN 3: PI-MONO — NỀN TẢNG CỦA OPENCLAW
 
 ### 3.1 Pi-Mono Là Gì?
 

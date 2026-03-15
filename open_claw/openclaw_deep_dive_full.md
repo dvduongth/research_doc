@@ -172,7 +172,7 @@ openclaw/
 ### 3.2 Flow tổng quát một tin nhắn
 
 ```mermaid
-flowchart LR
+flowchart TD
     User([Người dùng]) -->|Nhắn tin| Channel[Channel Adapter]
     Channel -->|Event| Gateway[Gateway Server]
     Gateway -->|Auth + Route| AgentRuntime[Agent Runtime]
@@ -1047,7 +1047,7 @@ openclaw agent --message "Phân tích file này" --offline
 ### 15.3 Điểm Mạnh Độc Đáo Không Thể Copy
 
 ```
-1. Zalo support (cá nhân + doanh nghiệp) — không ai làm được
+1. Zalo support (cá nhân + doanh nghiệp) — USP (không ai làm được)
 2. Self-hosted + multi-channel + multi-LLM cùng lúc
 3. Open source MIT với 22K+ star community
 4. Plugin SDK mạnh mẽ + ClawHub marketplace

@@ -31,7 +31,7 @@ OpenClaw là một **"tổng đài AI"** — nhận tin từ 22+ kênh, định 
 ```
 openclaw/
 ├── src/                    ← Core TypeScript
-│   ├── gateway/           ← WebSocket + HTTP server (tim đập)
+│   ├── gateway/           ← WebSocket + HTTP server (Heart Beat)
 │   ├── agents/            ← Agent runtime + LLM orchestration
 │   ├── channels/          ← Channel plugins
 │   └── ...
