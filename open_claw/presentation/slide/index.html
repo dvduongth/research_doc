@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw — Presentation</title>
+
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/white.css">
+
+    <!-- Mermaid.js -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+
+    <!-- Highlight.js for code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #4A90D9;
+            --secondary-color: #7B68EE;
+            --accent-color: #E8884A;
+            --success-color: #5CB85C;
+            --danger-color: #D9534F;
+            --dark-bg: #1a1a2e;
+            --text-main: #2c3e50;
+            --text-light: #5d6d7e;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'DejaVu Sans', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-main);
+        }
+
+        .reveal {
+            --r-primary-color: var(--primary-color);
+            --r-secondary-color: var(--secondary-color);
+            --r-accent-color: var(--accent-color);
+            --r-success-color: var(--success-color);
+            --r-danger-color: var(--danger-color);
+        }
+
+        .reveal .slides {
+            text-align: left;
+        }
+
+        .reveal .slides section {
+            padding: 20px 40px;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            text-transform: none;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.8em;
+        }
+
+        .reveal h1 {
+            font-size: 2.8em;
+            text-align: center;
+            color: var(--secondary-color);
+            border-bottom: 4px solid var(--accent-color);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .reveal h2 {
+            font-size: 1.8em;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+        }
+
+        .reveal h3 {
+            font-size: 1.4em;
+            color: var(--secondary-color);
+        }
+
+        .reveal p, .reveal li {
+            font-size: 0.85em;
+            line-height: 1.6;
+            margin-bottom: 0.8em;
+        }
+
+        .reveal ul {
+            margin-left: 1.5em;
+        }
+
+        .reveal blockquote {
+            background: #f8f9fa;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .reveal table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.75em;
+        }
+
+        .reveal table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .reveal table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .reveal table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .reveal .mermaid {
+            margin: 20px 0;
+            text-align: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .reveal .highlight {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--success-color);
+            font-size: 0.7em;
+            overflow-x: auto;
+        }
+
+        .reveal .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .reveal .icon-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .reveal .icon-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .reveal .icon-item .emoji {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .reveal .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .reveal .stat-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .reveal .stat-box .number {
+            font-size: 2.2em;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .reveal .stat-box .label {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .reveal .quadrant {
+            border: 2px dashed #ccc;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .reveal .tag {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin: 3px;
+        }
+
+        .reveal .badge {
+            display: inline-block;
+            background: var(--success-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .reveal .badge.danger {
+            background: var(--danger-color);
+        }
+
+        .reveal .badge.warning {
+            background: var(--accent-color);
+        }
+
+        /* Slide-specific backgrounds */
+        .slide-title {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+            color: white !important;
+        }
+
+        .slide-title h1, .slide-title h2 {
+            color: white !important;
+        }
+
+        .slide-title p, .slide-title li {
+            color: #e0e0e0 !important;
+        }
+
+        .slide-features {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%) !important;
+        }
+
+        .slide-architecture {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d1e8fa 100%) !important;
+        }
+
+        .slide-security {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%) !important;
+        }
+
+        .slide-conclusion {
+            background: linear-gradient(135deg, #e8f8f5 0%, #d1f0e1 100%) !important;
+        }
+
+        .reveal .slides section[data-background] {
+            background-size: cover;
+            background-position: center;
+        }
+
+        .reveal .progress {
+            background: rgba(0,0,0,0.2);
+            height: 4px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .reveal .progress span {
+            background: var(--accent-color);
+            height: 100%;
+            display: block;
+        }
+
+        /* Speaker notes styling */
+        .notes {
+            font-size: 0.85em;
+            color: #666;
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+            margin-top: 20px;
+        }
+
+        .notes strong {
+            color: var(--primary-color);
+        }
+
+        .reveal .slides section .notes {
+            display: none;
+        }
+
+        .reveal .slide-backdrop {
+            background: rgba(0,0,0,0.85);
+        }
+
+        .reveal .speaker-notes-preview {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            width: 300px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(255,255,255,0.95);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .reveal .small-text {
+            font-size: 0.75em;
+        }
+
+        .reveal .large-text {
+            font-size: 1.2em;
+        }
+
+        .reveal .centered {
+            text-align: center;
+        }
+
+        .reveal .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .reveal .three-column {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .reveal .highlight-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: none;
+        }
+
+        .reveal .warning-box {
+            background: linear-gradient(135deg, #fab1a0 0%, #ff7675 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .reveal .info-box {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .reveal .dark-bg {
+            background-color: var(--dark-bg) !important;
+            color: white !important;
+        }
+
+        .reveal .dark-bg h1, .reveal .dark-bg h2, .reveal .dark-bg h3 {
+            color: white !important;
+        }
+    </style>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/math/math.js"></script>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- SLIDE 1: TITLE -->
+            <section class="slide-title" data-background="#1a1a2e">
+                <h1>🦀 OpenClaw</h1>
+                <h2 style="color: #667eea; text-align: center; font-size: 1.5em; border: none; margin-top: 20px;">Personal AI Assistant Gateway Tự Chủ</h2>
+                <div style="text-align: center; margin-top: 40px; color: #e0e0e0;">
+                    <p style="font-size: 1.2em;">AI Gateway Tự Host — Đa Kênh — Bảo Mật</p>
+                    <p style="font-size: 0.9em; opacity: 0.8;">Phiên bản tài liệu: 1.0 | Ngày: 2025-06-20</p>
+                </div>
+                <div class="stats-grid" style="margin-top: 40px;">
+                    <div class="stat-box">
+                        <span class="number">22+</span>
+                        <span class="label">Kênh nhắn tin</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="number">30+</span>
+                        <span class="label">LLM Providers</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="number">52</span>
+                        <span class="label">Built-in Skills</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="number">MIT</span>
+                        <span class="label">Open Source</span>
+                    </div>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 1 — Title</strong><br><br>
+                    • Mở đầu bằng câu chuyện: "OpenClaw là AI thực sự làm việc"<br>
+                    • Nhấn mạnh 3 trụ cột: Tự chủ, Đa kênh, Bảo mật<br>
+                    • Đưa ra con số ấn tượng ngay từ đầu để gây chú ý<br>
+                    • Tone: Chuyên nghiệp nhưng truyền cảm hứng<br>
+                    • Chuẩn bị tâm thế: Đây là giải pháp duy nhất tại Việt Nam có Zalo support<br><br>
+                    <em>Chuyển slide sau 30-45 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 2: EXECUTIVE SUMMARY -->
+            <section data-background="#e8f4fd">
+                <h1>Executive Summary</h1>
+                <div class="two-column">
+                    <div>
+                        <h3>🔵 OpenClaw là gì?</h3>
+                        <ul>
+                            <li>Personal AI Assistant Gateway mã nguồn mở (MIT)</li>
+                            <li>Tự chủ: chạy trên máy của bạn, không phụ thuộc cloud</li>
+                            <li>Kết nối với 22+ kênh nhắn tin (WhatsApp, Telegram, Zalo...)</li>
+                            <li>Hỗ trợ 30+ LLM providers (Claude, GPT, Gemini, Ollama...)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>🟢 Phù hợp với ai?</h3>
+                        <ul>
+                            <li><span class="badge">Developer</span> Muốn AI tích hợp sâu vào workflow</li>
+                            <li><span class="badge">DevOps</span> Cần automation, cron, webhooks</li>
+                            <li><span class="badge">🇻🇊 người dùng Việt</span> Cần Zalo support (duy nhất!)</li>
+                            <li><span class="badge">Privacy-first</span> Không muốn dữ liệu rời máy</li>
+                        </ul>
+                        <p class="warning-box" style="margin-top: 15px;">
+                            <strong>⚠️ Không phù hợp:</strong> Người chưa quen terminal/command line
+                        </p>
+                    </div>
+                </div>
+                <blockquote style="margin-top: 30px;">
+                    "OpenClaw là AI thực sự làm việc. Chạy trên thiết bị của bạn, trong các kênh của bạn, theo quy tắc của bạn."
+                </blockquote>
+                <aside class="notes">
+                    <strong>Slide 2 — Executive Summary</strong><br><br>
+                    <strong>Nội dung chính:</strong><br>
+                    • Giới thiệu OpenClaw làGateway, không phải chatbot<br>
+                    • Nhấn mạnh: tự host, đa kênh, đa LLM<br>
+                    • Zalo là USP (điểm bán hàng độc nhất)<br>
+                    • Phân biệt rõ audience: dev/ops/privacy-focused<br><br>
+                    <strong>Gió ý nói:</strong><br>
+                    "Nếu bạn cần một AI assistant mà bạn kiểm soát hoàn toàn, không phụ thuộc vào bất kỳ công ty nào, OpenClaw chính là giải pháp. Đặc biệt nếu bạn cần dùng Zalo — không có sản phẩm nào khác trên thế giới làm được điều này."<br><br>
+                    <strong>Dừng lại để người nghe đọc stats</strong><br>
+                    <em>Chuyển slide sau 60 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 3: STATS & COMPARISON -->
+            <section data-background="#f5f7fa">
+                <h1>Đặc điểm nổi bật</h1>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="number">22+</span>
+                        <span class="label">Kênh nhắn tin</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="number">30+</span>
+                        <span class="label">LLM Providers</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="number">52</span>
+                        <span class="label">Built-in Skills</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="number">75+</span>
+                        <span class="label">Source Modules</span>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <span class="number">3</span>
+                        <span class="label">Mobile Platforms</span>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <span class="number">MIT</span>
+                        <span class="label">License</span>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <span class="number">22K+</span>
+                        <span class="label">GitHub Stars</span>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <span class="number">2026</span>
+                        <span class="label">Phiên bản mới</span>
+                    </div>
+                </div>
+                <div class="info-box" style="margin-top: 30px;">
+                    <h3 style="color: white; margin-top: 0;">🎯 Tính năng độc nhất</h3>
+                    <ul style="color: white;">
+                        <li><strong>Zalo support</strong> — Cá nhân + doanh nghiệp (không có sản phẩm nào khác)</li>
+                        <li><strong>Model failover</strong> — Tự switch provider khi có lỗi</li>
+                        <li><strong>Offline capable</strong> — Ollama local, không cần Internet</li>
+                        <li><strong>Long-term memory</strong> — LanceDB vector storage local</li>
+                        <li><strong>Subagents (ACP)</strong> — Orchestration đa agent</li>
+                    </ul>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 3 — Stats & Comparison</strong><br><br>
+                    <strong>Focus trên con số:</strong><br>
+                    • 22+ channels — nhấn mạnh multi-channel là đặc biệt<br>
+                    • 30+ LLM providers → flexibility, cost optimization<br>
+                    • 52 skills → out-of-box capabilities<br>
+                    • MIT license → không bị khóa vendor<br><br>
+                    <strong>USP cần nhấn mạnh:</strong><br>
+                    1. Zalo support (duy nhất trên thế giới)<br>
+                    2. Self-hosted + privacy (10/10)<br>
+                    3. Model failover (high availability)<br><br>
+                    <strong>Gió ý:</strong><br>
+                    "Hầu hết các AI assistants đều bị lock vào một nền tảng — ChatGPT chỉ có web, Claude chỉ có web. OpenClaw là duy nhất cho phép bạn dùng AI qua TẤT CẢ kênh bạn đang dùng hàng ngày. Và đặc biệt, nếu bạn là người Việt và cần Zalo — đây là lựa chọn duy nhất."<br><br>
+                    <em>Chuyển slide sau 60-90 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 4: 5-LAYER ARCHITECTURE -->
+            <section data-background="#e8f8f5">
+                <h1>Kiến Trúc 5 Tầng</h1>
+                <div class="mermaid" style="width: 100%; max-width: 1200px;">
+                    graph TD
+                        subgraph Layer5["🖥️ TẦNG 5 — CLIENTS"]
+                            CLI["CLI Terminal"]
+                            WebUI["Web Dashboard"]
+                            Mac["macOS App"]
+                            iOS["iOS App"]
+                            Android["Android App"]
+                        end
+
+                        subgraph Layer4["📱 TẦNG 4 — CHANNELS (22+)"]
+                            Telegram["Telegram"]
+                            Discord["Discord"]
+                            WhatsApp["WhatsApp"]
+                            Slack["Slack"]
+                            Zalo["Zalo 🇻🇳"]
+                            More["+ 17 kênh khác..."]
+                        end
+
+                        subgraph Layer3["🔀 TẦNG 3 — GATEWAY (Pi-Mono Routing)"]
+                            HTTP["HTTP Server (Hono)"]
+                            WS["WebSocket Server"]
+                            Auth["Auth Layer"]
+                            Router["7-Tier Router"]
+                            Sessions["Session Manager"]
+                        end
+
+                        subgraph Layer2["🤖 TẦNG 2 — AGENT RUNTIME (Pi-Mono)"]
+                            AgentCore["Pi Agent Core"]
+                            ContextEng["Context Engine"]
+                            Skills["Skills System (52)"]
+                            Memory["Memory (LanceDB)"]
+                            Security["Security (8 layers)"]
+                        end
+
+                        subgraph Layer1["🧠 TẦNG 1 — LLM PROVIDERS (22+)"]
+                            Claude["Anthropic Claude"]
+                            GPT["OpenAI GPT"]
+                            Gemini["Google Gemini"]
+                            Ollama["Ollama (Local)"]
+                            More2["+ 18 providers..."]
+                        end
+
+                        Layer5 --> Layer4
+                        Layer4 --> Layer3
+                        Layer3 --> Layer2
+                        Layer2 --> Layer1
+
+                        style Layer5 fill:#4A90D9,color:#fff
+                        style Layer4 fill:#7B68EE,color:#fff
+                        style Layer3 fill:#E8884A,color:#fff
+                        style Layer2 fill:#5CB85C,color:#fff
+                        style Layer1 fill:#D9534F,color:#fff
+                </div>
+                <aside class="notes">
+                    <strong>Slide 4 — 5-Layer Architecture</strong><br><br>
+                    <strong>Ý nghĩa 5 tầng:</strong><br>
+                    Tầng 5 (Clients): Các giao diện người dùng — CLI, Web UI, Mobile apps<br>
+                    Tầng 4 (Channels): 22+ nền tảng nhắn tin — mỗi channel là một adapter<br>
+                    Tầng 3 (Gateway): Tim đập — routing, auth, session management<br>
+                    Tầng 2 (Agent Runtime): Pi-Mono core — context, skills, memory, security<br>
+                    Tầng 1 (LLM Providers): Abstraction layer — Claude, GPT, Ollama...<br><br>
+                    <strong>Điểm quan trọng:</strong><br>
+                    • Mọi channel đều đi qua Gateway — chuẩn hóa input<br>
+                    • Agent không biết channel nào đang dùng — abstraction<br>
+                    • LLM providers có thể failover tự động<br><br>
+                    <strong>Gí»‡ ý:</strong><br>
+                    "Kiến trúc này giúp OpenClaw dễ mở rộng: thêm channel mới = viết adapter mới, không sửa core. Thêm LLM mới = thêm provider adapter. Đây là pattern mà nhiều framework theo dõi."<br><br>
+                    <em>Chuyển slide sau 60-90 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 5: GATEWAY ROUTING -->
+            <section data-background="#fff5f5">
+                <h1>Gateway Routing — 7-Tier Priority</h1>
+                <div class="mermaid" style="width: 100%; max-width: 1000px;">
+                    flowchart LR
+                        MSG[/"📩 Message Arrives"/] --> T1{Tier 1: binding.peer?}
+                        T1 -->|Match| A1["Route to peer-bound agent"]
+                        T1 -->|No| T2{Tier 2: binding.peer.parent?}
+                        T2 -->|Match| A2["Route to parent-bound agent"]
+                        T2 -->|No| T3{Tier 3: guild + roles?}
+                        T3 -->|Match| A3["Route to role-specific agent"]
+                        T3 -->|No| T4{Tier 4: binding.guild?}
+                        T4 -->|Match| A4["Route to guild-bound agent"]
+                        T4 -->|No| T5{Tier 5: binding.team?}
+                        T5 -->|Match| A5["Route to team-bound agent"]
+                        T5 -->|No| T6{Tier 6: binding.account?}
+                        T6 -->|Match| A6["Route to account-bound agent"]
+                        T6 -->|No| A7["Route to default 'main' agent"]
+
+                        A1 & A2 & A3 & A4 & A5 & A6 & A7 --> AGENT["🤖 Agent Runtime"]
+
+                        style MSG fill:#4A90D9,color:#fff
+                        style AGENT fill:#5CB85C,color:#fff
+                </div>
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <h4 style="margin-top: 0;">Ví dụ binding config:</h4>
+                    <pre class="highlight"><code class="json">{
+  "agentBindings": {
+    "peer:telegram:12345": "support-agent",
+    "guild:discord:98765": "moderator-bot",
+    "account:zalo:67890": "personal-assistant"
+  }
+}</code></pre>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 5 — Gateway Routing</strong><br><br>
+                    <strong>7-tier routing logic:</strong><br>
+                    Tier 1: Peer-specific binding (user-level)<br>
+                    Tier 2: Parent binding (group chat hierarchy)<br>
+                    Tier 3: Guild + roles (Discord role-based)<br>
+                    Tier 4: Guild binding (server-level)<br>
+                    Tier 5: Team binding (workspace)<br>
+                    Tier 6: Account binding (user account)<br>
+                    Tier 7: Default agent (fallback)<br><br>
+                    <strong>Ý nghĩa:</strong><br>
+                    • Có thể config nhiều agents khác nhau cho các kênh khác nhau<br>
+                    • Ví dụ: Support agent cho Telegram group, Moderator bot cho Discord server<br>
+                    • Flexibility cao — mỗi kênh/user có thể có agent khác nhau<br><br>
+                    <strong>Demo:</strong><br>
+                    "Khi user từ Zalo gửi tin nhắn, Gateway kiểm tra binding. Nếu có `account:zalo:USER_ID` binding → route đến agent đó. Nếu không → dùng default main agent."<br><br>
+                    <em>Chuyển slide sau 60 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 5.5: CHANNELS ECOSYSTEM -->
+            <section data-background="#e8f4fd">
+                <h1>🌐 Hệ Thống Kênh — 22+ Channels</h1>
+                
+                <div class="mermaid" style="width: 100%; max-width: 1000px;">
+                    mindmap
+                      root((OpenClaw<br/>Gateway))
+                        Tin nhắn phổ biến
+                          WhatsApp
+                          Telegram
+                          Signal
+                          Discord
+                        Doanh nghiệp & Team
+                          Slack
+                          Microsoft Teams
+                          Google Chat
+                          Feishu / Lark
+                        Việt Nam 🇻🇳 [USP!]
+                          Zalo Business
+                          Zalo Personal
+                        Châu Á
+                          LINE
+                          WeChat
+                        Self-hosted
+                          Matrix
+                          Mattermost
+                          Nextcloud Talk
+                          Synology Chat
+                        Phi tập trung
+                          Nostr
+                          Tlon/Urbit
+                        Streaming & Chat
+                          Twitch
+                          IRC
+                        Ứng dụng Native
+                          WebChat
+                          macOS App
+                          iOS App
+                          Android App
+                </div>
+
+                <div class="info-box" style="margin-top: 30px;">
+                    <h4 style="color: white; margin-top: 0;">🎯 Điểm khác biệt: Zalo Support</h4>
+                    <ul style="color: white;">
+                        <li><strong>Zalo Business + Personal</strong> — Hỗ trợ <em>cá nhân</em> và <em>doanh nghiệp</em></li>
+                        <li>Đây là <strong>duy nhất trên thế giới</strong> — không có sản phẩm nào khác hỗ trợ Zalo</li>
+                        <li>Với người dùng Việt Nam: OpenClaw là <strong>lựa chọn duy nhất</strong> để dùng AI qua Zalo</li>
+                    </ul>
+                </div>
+
+                <div class="three-column" style="margin-top: 20px; font-size: 0.7em;">
+                    <div>
+                        <h4>📱 Messaging</h4>
+                        <ul>
+                            <li>WhatsApp (Baileys)</li>
+                            <li>Telegram (grammY)</li>
+                            <li>Signal (signal-cli)</li>
+                            <li>Discord (discord.js)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🏢 Enterprise</h4>
+                        <ul>
+                            <li>Slack (Bolt)</li>
+                            <li>MS Teams (Bot Framework)</li>
+                            <li>Google Chat API</li>
+                            <li>Feishu/Lark</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🔧 Self-hosted</h4>
+                        <ul>
+                            <li>Matrix (Element)</li>
+                            <li>Mattermost</li>
+                            <li>Nextcloud Talk</li>
+                            <li>Synology Chat</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <aside class="notes">
+                    <strong>Slide 5.5 — Channels Ecosystem</strong><br><br>
+                    <strong>Nội dung chính:</strong><br>
+                    • OpenClaw hỗ trợ 22+ kênh nhắn tin — từ messaging phổ biến, enterprise, self-hosted, đến decentralized.<br>
+                    • Diagram mindmap minh họa toàn bộ ecosystem: các kênh được nhóm theo category.<br>
+                    • <strong>Zalo là USP (Unique Selling Proposition)</strong> — hỗ trợ cả Business và Personal, là <em>duy nhất trên thế giới</em>.<br>• Native apps: macOS, iOS, Android — đều là channel extensions.<br><br>
+                    <strong>Architecture pattern:</strong><br>
+                    "Mỗi kênh là một Channel Adapter — implement cùng interface, Gateway chuẩn hóa input. Agent không biết channel nào đang dùng — abstraction.”<br><br>
+                    <strong>Use case Việt Nam:</strong><br>
+                    "Nếu bạn cần bot Zalo — OpenClaw là <strong>lựa chọn duy nhất</strong>. Không có ChatGPT, Claude hay bất kỳ AI assistant nào khác hỗ trợ Zalo. Đây là lý do OpenClaw chiếm thị trường Việt Nam."<br><br>
+                    <strong>Security:</strong><br>
+                    Pairing model: người lạ không tự động được phục vụ — cần approval từ operator.<br><br>
+                    <strong>Mobile apps:</strong><br>
+                    macOS/iOS/Android apps không phải channel riêng biệt — chúng là native clients <em>kết nối qua ACP protocol</em> đến Gateway, như một channel nội bộ.<br><br>
+                    <em>Timing: 60-90 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 6: DUAL-LOOP EXECUTION -->
+            <section data-background="#e8f4fd">
+                <h1>Dual-Loop Agent Execution</h1>
+                <div class="mermaid" style="width: 100%; max-width: 900px;">
+                    flowchart TD
+                        START([agent_start]) --> OUTER_LOOP[Outer Loop: Check Follow-ups]
+
+                        OUTER_LOOP --> INJECT[Inject steering/pending messages]
+                        INJECT --> LLM["📡 Call LLM<br/>(streaming: text_delta events)"]
+                        LLM --> MSG_DONE[Build AssistantMessage]
+
+                        MSG_DONE --> HAS_TOOLS{Has tool calls?}
+
+                        HAS_TOOLS -->|No| CHECK_FOLLOWUP[Check follow-up queue]
+                        HAS_TOOLS -->|Yes| INNER_LOOP[Inner Loop: Execute tools]
+
+                        INNER_LOOP --> EXEC_TOOL[Execute tool N]
+                        EXEC_TOOL --> CHECK_STEERING{Steering messages?}
+                        CHECK_STEERING -->|Yes| SKIP["Skip remaining tools<br/>(inject steering)"]
+                        CHECK_STEERING -->|No| MORE_TOOLS{More tools?}
+                        MORE_TOOLS -->|Yes| EXEC_TOOL
+                        MORE_TOOLS -->|No| CHECK_FOLLOWUP
+
+                        SKIP --> CHECK_FOLLOWUP
+
+                        CHECK_FOLLOWUP --> HAS_FOLLOWUP{Follow-up exists?}
+                        HAS_FOLLOWUP -->|Yes| OUTER_LOOP
+                        HAS_FOLLOWUP -->|No| END([agent_end])
+
+                        style START fill:#4A90D9,color:#fff
+                        style END fill:#5CB85C,color:#fff
+                        style LLM fill:#E8884A,color:#fff
+                        style INNER_LOOP fill:#7B68EE,color:#fff
+                </div>
+                <div class="two-column" style="margin-top: 30px;">
+                    <div>
+                        <h3>🔄 Outer Loop</h3>
+                        <ul>
+                            <li>Check follow-up queue</li>
+                            <li>Inject steering/pending messages</li>
+                            <li>Call LLM (streaming)</li>
+                            <li>Build assistant message</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>⚙️ Inner Loop</h3>
+                        <ul>
+                            <li>Execute tools one by one</li>
+                            <li>Check steering messages (inject interrupt)</li>
+                            <li>Continue until no more tools</li>
+                            <li>Return to outer loop</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 6 — Dual-Loop Execution</strong><br><br>
+                    <strong>Concept then:</strong><br>
+                    Dual-loop là core của Pi-Mono agent runtime.<br><br>
+                    Outer loop: Lặp lại khi có follow-up messages (steering).<br>
+                    Inner loop: Thực thi các tool calls trong một turn (có thể nhiều tool).<br><br>
+                    <strong>Ví dụ flow:</strong><br>
+                    1. User: "Tìm thời tiết Hà Nội"<br>
+                    2. Agent gọi LLM → LLM trả về tool_call weather_skill<br>
+                    3. Inner loop: execute weather_skill → kết quả<br>
+                    4. Agent gọi LLM lần nữa với kết quả → trả lời user<br>
+                    5. Không có follow-up → end<br><br>
+                    <strong>Steering messages:</strong><br>
+                    "Pause" hoặc "Change plan" có thể inject vào giữa inner loop để dừng/skip tools đang chạy.<br><br>
+                    <strong>Key insight:</strong><br>
+                    Đây là pattern để agent linh hoạt — có thể interrupt, adjust plan, và continue mà không restart.<br><br>
+                    <em>Chuyển slide sau 60-90 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 7: EXTENSION ECOSYSTEM -->
+            <section data-background="#f5f7fa">
+                <h1>Extension Ecosystem</h1>
+                <div class="mermaid" style="width: 100%; max-width: 1000px;">
+                    graph TD
+                        subgraph Apps["📱 Applications Layer"]
+                            WEB["Web UI (Lit + 32 WC)"]
+                            CLI2["CLI (tui package)"]
+                            MOBILE["Native Mobile Apps"]
+                            SLACK_APP["Slack Bot (mom package)"]
+                        end
+
+                        subgraph Ext["🔌 Extensions System (40+)"]
+                            CHANNELS["Channel Extensions (22+ platforms)"]
+                            SKILLS["Skills (52 built-in + ClawHub)"]
+                            PLUGINS["Plugin SDK (40+ sub-paths)"]
+                        end
+
+                        subgraph Runtime["⚙️ Agent Runtime"]
+                            AGENT_CORE["Pi Agent Core (dual-loop)"]
+                            CTX["Context Engine"]
+                            MEM["Memory (LanceDB)"]
+                            SEC["Security (8 layers)"]
+                        end
+
+                        subgraph LLM["🧠 LLM Abstraction (pi-mono/ai)"]
+                            PROVIDERS["22+ Providers"]
+                            STREAM["Streaming Events"]
+                            FAILOVER["Auto-Failover"]
+                        end
+
+                        Apps --> Ext
+                        Ext --> Runtime
+                        Runtime --> LLM
+
+                        style Apps fill:#4A90D9,color:#fff
+                        style Ext fill:#7B68EE,color:#fff
+                        style Runtime fill:#5CB85C,color:#fff
+                        style LLM fill:#D9534F,color:#fff
+                </div>
+                <div class="highlight" style="margin-top: 20px; font-size: 0.7em;">
+                    <strong>Extensions mẫu:</strong><br>
+                    Channels: telegram, discord, zalo, slack, whatsapp, signal, imessage, matrix...<br>
+                    Skills: web_search, read_file, write_file, run_bash, send_email, memory_store...<br>
+                    Plugins: coding-agent, mcporter (MCP), voice-call, ios, android...
+                </div>
+                <aside class="notes">
+                    <strong>Slide 7 — Extension Ecosystem</strong><br><br>
+                    <strong>Plugin-first architecture:</strong><br>
+                    OpenClaw được thiết kế theo plugin architecture — core nhỏ, functionality được cấp thêm qua plugins.<br><br>
+                    <strong>Ứng dụng (Apps layer):</strong><br>
+                    • Web UI: Dashboard để quản lý<br>
+                    • CLI: Command line interface<br>
+                    • Mobile Apps: iOS, Android, macOS (native companion)<br>
+                    • Slack Bot: Chạy như một Slack app<br><br>
+                    <strong>Extensions:</strong><br>
+                    • Channel extensions: Mỗi kênh là một plugin (22+)<br>
+                    • Skills: 52 built-in + thousands từ ClawHub marketplace<br>
+                    • Plugin SDK: Cho developers viết plugin riêng<br><br>
+                    <strong>Runtime + LLM:</strong><br>
+                    • Agent Runtime: Pi-Mono core (dual-loop execution)<br>
+                    • Context Engine: sliding window + semantic retrieval<br>
+                    • Memory: LanceDB vector DB local<br>
+                    • Security: 8-layer approval/auth model<br>
+                    • LLM Abstraction: 22+ providers, auto-failover<br><br>
+                    <strong>Message:</strong><br>
+                    "Kiến trúc này cho phép bạn mở rộng vô hạn — thêm channel mới, skill mới, provider mới mà không cần sửa code core. Đây là lý do OpenClaw có thể hỗ trợ 22+ channels và 30+ LLM providers."<br><br>
+                    <em>Chuyển slide sau 90 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 8: SECURITY MODEL -->
+            <section data-background="#fff0f0">
+                <h1>🔒 Security Model — 8 Layers</h1>
+                <div class="mermaid" style="width: 100%; max-width: 900px;">
+                    graph TD
+                        USER[/"👤 User Request"/]
+
+                        subgraph SEC["🔒 8-Layer Security Stack"]
+                            L1["Layer 1: Authentication<br/>(none | token | password | trusted-proxy)"]
+                            L2["Layer 2: Role & Scopes<br/>(admin > approvals > write)"]
+                            L3["Layer 3: Tool Policy<br/>(messaging | minimal | full)"]
+                            L4["Layer 4: Approval System<br/>(dangerous tools require user OK)"]
+                            L5["Layer 5: Prompt Injection Defense<br/>(content wrapping + 13 regex patterns)"]
+                            L6["Layer 6: Sandbox Execution<br/>(Docker, non-root, no sudo)"]
+                            L7["Layer 7: Secrets Management<br/>(no hardcoded keys)"]
+                            L8["Layer 8: Security Audit<br/>(detect-secrets scan)"]
+                        end
+
+                        AGENT["🤖 Agent (Always Untrusted)"]
+
+                        USER --> L1 --> L2 --> L3 --> L4 --> L5 --> L6 --> L7 --> L8 --> AGENT
+
+                        style USER fill:#4A90D9,color:#fff
+                        style AGENT fill:#D9534F,color:#fff
+                        style L4 fill:#E8884A,color:#fff
+                        style L6 fill:#E8884A,color:#fff
+                </div>
+                <div class="info-box" style="margin-top: 30px;">
+                    <h4 style="color: white; margin-top: 0;">🧠 Trust Model</h4>
+                    <p style="color: white; margin: 0;">
+                        <strong>Host machine</strong> = Fully trusted<br>
+                        <strong>Operator</strong> = Trusted (authenticated)<br>
+                        <strong>AI agent/model</strong> = <strong>NEVER TRUSTED</strong> (có thể bị prompt injection)
+                    </p>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 8 — Security Model</strong><br><br>
+                    <strong>8 layers:</strong><br>
+                    L1 Authentication: none/token/password/trusted-proxy<br>
+                    L2 Role & Scopes: Hierarchical permissions<br>
+                    L3 Tool Policy: Whitelist tools theo agent config<br>
+                    L4 Approval System: Dangerous tools require human OK (critical!)<br>
+                    L5 Prompt Injection Defense: Wrapping + regex patterns<br>
+                    L6 Sandbox: Docker isolation, no sudo, non-root<br>
+                    L7 Secrets: No hardcoded keys, use credential store<br>
+                    L8 Audit: Scan for secrets, dangerous configs<br><br>
+                    <strong>Golden rule:</strong><br>
+                    "Agent LUÔN là untrusted. Dù agent nói gì, dù bị injection, các lớp bảo vệ ở host/config level vẫn là tuyến phòng thủ thực sự."<br><br>
+                    <strong>Ví dụ approval workflow:</strong><br>
+                    Agent muốn chạy "rm -rf /important-folder" → approval request gửi operator → operator approve/deny → chỉ execute nếu approved.<br><br>
+                    <strong>7 CVE đã fix (v2026.3.11):</strong><br>
+                    WebSocket origin bypass, session hijacking, SSRF, credential leak, path traversal, webhook bypass, rate limit bypass.<br><br>
+                    <em>Chuyển slide sau 90 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 9: PI-MONO ARCHITECTURE -->
+            <section data-background="#e8f4fd">
+                <h1>Pi-Mono: 3-Tier Architecture</h1>
+                <div class="mermaid" style="width: 100%; max-width: 900px;">
+                    graph LR
+                        subgraph T3["Tier 3 — Applications"]
+                            CA["coding-agent<br/>263 files | 6.51M dl/m"]
+                            MOM["mom<br/>Slack bot | 17 files"]
+                            PODS["pods<br/>GPU management | 9 files"]
+                        end
+
+                        subgraph T2["Tier 2 — Core"]
+                            AGENT["agent<br/>13 files | 6.57M dl/m<br/>⭐ Dual-loop execution"]
+                            WEBUI["web-ui<br/>75 files | 32 Web Components<br/>7.5K dl/m"]
+                        end
+
+                        subgraph T1["Tier 1 — Foundation"]
+                            AI["ai<br/>79 files | 22+ LLM providers<br/>6.7M dl/m"]
+                            TUI["tui<br/>50 files | Terminal UI<br/>6.6M dl/m"]
+                        end
+
+                        CA --> AGENT
+                        CA --> AI
+                        CA --> TUI
+                        MOM --> AGENT
+                        MOM --> AI
+                        PODS --> AI
+                        WEBUI --> AGENT
+                        WEBUI --> AI
+
+                        AGENT --> AI
+
+                        style T3 fill:#4A90D9,color:#fff
+                        style T2 fill:#7B68EE,color:#fff
+                        style T1 fill:#5CB85C,color:#fff
+                        style AI fill:#D9534F,color:#fff,stroke-width:3px
+                        style AGENT fill:#E8884A,color:#fff,stroke-width:3px
+                </div>
+                <div class="highlight" style="margin-top: 20px; font-size: 0.75em;">
+                    <strong>Key packages:</strong><br>
+                    • <code>ai</code> — LLM abstraction (22+ providers, streaming, failover)<br>
+                    • <code>agent</code> — Dual-loop execution (star of the show)<br>
+                    • <code>web-ui</code> — 32 Web Components, React-like<br>
+                    • <code>tui</code> — Terminal UI framework<br>
+                    • <code>coding-agent</code> — Specialized for code tasks (263 files!)<br>
+                    • <code>mom</code> — Slack-specific framework<br>
+                    • <code>pods</code> — GPU management for self-hosted AI
+                </div>
+                <aside class="notes">
+                    <strong>Slide 9 — Pi-Mono Architecture</strong><br><br>
+                    <strong>Pi-Mono là foundation của OpenClaw:</strong><br>
+                    OpenClaw xây dựng trên Pi-Mono framework — 3-tier architecture:<br><br>
+                    Tier 1 (Foundation):<br>
+                    • ai package — abstraction over 22+ LLM providers<br>
+                    • tui package — Terminal UI components<br><br>
+                    Tier 2 (Core):<br>
+                    • agent package — Dual-loop execution (⭐ most important)<br>
+                    • web-ui package — 32 Web Components, used by OpenClaw dashboard<br><br>
+                    Tier 3 (Applications):<br>
+                    • coding-agent — Application-specific agent cho coding tasks (263 files)<br>
+                    • mom — Slack bot framework (17 files)<br>
+                    • pods — GPU management cho self-hosted inference<br><br>
+                    <strong>Dependencies:</strong><br>
+                    Applications depend on Core + Foundation. OpenClaw là một "application" trên Pi-Mono, nhưng nó cũng mở rộng qua plugins.<br><br>
+                    <strong>Message:</strong><br>
+                    "Pi-Mono là framework mà OpenClaw được build trên. Nó cung cấp dual-loop agent execution, LLM abstraction, và UI components. OpenClaw mở rộng nó bằng 22+ channel adapters, 52 skills, và gateway routing."<br><br>
+                    <em>Chuyển slide sau 90-120 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 10: DATA FLOW SEQUENCE -->
+            <section data-background="#f5f7fa">
+                <h1>Data Flow: User → AI → Response</h1>
+                <div class="mermaid" style="width: 100%; max-width: 900px;">
+                    sequenceDiagram
+                        participant User as 👤 User (Telegram)
+                        participant Chan as 📱 Channel Extension
+                        participant GW as 🔀 Gateway
+                        participant Auth as 🔒 Auth Layer
+                        participant Router as 🗺️ 7-Tier Router
+                        participant Agent as 🤖 Agent Runtime
+                        participant CTX as 📚 Context Engine
+                        participant LLM as 🧠 LLM (Claude)
+                        participant Skill as 🛠️ Skill
+
+                        User->>Chan: "Thời tiết Hà Nội?"
+                        Chan->>GW: IncomingMessage{text, peerId, channel}
+                        GW->>Auth: validate(token)
+                        Auth-->>GW: ✅ authenticated
+                        GW->>Router: resolve_route(message)
+                        Router-->>GW: agent: "main"
+                        GW->>Agent: dispatch(message, session)
+                        Agent->>CTX: assemble(history, message)
+                        CTX-->>Agent: context[tokens: 8,432]
+                        Agent->>LLM: stream(context, tools=[weather_skill])
+                        LLM-->>Agent: text_delta × N → tool_call: weather_skill
+                        Agent->>Skill: execute("Hà Nội")
+                        Note over Skill: Approval not needed<br/>(read-only operation)
+                        Skill-->>Agent: {temp: 28, humid: 75%, wind: 12km/h}
+                        Agent->>LLM: stream(context + tool_result)
+                        LLM-->>Agent: "Hà Nội hôm nay 28°C, nắng..."
+                        Agent->>CTX: save(conversation)
+                        Agent->>Chan: StreamingResponse{text}
+                        Chan->>User: "Hà Nội hôm nay 28°C, nắng, ẩm 75%..."
+                </div>
+                <aside class="notes">
+                    <strong>Slide 10 — Data Flow Sequence</strong><br><br>
+                    <strong>Walkthrough từng bước:</strong><br>
+                    1. User gửi "Thời tiết Hà Nội?" qua Telegram<br>
+                    2. Channel extension nhận, convert → Gateway (WebSocket/HTTP)<br>
+                    3. Gateway authenticate token<br>
+                    4. Router resolve agent (dựa trên binding config)<br>
+                    5. Agent runtime nhận message, tạo session<br>
+                    6. Context Engine assemble context (history + current message)<br>
+                    7. Agent gọi LLM với tools=[weather_skill]<br>
+                    8. LLM quyết định gọi tool → tool_call event<br>
+                    9. Agent execute skill (weather_skill) — không cần approval vì read-only<br>
+                    10. Skill trả về data weather<br>
+                    11. Agent gọi LLM lần 2 với kết quả tool<br>
+                    12. LLM stream response text<br>
+                    13. Agent lưu conversation vào memory<br>
+                    14. Response stream ngược lại channel → user<br><br>
+                    <strong>Key points:</strong><br>
+                    • Streaming: response được gửi từng chunk, không đợi full<br>
+                    • Tool call là async, agent quyết định execution<br>
+                    • Context Engine quản lý token window (sliding window)<br>
+                    • Memory được save sau mỗi turn<br><br>
+                    <em>Chuyển slide sau 90-120 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 10.5: MOBILE APPLICATIONS -->
+            <section data-background="#e8f4fd">
+                <h1>📱 Ứng dụng Di động — Mobile Apps</h1>
+                <div class="two-column">
+                    <div>
+                        <h3>Tính năng nổi bật</h3>
+                        <ul>
+                            <li><strong>Voice Wake</strong> — Kích hoạt bằng giọng nói, luôn lắng nghe</li>
+                            <li><strong>Home Canvas</strong> — Trang chủ tùy chỉnh, widget trực quan</li>
+                            <li><strong>Camera Integration</strong> — Quét mã QR, OCR từ ảnh</li>
+                            <li><strong>SMS Access</strong> — Đọc/gửi tin nhắn tự động</li>
+                            <li><strong>ACP Protocol</strong> — Giao thức binary, real-time, low-latency</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Kiến trúc Mobile</h3>
+                        <div class="mermaid">
+                            graph LR
+                                A[Voice/SMS/Camera] --> B[Mobile App Native]
+                                B --> C[ACP Protocol Encrypted]
+                                C --> D[Gateway]
+                                D --> E[Agent Runtime]
+                                E --> F[LLM]
+                                F --> E
+                                E --> D
+                                D --> C
+                                C --> B
+                                B --> G[Voice Output / UI Update]
+                        </div>
+                    </div>
+                </div>
+                <div class="info-box" style="margin-top: 20px;">
+                    <h4 style="color: white; margin-top: 0;">🎯 Mobile Experience</h4>
+                    <ul style="color: white;">
+                        <li><strong>Native apps:</strong> iOS (Swift), Android (Kotlin), macOS (SwiftUI)</li>
+                        <li><strong>Always-on:</strong> Voice Wake hoạt động nền, tiêu thụ ~5-10%/ngày</li>
+                        <li><strong>Offline capable:</strong> Kết nối Ollama local → hoàn toàn offline</li>
+                        <li><strong>ACP protocol:</strong> Stream binary, reconnect tự động, compression</li>
+                    </ul>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 10.5 — Mobile Applications</strong><br><br>
+                    <strong>Timing: 60-90 giây</strong><br><br>
+                    <strong>Script:</strong><br>
+                    "OpenClaw có ứng dụng di động đầy đủ cho iOS, macOS, Android. Không phải mobile web wrapper, mà native experience tích hợp sâu hệ thống."<br><br>
+                    <strong>Voice Wake (15s):</strong><br>
+                    "Giống 'Hey Siri', nhưng của OpenClaw. Luôn lắng nghe (VAD). Wake word có thể tùy chỉnh. Kích hoạt → ACP stream đến gateway → agent."<br><br>
+                    <strong>Home Canvas (15s):</strong><br>
+                    "Trang chủ tùy chỉnh với widget: thời tiết, lịch, quick actions. Widget có thể bind skill. Ví dụ: widget 'đọc tin nhắn' → skill sms_read."<br><br>
+                    <strong>Camera (10s):</strong><br>
+                    "QR code scan cho OAuth, và OCR để đọc văn bản từ ảnh. Accessibility + quick data entry."<br><br>
+                    <strong>SMS (10s):</strong><br>
+                    "Đọc/gửi SMS (Android đầy đủ, iOS hạn chế). Có thể tự động OTP filling. Cần approval policy nghiêm ngặt vì SMS nhạy cảm."<br><br>
+                    <strong>ACP Protocol (10s):</strong><br>
+                    "Binary stream với encryption end-to-end. Real-time text_delta, tool calls, steering, binary blobs. Không dùng HTTP REST vì overhead. Reconnect tự động, compression."<br><br>
+                    <strong>Q&A:</strong><br>
+                    • iOS SMS? — Hạn chế, chỉ native bridge.<br>
+                    • Pin drain? — VAD efficient, ~5-10%/ngày.<br>
+                    • Offline? — Có, nếu dùng Ollama local.<br><br>
+                    <em>Kết thúc: "Mobile apps cho phép dùng OpenClaw mọi lúc, mọi nơi, đầy đủ khả năng như desktop."</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 11: SKILLS PIPELINE -->
+            <section data-background="#f0f8ff">
+                <h1>Skills System Pipeline</h1>
+                <div class="mermaid" style="width: 100%; max-width: 900px;">
+                    flowchart TD
+                        subgraph DISCOVER["1. DISCOVER"]
+                            D1["~/.openclaw/skills/"]
+                            D2["Bundled (52 built-in)"]
+                            D3["Plugin extensions"]
+                            D4["ClawHub marketplace"]
+                        end
+
+                        subgraph FILTER["2. FILTER"]
+                            F1["requires.bins ✓"]
+                            F2["requires.env ✓"]
+                            F3["OS compatible ✓"]
+                            F4["Agent whitelist ✓"]
+                        end
+
+                        subgraph SERIALIZE["3. SERIALIZE"]
+                            S1["Max 150 skills"]
+                            S2["Max 30K chars"]
+                            S3["Max 256KB/file"]
+                            S4["→ System prompt"]
+                        end
+
+                        subgraph EXECUTE["4. EXECUTE"]
+                            E1["LLM decides"]
+                            E2["Tool call"]
+                            E3["Result → context"]
+                            E4["Loop if needed"]
+                        end
+
+                        DISCOVER --> FILTER --> SERIALIZE --> EXECUTE
+
+                        style DISCOVER fill:#4A90D9,color:#fff
+                        style FILTER fill:#7B68EE,color:#fff
+                        style SERIALIZE fill:#E8884A,color:#fff
+                        style EXECUTE fill:#5CB85C,color:#fff
+                </div>
+                <div class="two-column" style="margin-top: 20px;">
+                    <div>
+                        <h3>📥 DISCOVER</h3>
+                        <ul>
+                            <li>Skills từ <code>~/.openclaw/skills/</code> (user)</li>
+                            <li>52 built-in skills (bundled)</li>
+                            <li>Plugin extensions (tự động load)</li>
+                            <li>ClawHub marketplace (install)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>⚙️ FILTER</h3>
+                        <ul>
+                            <li>Kiểm tra binary dependencies</li>
+                            <li>Kiểm tra env vars required</li>
+                            <li>OS compatibility check</li>
+                            <li>Agent whitelist (skill cho phép agent nào?)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="two-column">
+                    <div>
+                        <h3>📤 SERIALIZE</h3>
+                        <ul>
+                            <li>Giới hạn 150 skills/agent</li>
+                            <li>Max 30K characters total</li>
+                            <li>Max 256KB/file</li>
+                            <li>Inject vào system prompt</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>🚀 EXECUTE</h3>
+                        <ul>
+                            <li>LLM đọc tool definitions từ prompt</li>
+                            <li>LLM quyết định gọi tool (tool_call)</li>
+                            <li>Tool executor chạy thực tế</li>
+                            <li>Result → LLM → tiếp tục loop</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 11 — Skills Pipeline</strong><br><br>
+                    <strong>4 stages:</strong><br><br>
+                    <strong>1. DISCOVER:</strong><br>
+                    • Skill loader scan nhiều nguồn: user dir, bundled, plugins, marketplace<br>
+                    • Mỗi skill là một package với SKILL.md descriptor<br><br>
+                    <strong>2. FILTER:</strong><br>
+                    • Kiểm tra binary dependencies: skill cần binary nào? (ffmpeg, docker...)<br>
+                    • Kiểm tra env vars: skill cần API keys gì?<br>
+                    • OS compatibility: skill chỉ chạy trên macOS? Windows?<br>
+                    • Agent whitelist: skill này được phép dùng bởi agent nào? (sandboxing)<br><br>
+                    <strong>3. SERIALIZE:</strong><br>
+                    • Giới hạn 150 skills/agent (token budget)<br>
+                    • Max 30K characters trong system prompt<br>
+                    • Max 256KB/file cho skill metadata<br>
+                    • Convert skill definitions thành JSON để inject vào system prompt<br><br>
+                    <strong>4. EXECUTE:</strong><br>
+                    • LLM thấy tool definitions trong prompt → biết mình có thể làm gì<br>
+                    • Khi user hỏi, LLM quyết định gọi tool nào<br>
+                    • Tool executor chạy tool thực tế (có thể cần approval)<br>
+                    • Result được trả về LLM để continue generation<br><br>
+                    <strong>Demo:</strong><br>
+                    "Skill read_file: Inject vào prompt là tool definition với params path. Khi user hỏi 'đọc file X', LLM sẽ generate tool_call với arguments {path: 'X'}. Agent intercept và thực thi read_file thực tế."<br><br>
+                    <em>Chuyển slide sau 90-120 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 12: LLM PROVIDERS -->
+            <section data-background="#e8f4fd">
+                <h1>LLM Provider Architecture (22+)</h1>
+                <div class="mermaid" style="width: 100%; max-width: 900px;">
+                    graph LR
+                        APP["Application Code"]
+                        STREAM["stream() / complete()"]
+
+                        APP --> STREAM
+
+                        STREAM --> REGISTRY["Provider Registry<br/>(map by model.api)"]
+
+                        REGISTRY --> ANTHROPIC["anthropic-messages<br/>Claude Opus/Sonnet/Haiku"]
+                        REGISTRY --> OPENAI["openai-completions<br/>GPT-4o, o1, o3"]
+                        REGISTRY --> GOOGLE["google-generative-ai<br/>Gemini 2.5 Pro"]
+                        REGISTRY --> BEDROCK["bedrock-converse<br/>AWS Bedrock"]
+                        REGISTRY --> OLLAMA["ollama<br/>Local Models (no API cost)"]
+                        REGISTRY --> GROQ["groq compat<br/>Fast inference"]
+                        REGISTRY --> MORE["+ 16 more providers..."]
+
+                        ANTHROPIC & OPENAI & GOOGLE & BEDROCK & OLLAMA & GROQ & MORE --> UNIFIED["Unified EventStream<br/>(start | text_delta | toolcall_delta | done | error)"]
+
+                        UNIFIED --> APP2["Application gets same interface<br/>regardless of provider"]
+
+                        style APP fill:#4A90D9,color:#fff
+                        style REGISTRY fill:#E8884A,color:#fff
+                        style UNIFIED fill:#5CB85C,color:#fff
+                        style APP2 fill:#4A90D9,color:#fff
+                </div>
+                <div class="three-column" style="margin-top: 20px; font-size: 0.7em;">
+                    <div>
+                        <h4>☁️ Cloud Premium</h4>
+                        <ul>
+                            <li>Anthropic Claude</li>
+                            <li>OpenAI GPT</li>
+                            <li>Google Gemini</li>
+                            <li>xAI Grok</li>
+                            <li>Mistral AI</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🏠 Local/Offline</h4>
+                        <ul>
+                            <li>Ollama</li>
+                            <li>LM Studio</li>
+                            <li>vLLM</li>
+                            <li>KoboldAI</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🌏 Asia & Aggregators</h4>
+                        <ul>
+                            <li>Kimi (Moonshot)</li>
+                            <li>DeepSeek</li>
+                            <li>Alibaba Qwen</li>
+                            <li>OpenRouter</li>
+                            <li>Azure OpenAI</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 12 — LLM Providers</strong><br><br>
+                    <strong>Abstraction layer:</strong><br>
+                    Application code chỉ gọi <code>stream()</code> hoặc <code>complete()</code> qua unified interface. Provider Registry map model.api → provider adapter.<br><br>
+                    <strong>Các nhóm providers:</strong><br>
+                    Cloud Premium: Claude, GPT, Gemini, Grok, Mistral (paid APIs)<br>
+                    Local/Offline: Ollama, LM Studio (chạy local, free, no internet)<br>
+                    Asia & Aggregators: Kimi, DeepSeek, Qwen, OpenRouter (proxy to many models), Azure/AWS Bedrock<br><br>
+                    <strong>Model failover:</strong><br>
+                    Có thể config model = ["claude-opus", "gpt-5", "ollama-llama"] — nếu Claude lỗi → tự động sang GPT → sang Ollama.<br><br>
+                    <strong>Unified EventStream:</strong><br>
+                    Tất cả providers đều output same event types: start, text_delta, toolcall_delta, done, error. Application không cần biết provider nào.<br><br>
+                    <strong>Use case:</strong><br>
+                    "Bạn muốn dùng Claude cho chất lượng cao, nhưng muốn backup là GPT nếu Claude down. Hoặc dùng Ollama local để tiết kiệm chi phí. OpenClaw hỗ trợ tất cả, cùng một config."<br><br>
+                    <em>Chuyển slide sau 90-120 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 12.5: DESIGN PATTERNS -->
+            <section data-background="#e8f4fd">
+                <h1>🎨 Design Patterns</h1>
+                <p>OpenClaw sử dụng các mẫu thiết kế để đảm bảo tính mô-đun, mở rộng và bảo trì.</p>
+                
+                <div class="two-column">
+                    <div>
+                        <h2>1. Gateway Hub</h2>
+                        <pre class="highlight"><code class="language-typescript">class GatewayHub {
+  private channels = new Map&lt;string, ChannelAdapter&gt;();
+  
+  register(type: string, adapter: ChannelAdapter) {
+    this.channels.set(type, adapter);
+  }
+  
+  async send(msg: Message, to: string) {
+    const adapter = this.channels.get(to.platform);
+    return adapter?.deliver(msg) ?? new Error('Gateway not found');
+  }
+}</code></pre>
+                        <p><strong>Mục đích:</strong> Centralize routing, unified interface.</p>
+                        
+                        <h2>2. Adapter</h2>
+                        <pre class="highlight"><code class="language-typescript">class DiscordAdapter implements ChannelAdapter {
+  constructor(private client: DiscordClient) {}
+  
+  async deliver(msg: Message): Promise&lt;Result&gt; {
+    return await this.client.send(this.toDiscord(msg));
+  }
+  private toDiscord(msg: Message): DiscordMessage {
+    return { content: msg.text };
+  }
+}</code></pre>
+                        <p><strong>Mục đích:</strong> Interface compatibility, legacy integration.</p>
+                        
+                        <h2>3. Strategy</h2>
+                        <pre class="highlight"><code class="language-typescript">interface RateLimitStrategy {
+  shouldThrottle(userId: string): boolean;
+}
+
+class TokenBucket implements RateLimitStrategy {
+  private buckets = new Map&lt;string, TokenBucket&gt;();
+  
+  shouldThrottle(userId: string): boolean {
+    const bucket = this.buckets.get(userId) ?? new TokenBucket();
+    return !bucket.tryConsume();
+  }
+}</code></pre>
+                        <p><strong>Mục đích:</strong> Swappable algorithms, runtime selection.</p>
+                    </div>
+                    <div>
+                        <h2>4. Plugin</h2>
+                        <pre class="highlight"><code class="language-typescript">interface Plugin {
+  name: string;
+  initialize(ctx: PluginContext): void;
+  dispose(): void;
+}
+
+class ModerationPlugin implements Plugin {
+  name = 'Moderation';
+  async initialize(ctx: PluginContext) {
+    ctx.on('message', this.filter.bind(this));
+  }
+  private filter(msg: Message) {
+    if (this.isSpam(msg)) msg.delete();
+  }
+}</code></pre>
+                        <p><strong>Mục đích:</strong> Dynamic loading, isolation.</p>
+                        
+                        <h2>5. Approval Gate</h2>
+                        <pre class="highlight"><code class="language-typescript">class ApprovalGate {
+  constructor(private checks: ApprovalCheck[]) {}
+  
+  async approve(action: Action, ctx: Context) {
+    for (const check of this.checks) {
+      if (!(await check.evaluate(action, ctx)).passed) {
+        return { approved: false };
+      }
+    }
+    return { approved: true };
+  }
+}</code></pre>
+                        <p><strong>Mục đích:</strong> Pre-execution validation, policy enforcement.</p>
+                        
+                        <h2>6. Failover</h2>
+                        <pre class="highlight"><code class="language-typescript">class FailoverService {
+  async execute(primary: () => Promise&lt;T&gt;, fallback: () => Promise&lt;T&gt;): Promise&lt;T&gt; {
+    try {
+      if (this.circuitBreaker.allow()) {
+        const result = await primary();
+        this.circuitBreaker.success();
+        return result;
+      }
+    } catch (err) {
+      this.circuitBreaker.fail();
+      return await fallback();
+    }
+  }
+}</code></pre>
+                        <p><strong>Mục đích:</strong> High availability, graceful degradation.</p>
+                    </div>
+                </div>
+                
+                <h2 style="margin-top: 30px;">⚠️ Anti-Patterns (Tránh!)</h2>
+                <div class="three-column">
+                    <div>
+                        <ul>
+                            <li><strong>God Object</strong> — Class biến thành "tổng thể", làm tất cả</li>
+                            <li><strong>Spaghetti Dependencies</strong> — Circular imports, tightly coupled</li>
+                            <li><strong>Configuration Hell</strong> — Hard-code keys trong code</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><strong>Empty Plugin Hooks</strong> — Interface với nhiều empty methods</li>
+                            <li><strong>Magic Strings</strong> — Hard-coded channel names, protocol IDs</li>
+                            <li><strong>Silent Failures</strong> — Không log khi plugin crash</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><strong>Failover without Observability</strong> — Không telemetry</li>
+                            <li><strong>Tight Coupling to LLM</strong> — Code đội quản lý agent</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <aside class="notes">
+                    <strong>Slide 12.5 — Design Patterns</strong><br><br>
+                    <strong>Timing: 60-90 giây</strong><br><br>
+                    <strong>Script:</strong><br>
+                    "OpenClaw sử dụng 6 design patterns chính. Mỗi pattern giải quyết một vấn đề kiến trúc cụ thể."<br><br>
+                    <strong>Mỗi pattern (10-12s):</strong><br>
+                    1. <strong>Gateway Hub:</strong> Centralize routing, đa nền tảng.<br>
+                    2. <strong>Adapter:</strong> Interface compatibility, integrate legacy systems.<br>
+                    3. <strong>Strategy:</strong> Swappable algorithms (rate limiting, caching).<br>
+                    4. <strong>Plugin:</strong> Dynamic loading, isolation, lifecycle management.<br>
+                    5. <strong>Approval Gate:</strong> Pre-execution validation, policy enforcement.<br>
+                    6. <strong>Failover:</strong> Circuit breaker, retry, graceful degradation.<br><br>
+                    <strong>Anti-patterns (20s):</strong><br>
+                    "Tránh: God Object, circular dependencies, hard-coded config, empty plugin hooks, silent failures, failover without observability."<br><br>
+                    <strong>Key points:</strong><br>
+                    • Patterns tạo kiến trúc mô-đun, testable, secure.<br>
+                    • Anti-patterns dẫn đến codebase khó maintain, buggy.<br>
+                    • Mỗi pattern có code example ngắn, dễ hiểu.<br><br>
+                    <strong>Q&A có thể:</strong><br>
+                    Q: Tại sao dùng Gateway Hub mà không direct?<br>
+                    A: Abstraction — agent không cần biết channel nào, dễ thêm mới.<br>
+                    Q: Failover có tự động recover không?<br>
+                    A: Có, circuit breaker tự đóng/mở.<br><br>
+                    <em>Kết thúc: "Những patterns này là backbone của OpenClaw — đảm bảo codebase sạch, scalable, và maintainable."</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 13: COMPARISON RADAR -->
+            <section data-background="#fafafa">
+                <h1>So Sánh: OpenClaw vs Competitors</h1>
+                <div class="mermaid" style="width: 100%; max-width: 800px;">
+                    xychart-beta
+                        title "OpenClaw vs ChatGPT — Feature Coverage (Score 1-10)"
+                        x-axis ["Privacy", "Multi-Channel", "LLM Flex", "Automation", "Extensibility", "Cost", "Ease-of-Use", "Ecosystem"]
+                        y-axis "Score" 0 --> 10
+                        bar [9, 9, 9, 8, 8, 7, 3, 4]
+                        line [3, 2, 3, 2, 5, 5, 9, 9]
+                </div>
+                <div class="two-column" style="margin-top: 30px;">
+                    <div>
+                        <h3>✅ Khi Nào Dùng OpenClaw</h3>
+                        <ul>
+                            <li>Cần AI qua nhiều kênh (đặc biệt Zalo)</li>
+                            <li>Cần automation: cron, webhook, shell</li>
+                            <li>Quan tâm privacy: local-first</li>
+                            <li>Muốn tự chọn LLM provider</li>
+                            <li>Là developer/engineer</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>❌ Khi Nào Không Dùng</h3>
+                        <ul>
+                            <li>Muốn dùng ngay không cần setup</li>
+                            <li>Không quen terminal/CLI</li>
+                            <li>Chỉ cần chat đơn giản</li>
+                            <li>Cần enterprise SLA</li>
+                            <li>Không muốn self-host</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 13 — Comparison Radar</strong><br><br>
+                    <strong>Radar chart explanation:</strong><br>
+                    Bar = OpenClaw, Line = ChatGPT (để so sánh)<br><br>
+                    Axes (1-10):<br>
+                    • Privacy: OpenClaw 9 (self-hosted, local LanceDB) vs ChatGPT 3 (cloud only)<br>
+                    • Multi-Channel: OpenClaw 9 (22+ channels) vs ChatGPT 2 (web only)<br>
+                    • LLM Flex: OpenClaw 9 (30+ providers) vs ChatGPT 3 (only OpenAI)<br>
+                    • Automation: OpenClaw 8 (cron, webhook, shell) vs ChatGPT 2 (limited)<br>
+                    • Extensibility: OpenClaw 8 (plugin SDK) vs ChatGPT 5 (GPTs limited)<br>
+                    • Cost: OpenClaw 7 (free + API cost) vs ChatGPT 5 (paid tiers)<br>
+                    • Ease-of-Use: OpenClaw 3 (setup required) vs ChatGPT 9 (instant)<br>
+                    • Ecosystem: OpenClaw 4 (small but growing) vs ChatGPT 9 (massive)<br><br>
+                    <strong>Takeaway:</strong><br>
+                    OpenClaw mạnh về privacy, multi-channel, LLM flexibility, automation.<br>
+                    Yếu về ease-of-use (cần technical setup) và ecosystem (nhỏ hơn ChatGPT).<br>
+                    <strong>Sweet spot:</strong> Developer + DevOps + Privacy-conscious users.<br><br>
+                    <strong>Khía cạnh Việt Nam:</strong><br>
+                    "Chỉ có OpenClaw hỗ trợ Zalo — điều này không có sản phẩm nào khác trên thế giới làm được. Nếu bạn cần bot Zalo, OpenClaw là lựa chọn duy nhất."<br><br>
+                    <em>Chuyển slide sau 60-90 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 14: INTEGRATION GUIDE -->
+            <section data-background="#e8f8f5">
+                <h1>Hướng Dẫn Tích Hợp Thực Tế</h1>
+                <div class="two-column">
+                    <div>
+                        <h3>🚀 Quick Start</h3>
+                        <pre class="highlight"><code class="bash"># Cài đặt
+npm install -g openclaw@latest
+
+# Wizard setup
+openclaw onboard --install-daemon
+
+# Kiểm tra hệ thống
+openclaw doctor
+
+# Test agent
+openclaw agent --message "Hello?"</code></pre>
+                    </div>
+                    <div>
+                        <h3>📋 Cấu hình Cơ bản</h3>
+                        <pre class="highlight"><code class="json">{
+  "gateway": {
+    "port": 18789,
+    "auth": { "mode": "token" }
+  },
+  "agents": {
+    "default": {
+      "model": "anthropic/claude-sonnet-4-6",
+      "skills": ["web_search", "read_file"],
+      "sandbox": "workspace"
+    }
+  },
+  "plugins": ["telegram", "zalo"]
+}</code></pre>
+                    </div>
+                </div>
+                <div class="highlight-box" style="margin-top: 20px;">
+                    <h4 style="margin-top: 0;">💡 3 Use Case Mẫu</h4>
+                    <ol style="margin-left: 20px;">
+                        <li><strong>Discord Bot cho Game Community</strong> — Agent chuyên hỗ trợ luật chơi CCN2</li>
+                        <li><strong>DevOps Automation</strong> — Cron job daily report, send to Slack</li>
+                        <li><strong>Ollama Local (Offline)</strong> — Chạy hoàn toàn offline, không tốn API credits</li>
+                    </ol>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 14 — Integration Guide</strong><br><br>
+                    <strong>Quick start steps:</strong><br>
+                    1. npm install -g openclaw@latest<br>
+                    2. openclaw onboard — wizard hướng dẫn từng bước<br>
+                    3. openclaw doctor — check system dependencies<br>
+                    4. openclaw agent --message "Hello?" — test agent hoạt động<br><br>
+                    <strong>Config cơ bản:</strong><br>
+                    • gateway.port: 18789 (default)<br>
+                    • gateway.auth.mode: token (recommended)<br>
+                    • agents.default.model: chọn LLM provider<br>
+                    • agents.default.skills: whitelist tools agent được dùng<br>
+                    • agents.default.sandbox: isolation level<br>
+                    • plugins: list channel extensions to load<br><br>
+                    <strong>3 Use cases:</strong><br><br>
+                    <em>1. Discord Bot for Game Community:</em><br>
+                    Config agent "game-bot" với identity: "Bạn là bot hỗ trợ game CCN2..."<br>
+                    Bindings: serverId:123456 → game-bot<br>
+                    Skills: web_search (để tra rules), read_file (đọc docs)<br><br>
+                    <em>2. DevOps Automation:</em><br>
+                    Agent "devops" với skills: run_bash, read_file, send_message<br>
+                    Cron job: mỗi ngày 8h chạy health check, gửi báo cáo Slack<br>
+                    Sandbox: workspace (giới hạn trong thư mục)<br><br>
+                    <em>3. Ollama Local (Offline):</em><br>
+                    Cài Ollama, pull model (llama3.3:70b)<br>
+                    Config: model: "ollama/llama3.3:70b"<br>
+                    Chạy offline, không tốn tiền, data không rời máy<br><br>
+                    <strong>Message:</strong><br>
+                    "OpenClaw setup chỉ mất 5 phút với wizard. Sau đó bạn có thể tích hợp với bất kỳ kênh nào trong 22+ supported channels."<br><br>
+                    <em>Chuyển slide sau 90-120 giây</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 18: ROADMAP & TƯƠNG LAI -->
+            <section data-background="#e8f8f5">
+                <h1>🚀 Roadmap & Tương Lai</h1>
+                <div class="two-column">
+                    <div>
+                        <h2>Phiên bản Unreleased</h2>
+                        <ul class="fragment">
+                            <li><strong>7 CVE fixes</strong> — bảo mật ưu tiên</li>
+                            <li>Invisible Unicode attacks</li>
+                            <li>Device token overflow</li>
+                            <li>Git exec path injection</li>
+                            <li>Session tree leak</li>
+                            <li>Và 3 CVE khác đang active</li>
+                        </ul>
+                        
+                        <h2>Vision & Hướng phát triển</h2>
+                        <blockquote>
+                            "Make OpenClaw the universal AI integration layer for developers"
+                        </blockquote>
+                        <ul class="fragment">
+                            <li>Multi-user Gateway (enterprise collaboration)</li>
+                            <li>WebAssembly sandbox (plugin isolation)</li>
+                            <li>Edge deployment (Cloudflare Workers, Deno)</li>
+                            <li>Agent Marketplace (ClawHub monetization)</li>
+                            <li>Enterprise: SSO, audit logs, RBAC</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2>Ecosystem Growth</h2>
+                        <div class="icon-list">
+                            <div class="icon-item">
+                                <span class="emoji">⭐</span>
+                                <div>Pi-Mono: <strong>22,100+</strong> stars</div>
+                            </div>
+                            <div class="icon-item">
+                                <span class="emoji">📦</span>
+                                <div>ClawHub: <strong>~40</strong> plugins</div>
+                            </div>
+                            <div class="icon-item">
+                                <span class="emoji">🤝</span>
+                                <div>MCP: <strong>Standard</strong> support</div>
+                            </div>
+                            <div class="icon-item">
+                                <span class="emoji">💰</span>
+                                <div>Sponsor: OpenAI + Vercel</div>
+                            </div>
+                        </div>
+                        
+                        <h2>Timeline</h2>
+                        <div class="mermaid">
+                            timeline
+                                title OpenClaw Development Roadmap
+                                section 2026 Q1 (Đã hoàn thành)
+                                  v2026.3.11
+                                  : 7 CVE fixes
+                                  : iOS Home Canvas redesign
+                                  : Ollama wizard
+                                section 2026 Q2 (Dự kiến)
+                                  Multi-user Gateway
+                                  WebAssembly sandbox
+                                section 2026 Q3
+                                  Edge deployment
+                                  Agent Marketplace
+                                section 2026 Q4
+                                  Enterprise SSO
+                                  Audit logs
+                        </div>
+                    </div>
+                </div>
+                
+                <aside class="notes">
+                    <strong>Slide 18 — Roadmap & Tương Lai</strong><br><br>
+                    <strong>Timing: 60 giây</strong><br><br>
+                    <strong>Script:</strong><br>
+                    1. <strong>(10s) Unreleased:</strong> "Phiên bản 2026.3.11 đã vá 7 CVE, nhưng còn 7 CVE khác trong backlog: invisible unicode, device token overflow, git injection. Bảo mật là ưu tiên #1."<br><br>
+                    2. <strong>(15s) Vision:</strong> "Vision: 'universal AI integration layer'. 5 hướng: Multi-user Gateway (enterprise), WASM sandbox (isolate plugins), Edge deployment (Cloudflare Workers), Agent Marketplace (ClawHub monetization), Enterprise SSO/RBAC."<br><br>
+                    3. <strong>(10s) Ecosystem:</strong> "Pi-Mono: 22,100+ stars. ClawHub: ~40 plugins từ cộng đồng. MCP support — tương thích Anthropic ecosystem. Sponsorship từ OpenAI + Vercel = stability, long-term commitment."<br><br>
+                    4. <strong>(10s) Timeline:</strong> "Q1 đã xong CVE fixes. Q2: multi-user gateway + WASM sandbox. Q3: edge + marketplace. Q4: enterprise SSO + audit logs."<br><br>
+                    5. <strong>(5s) Closing:</strong> "OpenClaw đang tăng trưởng nhanh. Đây là thời điểm tốt để tham gia cộng đồng."<br><br>
+                    <strong>Key points:</strong><br>
+                    • 7 CVE đã fix, 7 CVE còn active<br>
+                    • Vision rõ ràng: universal AI integration layer<br>
+                    • 5 future directions cụ thể<br>
+                    • Community growth mạnh (22K+ stars, 40 plugins)<br>
+                    • Sponsorship từ big names (OpenAI, Vercel)<br><br>
+                    <strong>Q&A:</strong><br>
+                    Q: Multi-user khi nào? A: Dự kiến Q2 2026.<br>
+                    Q: WASM sandbox thay thế Docker? A: Complement, không replace.<br>
+                    Q: Marketplace có free? A: Mix free/paid.<br>
+                    Q: Edge deployment là gì? A: Chạy gateway trên edge network (Cloudflare Workers) để gần user.<br><br>
+                    <em>Kết thúc: "OpenClaw tương lai rất tươi sáng — và bạn có thể là một phần của nó."</em>
+                </aside>
+            </section>
+
+            <!-- SLIDE 15: CONCLUSION -->
+            <section class="slide-conclusion" data-background="#e8f8f5">
+                <h1>Kết Luận</h1>
+                <div class="two-column">
+                    <div>
+                        <h3>📊 Tổng Kết Số Liệu</h3>
+                        <table>
+                            <tr><td><strong>Kênh nhắn tin</strong></td><td>22+</td></tr>
+                            <tr><td><strong>LLM Providers</strong></td><td>30+</td></tr>
+                            <tr><td><strong>Built-in Skills</strong></td><td>52</td></tr>
+                            <tr><td><strong>Extensions</strong></td><td>~40</td></tr>
+                            <tr><td><strong>Source Modules</strong></td><td>75+</td></tr>
+                            <tr><td><strong>CVE Patches (2026.3.11)</strong></td><td>7</td></tr>
+                            <tr><td><strong>GitHub Stars</strong></td><td>22,100+</td></tr>
+                            <tr><td><strong>License</strong></td><td>MIT</td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h3>🎯 3 Câu Tóm Tắt</h3>
+                        <div class="highlight-box">
+                            <ol style="margin-left: 1.2em;">
+                                <li><strong>OpenClaw là AI gateway tự chủ</strong> — chạy trên máy bạn, kết nối 22+ kênh, hỗ trợ 30+ LLM.</li>
+                                <li><strong>Công cụ cho power users</strong> — cron automation, browser control, shell execution, multi-agent.</li>
+                                <li><strong>Giải pháp privacy-first</strong> — data không rời máy nếu dùng Ollama, MIT license.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-box" style="margin-top: 30px;">
+                    <h4 style="color: white; margin-top: 0;">🌟 Điểm Mạnh Độc Quyền</h4>
+                    <ul style="color: white;">
+                        <li><strong>Zalo support</strong> — Cá nhân + doanh nghiệp (Duy nhất trên thế giới)</li>
+                        <li><strong>Self-hosted + Multi-channel + Multi-LLM</strong> — Tất cả trong một</li>
+                        <li><strong>Open source MIT</strong> — Không vendor lock-in, 22K+ stars community</li>
+                        <li><strong>Plugin SDK mạnh mẽ</strong> — ClawHub marketplace sắp ra mắt</li>
+                    </ul>
+                </div>
+                <div class="centered" style="margin-top: 40px; font-size: 1.5em;">
+                    <strong>❓ Questions?</strong>
+                </div>
+                <aside class="notes">
+                    <strong>Slide 15 — Conclusion</strong><br><br>
+                    <strong>Wrap-up:</strong><br>
+                    • Recap những con số ấn tượng (22+ channels, 30+ LLM providers, 52 skills...)<br>
+                    • 3 câu tóm tắt OpenClaw là gì<br>
+                    • Emphasize USPs: Zalo, self-hosted + multi-channel, open source<br><br>
+                    <strong>Call to action:</strong><br>
+                    • Try it: <code>npm install -g openclaw@latest</code><br>
+                    • Join community: GitHub, Discord<br>
+                    • Contribute to ClawHub marketplace<br>
+                    • For Vietnamese users: Zalo integration is a game-changer<br><br>
+                    <strong>Final message:</strong><br>
+                    "OpenClaw không phải là một chatbot khác. Đó là một AI gateway cho phép bạn làm bất cứ điều gì với AI — từ gửi tin nhắn qua Zalo đến tự động hóa DevOps, tất cả từ một gateway tự host mà bạn kiểm soát hoàn toàn."<br><br>
+                    <strong>Xử lý Q&A:</strong><br>
+                    • Chuẩn bị sẵn câu hỏi thường gặp (FAQ)<br>
+                    • Nhấn mạnh security model (8 layers)<br>
+                    • Nhắc lại Zalo là USP độc nhất<br>
+                    • Nếu hỏi về enterprise: "Hiện tại focus community, nhưng có thể self-host cho enterprise"<br><br>
+                    <em>Kết thúc presentation — cảm ơn!</em>
+                </aside>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        // Initialize Reveal.js
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            controls: true,
+            progress: true,
+            center: true,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            plugins: [RevealMarkdown, RevealNotes, RevealHighlight, RevealMath]
+        });
+
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            },
+            sequence: {
+                useMaxWidth: true
+            },
+            gantt: {
+                useMaxWidth: true
+            }
+        });
+
+        // Auto-render Mermaid diagrams when slide changes
+        Reveal.addEventListener('slidechanged', event => {
+            mermaid.init(undefined, event.currentSlide.querySelectorAll('.mermaid'));
+        });
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+        });
+    </script>
+</body>
+</html>
