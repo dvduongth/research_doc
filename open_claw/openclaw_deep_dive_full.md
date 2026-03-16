@@ -187,7 +187,7 @@ flowchart TD
 
 ---
 
-## 4. Gateway & Routing — Tim Đập
+## 4. Gateway & Routing — Heart Beat
 
 ### 4.1 Vai trò của Gateway
 
