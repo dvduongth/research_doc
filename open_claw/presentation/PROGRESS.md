@@ -1,6 +1,6 @@
 # OpenClaw PPTX — Tiến Độ & Plan
 
-> Cập nhật: 2026-03-16 | Trạng thái: ⏸️ TẠM DỪNG
+> Cập nhật: 2026-03-16 | Trạng thái: HOÀN THÀNH
 
 ---
 
@@ -18,38 +18,24 @@ Tạo file `OpenClaw_Presentation.pptx` (22 slides, tiếng Việt, có presente
 
 | File | Nội dung | Trạng thái |
 |------|----------|------------|
-| `generate_pptx_part1.js` | Slides 1–11 (Title → Security 8 Layers) | ✅ Spec + QA passed |
-| `generate_pptx_part2.js` | Slides 12–22 (Agent Runtime → Kết Luận) | ⚠️ 1 minor fix còn |
-| `generate_pptx.js` | Combiner: require part1+part2, writeFile | ✅ Ready |
+| `generate_pptx_part1.js` | Slides 1–11 (Title → Security 8 Layers) | ✅ Done |
+| `generate_pptx_part2.js` | Slides 12–22 (Agent Runtime → Kết Luận) | ✅ Done (diacritics + layout fixed) |
+| `generate_pptx.js` | Combiner: require part1+part2, writeFile | ✅ Done |
+| `OpenClaw_Presentation.pptx` | Output file — 22 slides | ✅ Generated |
 
 ---
 
-## Vấn đề còn lại
+## Đã hoàn thành
 
-**generate_pptx_part2.js — Slide 16 chart:**
-```js
-// Hiện tại (cần sửa):
-s.addChart("bar", chartData, {...})
-
-// Đúng spec:
-s.addChart(pres.charts.BAR, chartData, {...})
-```
-
----
-
-## Bước tiếp theo khi resume
-
-```
-1. Fix Slide 16 chart constant → run node --check
-2. Code quality review generate_pptx_part2.js
-3. cd presentation && npm install pptxgenjs
-4. node generate_pptx.js   →  sinh ra OpenClaw_Presentation.pptx
-5. Visual QA:
-   python scripts/office/soffice.py --headless --convert-to pdf OpenClaw_Presentation.pptx
-   pdftoppm -jpeg -r 150 OpenClaw_Presentation.pdf slide
-   → Inspect ảnh, fix lỗi overlap/overflow/contrast
-6. DONE ✅
-```
+1. ✅ Fix Slide 16 chart constant (`pres.charts.BAR`)
+2. ✅ Fix 8-char hex colors (`FFFFFFCC` → `FFFFFF`)
+3. ✅ Fix ALL Vietnamese diacritics in slides 12-22 (toàn bộ)
+4. ✅ Fix Slide 22 decorative arc overlap
+5. ✅ Fix Slide 21 text overflow
+6. ✅ Fix Slide 14 missing 4th extension type (Mobile)
+7. ✅ Fix Slide 15 card gaps
+8. ✅ Fix Slide 16 chart height (dead zone)
+9. ✅ Visual QA: 2 rounds, all issues resolved
 
 ---
 

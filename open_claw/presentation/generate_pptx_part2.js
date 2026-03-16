@@ -128,17 +128,17 @@ function addSlides12to22(pres) {
 
     // ── RIGHT COLUMN: Execution Pipeline ───────────────────────────────────
     const steps = [
-      { label: "Nhan tin",         color: C.blue   },
+      { label: "Nhận tin",          color: C.blue   },
       { label: "Context Engine",   color: C.purple },
       { label: "Memory Search",    color: C.green  },
       { label: "Skills Injection", color: C.amber  },
-      { label: "LLM Suy nghi",     color: C.blue   },
+      { label: "LLM Suy nghĩ",      color: C.blue   },
       { label: "Tool Executor",    color: C.red    },
       { label: "Response",         color: C.green  },
-      { label: "Luu context",      color: C.purple },
+      { label: "Lưu context",       color: C.purple },
     ];
 
-    s.addText("Luong xu ly", {
+    s.addText("Luồng xử lý", {
       x: 5.4, y: 0.85, w: 4.1, h: 0.35,
       fontSize: 14, bold: true, fontFace: "Calibri", color: C.navyText,
     });
@@ -166,21 +166,21 @@ function addSlides12to22(pres) {
     });
 
     addPresenterNote(s, `SLIDE 12 — AGENT RUNTIME & SKILLS
-Thoi gian: ~90 giay
+Thời gian: ~90 giây
 
-Diem chinh:
-- Agent la don vi co ban — moi agent co ten rieng, model rieng, skills rieng
-- Dual-loop: outer loop xu ly tin nhan, inner loop cho tool calls
-- Context Engine: gom lich su hoi thoai + memory search + system prompt
-- Skills duoc inject vao LLM nhu "tools" (OpenAI function calling format)
-- Khi co action nguy hiem (delete, send email, shell), sandbox bat buoc approval
+Điểm chính:
+- Agent là đơn vị cơ bản — mỗi agent có tên riêng, model riêng, skills riêng
+- Dual-loop: outer loop xử lý tin nhắn, inner loop cho tool calls
+- Context Engine: gồm lịch sử hội thoại + memory search + system prompt
+- Skills được inject vào LLM như "tools" (OpenAI function calling format)
+- Khi có action nguy hiểm (delete, send email, shell), sandbox bắt buộc approval
 
-Cau hoi du kien:
-Q: "LLM co the goi nhieu skills mot luc khong?"
-A: "Co, agent ho tro parallel tool execution — LLM tra ve nhieu tool_calls cung luc, executor chay song song roi tong hop ket qua."
+Câu hỏi dự kiến:
+Q: "LLM có thể gọi nhiều skills một lúc không?"
+A: "Có, agent hỗ trợ parallel tool execution — LLM trả về nhiều tool_calls cùng lúc, executor chạy song song rồi tổng hợp kết quả."
 
-Q: "Memory search hoat dong nhu the nao?"
-A: "LanceDB tao vector embedding cho moi tin nhan, Context Engine lay top-K related memories truoc khi gui cho LLM."`);
+Q: "Memory search hoạt động như thế nào?"
+A: "LanceDB tạo vector embedding cho mỗi tin nhắn, Context Engine lấy top-K related memories trước khi gửi cho LLM."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -191,7 +191,7 @@ A: "LanceDB tao vector embedding cho moi tin nhan, Context Engine lay top-K rela
     s.background = { color: C.lightBg };
     addTopBar(s, C.green);
 
-    s.addText("52 Built-in Skills — He Thong Ky Nang", {
+    s.addText("52 Built-in Skills — Hệ Thống Kỹ Năng", {
       x: 0.5, y: 0.15, w: 9.0, h: 0.55,
       fontSize: 28, bold: true, fontFace: "Calibri", color: C.navyText,
     });
@@ -271,21 +271,21 @@ A: "LanceDB tao vector embedding cho moi tin nhan, Context Engine lay top-K rela
     });
 
     addPresenterNote(s, `SLIDE 13 — 52 BUILT-IN SKILLS
-Thoi gian: ~90 giay
+Thời gian: ~90 giây
 
-Diem chinh:
-- 52 skills chia 6 nhom, cover tat ca use cases pho bien
-- NGUY HIEM — can approval: run_bash, run_python, delete_file, send_email, create_pr
-- AN TOAN — khong can approval: read_file, web_fetch, memory_recall, git_status
-- ClawHub cho phep cai them skills tu cong dong (nhu npm packages)
+Điểm chính:
+- 52 skills chia 6 nhóm, cover tất cả use cases phổ biến
+- NGUY HIỂM — cần approval: run_bash, run_python, delete_file, send_email, create_pr
+- AN TOÀN — không cần approval: read_file, web_fetch, memory_recall, git_status
+- ClawHub cho phép cài thêm skills từ cộng đồng (như npm packages)
 
-Luu y cho nguoi dung:
-- Sandbox mode: moi lan skill de thay doi trang thai (ghi file, gui tin) se hien popup xac nhan
-- Co the whitelist skills cho agent cu the trong config
+Lưu ý cho người dùng:
+- Sandbox mode: mỗi lần skill để thay đổi trạng thái (ghi file, gửi tin) sẽ hiện popup xác nhận
+- Có thể whitelist skills cho agent cụ thể trong config
 
-Cau hoi du kien:
-Q: "Co the viet them skill khong?"
-A: "Co, qua Plugin SDK — viet TypeScript, publish len ClawHub, cai voi mot lenh."`);
+Câu hỏi dự kiến:
+Q: "Có thể viết thêm skill không?"
+A: "Có, qua Plugin SDK — viết TypeScript, publish lên ClawHub, cài với một lệnh."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -344,17 +344,17 @@ A: "Co, qua Plugin SDK — viet TypeScript, publish len ClawHub, cai voi mot len
 
     // ── Extension Types (4 pills) ───────────────────────────────────────────
     const extTypes = [
-      { label: "Channel 22+",      color: C.blue,   sub: "Them kenh nhan tin" },
+      { label: "Channel 22+",      color: C.blue,   sub: "Thêm kênh nhắn tin" },
       { label: "Memory",           color: C.purple, sub: "Vector DB custom"   },
       { label: "AI Enhancement",   color: C.green,  sub: "Tool + provider"    },
       { label: "Mobile",           color: C.red,    sub: "iOS / Android ACP"  },
     ];
-    s.addText("4 loai Extension:", {
+    s.addText("4 loại Extension:", {
       x: 6.3, y: 0.9, w: 3.2, h: 0.35,
       fontSize: 13, bold: true, fontFace: "Calibri", color: C.navyText,
     });
     extTypes.forEach((ext, i) => {
-      const y = 1.3 + i * 0.62;
+      const y = 1.28 + i * 0.58;
       s.addShape("roundRect", {
         x: 6.3, y, w: 3.2, h: 0.52,
         rectRadius: 0.08,
@@ -376,63 +376,63 @@ A: "Co, qua Plugin SDK — viet TypeScript, publish len ClawHub, cai voi mot len
 
     // ── ClawHub Box ─────────────────────────────────────────────────────────
     s.addShape("roundRect", {
-      x: 0.5, y: 3.05, w: 9.0, h: 1.05,
+      x: 0.5, y: 3.65, w: 9.0, h: 1.05,
       rectRadius: 0.1,
       fill: { color: "EAF4FF" },
       line: { color: C.blue, width: 1 },
     });
-    s.addText("ClawHub — Registry cong dong", {
-      x: 0.7, y: 3.1, w: 4.0, h: 0.35,
+    s.addText("ClawHub — Registry cộng đồng", {
+      x: 0.7, y: 3.7, w: 4.0, h: 0.35,
       fontSize: 13, bold: true, fontFace: "Calibri", color: C.navyText,
     });
-    s.addText("Phat hien, cai dat va chia se plugins:", {
-      x: 0.7, y: 3.45, w: 4.0, h: 0.3,
+    s.addText("Phát hiện, cài đặt và chia sẻ plugins:", {
+      x: 0.7, y: 4.05, w: 4.0, h: 0.3,
       fontSize: 11, fontFace: "Calibri", color: C.mutedLight,
     });
     // Install command box
     s.addShape("roundRect", {
-      x: 4.9, y: 3.15, w: 4.4, h: 0.4,
+      x: 4.9, y: 3.75, w: 4.4, h: 0.4,
       rectRadius: 0.06,
       fill: { color: C.codeBg }, line: { color: C.borderDark, width: 1 },
     });
     s.addText("openclaw plugin install clawhub:weather-forecast", {
-      x: 5.0, y: 3.15, w: 4.2, h: 0.4,
+      x: 5.0, y: 3.75, w: 4.2, h: 0.4,
       fontSize: 11, fontFace: "Courier New", color: C.green,
       valign: "middle", margin: 0,
     });
-    s.addText("mcporter cho phep ket noi voi MCP ecosystem (Model Context Protocol)", {
-      x: 0.7, y: 3.78, w: 8.6, h: 0.25,
+    s.addText("mcporter cho phép kết nối với MCP ecosystem (Model Context Protocol)", {
+      x: 0.7, y: 4.38, w: 8.6, h: 0.25,
       fontSize: 10, italic: true, fontFace: "Calibri", color: C.mutedLight,
     });
 
     // ── Principle footer ────────────────────────────────────────────────────
     s.addShape("rect", {
-      x: 0.5, y: 4.2, w: 9.0, h: 0.04,
+      x: 0.5, y: 4.78, w: 9.0, h: 0.04,
       fill: { color: C.amber }, line: { color: C.amber, width: 0 },
     });
-    s.addText("Nguyen tac: Open/Closed Principle — Mo rong khong sua doi core", {
-      x: 0.5, y: 4.28, w: 9.0, h: 0.3,
+    s.addText("Nguyên tắc: Open/Closed Principle — Mở rộng không sửa đổi core", {
+      x: 0.5, y: 4.86, w: 9.0, h: 0.3,
       fontSize: 12, italic: true, fontFace: "Calibri", color: C.navyText, align: "center",
     });
 
     addPresenterNote(s, `SLIDE 14 — PLUGIN SDK & CLAWHUB
-Thoi gian: ~2 phut
+Thời gian: ~2 phút
 
-Diem chinh:
-- Plugin interface chi 4 truong — don gian nhung manh
-- tools: them skills moi cho agent (vi du: goi API rieng)
-- channels: tich hop them kenh nhan tin (vi du: Zalo OA, Viber)
-- providers: them LLM khac (vi du: Grok, Amazon Bedrock)
-- routes: them HTTP endpoints (vi du: webhook receiver)
-- ClawHub hoat dong nhu npm/PyPI cho OpenClaw plugins
-- MCP (Model Context Protocol) cua Anthropic duoc ho tro qua mcporter bridge
+Điểm chính:
+- Plugin interface chỉ 4 trường — đơn giản nhưng mạnh
+- tools: thêm skills mới cho agent (ví dụ: gọi API riêng)
+- channels: tích hợp thêm kênh nhắn tin (ví dụ: Zalo OA, Viber)
+- providers: thêm LLM khác (ví dụ: Grok, Amazon Bedrock)
+- routes: thêm HTTP endpoints (ví dụ: webhook receiver)
+- ClawHub hoạt động như npm/PyPI cho OpenClaw plugins
+- MCP (Model Context Protocol) của Anthropic được hỗ trợ qua mcporter bridge
 
-Cau hoi du kien:
-Q: "MCP la gi?"
-A: "Model Context Protocol cua Anthropic — chuan thong nhat cho LLM tu truy cap external tools. OpenClaw ket noi voi MCP ecosystem qua mcporter, nen co the dung bat ky MCP server nao."
+Câu hỏi dự kiến:
+Q: "MCP là gì?"
+A: "Model Context Protocol của Anthropic — chuẩn thống nhất cho LLM tự truy cập external tools. OpenClaw kết nối với MCP ecosystem qua mcporter, nên có thể dùng bất kỳ MCP server nào."
 
-Q: "Ai co the publish plugin len ClawHub?"
-A: "Bat ky ai — can dang ky, pass security review co ban, roi publish. Tuong tu npm public registry."`);
+Q: "Ai có thể publish plugin lên ClawHub?"
+A: "Bất kỳ ai — cần đăng ký, pass security review cơ bản, rồi publish. Tương tự npm public registry."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -443,7 +443,7 @@ A: "Bat ky ai — can dang ky, pass security review co ban, roi publish. Tuong t
     s.background = { color: C.darkBg };
     addTopBar(s, C.blue);
 
-    s.addText("Ung Dung Mobile", {
+    s.addText("Ứng Dụng Mobile", {
       x: 0.5, y: 0.15, w: 9.0, h: 0.55,
       fontSize: 32, bold: true, fontFace: "Arial Black", color: C.white,
     });
@@ -489,11 +489,11 @@ A: "Bat ky ai — can dang ky, pass security review co ban, roi publish. Tuong t
     ];
 
     platforms.forEach((plat, i) => {
-      const x = 0.4 + i * 3.15;
+      const x = 0.35 + i * 3.2;
 
       // Card background
       s.addShape("roundRect", {
-        x, y: 0.85, w: 3.0, h: 3.5,
+        x, y: 0.85, w: 2.75, h: 3.5,
         rectRadius: 0.1,
         fill: { color: C.darkCard },
         line: { color: plat.color, width: 2 },
@@ -501,13 +501,13 @@ A: "Bat ky ai — can dang ky, pass security review co ban, roi publish. Tuong t
       });
       // Header
       s.addShape("roundRect", {
-        x, y: 0.85, w: 3.0, h: 0.65,
+        x, y: 0.85, w: 2.75, h: 0.65,
         rectRadius: 0.1,
         fill: { color: plat.color },
         line: { color: plat.color, width: 0 },
       });
       s.addText(plat.name, {
-        x, y: 0.85, w: 3.0, h: 0.65,
+        x, y: 0.85, w: 2.75, h: 0.65,
         fontSize: 20, bold: true, fontFace: "Arial Black",
         color: C.white, align: "center", valign: "middle", margin: 0,
       });
@@ -520,7 +520,7 @@ A: "Bat ky ai — can dang ky, pass security review co ban, roi publish. Tuong t
           fill: { color: plat.color }, line: { color: plat.color, width: 0 },
         });
         s.addText(feat, {
-          x: x + 0.35, y: fy, w: 2.55, h: 0.38,
+          x: x + 0.35, y: fy, w: 2.45, h: 0.38,
           fontSize: 11, fontFace: "Calibri", color: C.mutedDark,
           valign: "middle", margin: 0,
         });
@@ -547,29 +547,29 @@ A: "Bat ky ai — can dang ky, pass security review co ban, roi publish. Tuong t
         color: acpColors[i], align: "center", margin: 0,
       });
     });
-    s.addText("Ket noi qua: Local WiFi / Tailscale / Relay Server", {
+    s.addText("Kết nối qua: Local WiFi / Tailscale / Relay Server", {
       x: 5.8, y: 4.6, w: 3.6, h: 0.6,
       fontSize: 10, fontFace: "Calibri", color: C.mutedDark,
       valign: "middle",
     });
 
-    addPresenterNote(s, `SLIDE 15 — UNG DUNG MOBILE
-Thoi gian: ~90 giay
+    addPresenterNote(s, `SLIDE 15 — ỨNG DỤNG MOBILE
+Thời gian: ~90 giây
 
-Diem chinh:
-- Ba nen tang native: macOS (Swift), iOS (Swift + TestFlight), Android (Kotlin)
-- ACP (Agent Communication Protocol) la giao thuc noi bo de mobile app noi voi gateway
-- iOS v2026.3.11 co redesign Home Canvas — giao dien moi dep hon, responsive
-- Android co SMS Intercept: agent co the doc va tra loi SMS (can quyen)
-- Talk Mode tren Android: roi tay hoan toan, noi chuyen nhu Siri
+Điểm chính:
+- Ba nền tảng native: macOS (Swift), iOS (Swift + TestFlight), Android (Kotlin)
+- ACP (Agent Communication Protocol) là giao thức nội bộ để mobile app nối với gateway
+- iOS v2026.3.11 có redesign Home Canvas — giao diện mới đẹp hơn, responsive
+- Android có SMS Intercept: agent có thể đọc và trả lời SMS (cần quyền)
+- Talk Mode trên Android: rảnh tay hoàn toàn, nói chuyện như Siri
 
-Luu y:
-- iOS hien qua TestFlight (beta), chua co tren App Store chinh thuc
-- ACP ho tro 3 kieu ket noi: Local WiFi (nhanh nhat), Tailscale VPN (an toan), Relay (luon on)
+Lưu ý:
+- iOS hiện qua TestFlight (beta), chưa có trên App Store chính thức
+- ACP hỗ trợ 3 kiểu kết nối: Local WiFi (nhanh nhất), Tailscale VPN (an toàn), Relay (luôn ổn)
 
-Cau hoi du kien:
-Q: "Co the dung tren Android khong can cai agent tren server khong?"
-A: "Co — Android Node cho phep chay agent ngay tren thiet bi Android (offline), khong can server rieng."`);
+Câu hỏi dự kiến:
+Q: "Có thể dùng trên Android không cần cài agent trên server không?"
+A: "Có — Android Node cho phép chạy agent ngay trên thiết bị Android (offline), không cần server riêng."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -580,7 +580,7 @@ A: "Co — Android Node cho phep chay agent ngay tren thiet bi Android (offline)
     s.background = { color: C.lightBg };
     addTopBar(s, C.red);
 
-    s.addText("So Sanh & Benchmark — Phan Tich", {
+    s.addText("So Sánh & Benchmark — Phân Tích", {
       x: 0.5, y: 0.15, w: 9.0, h: 0.55,
       fontSize: 28, bold: true, fontFace: "Calibri", color: C.navyText,
     });
@@ -614,7 +614,7 @@ A: "Co — Android Node cho phep chay agent ngay tren thiet bi Android (offline)
     ];
 
     s.addChart(pres.charts.BAR, chartData, {
-      x: 0.5, y: 0.9, w: 6.2, h: 3.0,
+      x: 0.5, y: 0.9, w: 6.2, h: 3.8,
       barDir: "col",
       barGrouping: "clustered",
       chartColors: [C.blue, C.amber, C.purple, C.green],
@@ -631,11 +631,11 @@ A: "Co — Android Node cho phep chay agent ngay tren thiet bi Android (offline)
 
     // ── Key Differentiators ─────────────────────────────────────────────────
     const diffs = [
-      { label: "Duy nhat co Zalo", sub: "Kenh Vietnam", color: C.red    },
-      { label: "Chay Local (Ollama)", sub: "Zero cloud",  color: C.green  },
+      { label: "Duy nhất có Zalo", sub: "Kênh Vietnam", color: C.red    },
+      { label: "Chạy Local (Ollama)", sub: "Zero cloud",  color: C.green  },
       { label: "Agent-to-Agent", sub: "ACP Protocol",    color: C.purple },
     ];
-    s.addText("3 Diem Khac Biet:", {
+    s.addText("3 Điểm Khác Biệt:", {
       x: 6.9, y: 0.9, w: 2.7, h: 0.35,
       fontSize: 13, bold: true, fontFace: "Calibri", color: C.navyText,
     });
@@ -660,32 +660,32 @@ A: "Co — Android Node cho phep chay agent ngay tren thiet bi Android (offline)
     });
 
     // Score legend note
-    s.addText("(Diem 1-10, danh gia chu quan. 10 = tot nhat cho tieu chi do)", {
-      x: 0.5, y: 3.98, w: 9.0, h: 0.25,
+    s.addText("(Điểm 1-10, đánh giá chủ quan. 10 = tốt nhất cho tiêu chí đó)", {
+      x: 0.5, y: 4.75, w: 9.0, h: 0.25,
       fontSize: 9, italic: true, fontFace: "Calibri", color: C.mutedLight, align: "center",
     });
 
-    addPresenterNote(s, `SLIDE 16 — SO SANH & BENCHMARK
-Thoi gian: ~2 phut
+    addPresenterNote(s, `SLIDE 16 — SO SÁNH & BENCHMARK
+Thời gian: ~2 phút
 
-Diem chinh:
-- OpenClaw thang tuyet doi ve: Privacy (9), Channels (9), LLM Flexibility (9)
-- OpenClaw thua ve: Ease-of-Use (3) — can terminal, config files
-- ChatGPT/Claude.ai tot hon cho: nguoi dung pho thong, khong quen tech
+Điểm chính:
+- OpenClaw thắng tuyệt đối về: Privacy (9), Channels (9), LLM Flexibility (9)
+- OpenClaw thua về: Ease-of-Use (3) — cần terminal, config files
+- ChatGPT/Claude.ai tốt hơn cho: người dùng phổ thông, không quen tech
 
 Sweet spot audience:
-- Developer, DevOps, Power User co kien thuc tech
-- Can privacy cao (y te, luat, tai chinh)
-- Su dung Zalo cho cong viec
+- Developer, DevOps, Power User có kiến thức tech
+- Cần privacy cao (y tế, luật, tài chính)
+- Sử dụng Zalo cho công việc
 
-KHONG dung OpenClaw khi:
-- Chi can chat don gian, khong code/automation
-- Khong quen terminal/Node.js
-- Can ket qua ngay (setup mat ~30 phut)
+KHÔNG dùng OpenClaw khi:
+- Chỉ cần chat đơn giản, không code/automation
+- Không quen terminal/Node.js
+- Cần kết quả ngay (setup mất ~30 phút)
 
-Cau hoi du kien:
-Q: "ChatGPT co Channels rieng, tai sao diem thap?"
-A: "ChatGPT co web va mobile app, nhung KHONG co Telegram bot API, khong co Zalo, khong tich hop vao Discord/Slack nhu OpenClaw. 2 diem la chi la web + mobile."`);
+Câu hỏi dự kiến:
+Q: "ChatGPT có Channels riêng, tại sao điểm thấp?"
+A: "ChatGPT có web và mobile app, nhưng KHÔNG có Telegram bot API, không có Zalo, không tích hợp vào Discord/Slack như OpenClaw. 2 điểm là chỉ là web + mobile."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -696,7 +696,7 @@ A: "ChatGPT co web va mobile app, nhung KHONG co Telegram bot API, khong co Zalo
     s.background = { color: C.lightBg };
     addTopBar(s, C.purple);
 
-    s.addText("Design Patterns — Bai Hoc Kien Truc", {
+    s.addText("Design Patterns — Bài Học Kiến Trúc", {
       x: 0.5, y: 0.15, w: 9.0, h: 0.55,
       fontSize: 28, bold: true, fontFace: "Calibri", color: C.navyText,
     });
@@ -714,7 +714,7 @@ A: "ChatGPT co web va mobile app, nhung KHONG co Telegram bot API, khong co Zalo
       },
       {
         name: "Adapter Pattern",
-        desc: "Interface chung cho tat ca channels",
+        desc: "Interface chung cho tất cả channels",
         snippet: "class TelegramAdapter\n  implements ChannelAdapter",
         color: C.green,
       },
@@ -726,19 +726,19 @@ A: "ChatGPT co web va mobile app, nhung KHONG co Telegram bot API, khong co Zalo
       },
       {
         name: "Plugin (Open/Closed)",
-        desc: "Mo rong khong sua doi core",
+        desc: "Mở rộng không sửa đổi core",
         snippet: "plugin.tools.forEach(\n  t => registry.add(t))",
         color: C.purple,
       },
       {
         name: "Approval Gate",
-        desc: "Kiem tra truoc khi thuc thi",
+        desc: "Kiểm tra trước khi thực thi",
         snippet: "cmd → isSafe()\n  ? exec() : askUser()",
         color: C.red,
       },
       {
         name: "Failover Chain",
-        desc: "Tu dong chuyen khi loi",
+        desc: "Tự động chuyển khi lỗi",
         snippet: "try(primary) ?? \n  try(fallback) ?? err",
         color: "E67E22",
       },
@@ -790,23 +790,23 @@ A: "ChatGPT co web va mobile app, nhung KHONG co Telegram bot API, khong co Zalo
     });
 
     addPresenterNote(s, `SLIDE 17 — DESIGN PATTERNS
-Thoi gian: ~2 phut
+Thời gian: ~2 phút
 
-Diem chinh:
-- 6 patterns nay la xuong song cua OpenClaw architecture
-- Gateway Hub: giam tu N*M ket noi xuong N+M (complexity linear thay vi quadratic)
-- Adapter Pattern: them Zalo chi can viet TelegramAdapter moi, khong sua gi het
-- Strategy Pattern: users co the doi LLM chi bang 1 dong config, khong restart
+Điểm chính:
+- 6 patterns này là xương sống của OpenClaw architecture
+- Gateway Hub: giảm từ N*M kết nối xuống N+M (complexity linear thay vì quadratic)
+- Adapter Pattern: thêm Zalo chỉ cần viết TelegramAdapter mới, không sửa gì hết
+- Strategy Pattern: users có thể đổi LLM chỉ bằng 1 dòng config, không restart
 
-Anti-patterns can tranh (danh cho developers dang hoc):
-- "God Agent": cho agent lam tat ca — nen chia nho subagents theo domain
-- "Skip Approval": bo qua cong approval de nhanh hon — nguy hiem cho production
-- "Trust AI Output": neu LLM tra ve code, phai review truoc khi exec
-- "Hardcode LLM": viet code gia su luon dung GPT-4 — dung LLMFactory thay
+Anti-patterns cần tránh (dành cho developers đang học):
+- "God Agent": cho agent làm tất cả — nên chia nhỏ subagents theo domain
+- "Skip Approval": bỏ qua cổng approval để nhanh hơn — nguy hiểm cho production
+- "Trust AI Output": nếu LLM trả về code, phải review trước khi exec
+- "Hardcode LLM": viết code giả sử luôn dùng GPT-4 — dùng LLMFactory thay
 
-Cau hoi du kien:
-Q: "Failover Chain co tu dong khong hay phai config?"
-A: "Tu dong theo thu tu trong config: primary → fallback1 → fallback2. Co timeout per attempt va jitter delay."`);
+Câu hỏi dự kiến:
+Q: "Failover Chain có tự động không hay phải config?"
+A: "Tự động theo thứ tự trong config: primary → fallback1 → fallback2. Có timeout per attempt và jitter delay."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -817,7 +817,7 @@ A: "Tu dong theo thu tu trong config: primary → fallback1 → fallback2. Co ti
     s.background = { color: C.darkBg };
     addTopBar(s, C.amber);
 
-    s.addText("Roadmap & Tuong Lai", {
+    s.addText("Roadmap & Tương Lai", {
       x: 0.5, y: 0.15, w: 9.0, h: 0.55,
       fontSize: 32, bold: true, fontFace: "Arial Black", color: C.white,
     });
@@ -834,13 +834,13 @@ A: "Tu dong theo thu tu trong config: primary → fallback1 → fallback2. Co ti
       rectRadius: 0.1,
       fill: { color: C.green }, line: { color: C.green, width: 0 },
     });
-    s.addText("Da phat hanh (v2026.3.11)", {
+    s.addText("Đã phát hành (v2026.3.11)", {
       x: 0.4, y: 0.85, w: 4.5, h: 0.45,
       fontSize: 13, bold: true, fontFace: "Calibri",
       color: C.white, align: "center", valign: "middle", margin: 0,
     });
     const released = [
-      "7 CVE fixes bao mat nghiem trong",
+      "7 CVE fixes bảo mật nghiêm trọng",
       "iOS Home Canvas redesign",
       "Ollama onboard wizard",
       "Gemini multimodal support",
@@ -871,13 +871,13 @@ A: "Tu dong theo thu tu trong config: primary → fallback1 → fallback2. Co ti
       rectRadius: 0.1,
       fill: { color: C.amber }, line: { color: C.amber, width: 0 },
     });
-    s.addText("Dang phat trien", {
+    s.addText("Đang phát triển", {
       x: 5.1, y: 0.85, w: 4.5, h: 0.45,
       fontSize: 13, bold: true, fontFace: "Calibri",
       color: C.white, align: "center", valign: "middle", margin: 0,
     });
     const inDev = [
-      "7 CVE fixes bo sung",
+      "7 CVE fixes bổ sung",
       "Enhanced ACP v2",
       "Performance optimization",
       "iOS App Store submission",
@@ -902,7 +902,7 @@ A: "Tu dong theo thu tu trong config: primary → fallback1 → fallback2. Co ti
       rectRadius: 0.1,
       fill: { color: "0A1525" }, line: { color: C.purple, width: 1 },
     });
-    s.addText("Dinh huong tuong lai:", {
+    s.addText("Định hướng tương lai:", {
       x: 0.6, y: 3.62, w: 5.6, h: 0.3,
       fontSize: 12, bold: true, fontFace: "Calibri", color: C.amber,
     });
@@ -937,25 +937,25 @@ A: "Tu dong theo thu tu trong config: primary → fallback1 → fallback2. Co ti
     });
 
     addPresenterNote(s, `SLIDE 18 — ROADMAP
-Thoi gian: ~90 giay
+Thời gian: ~90 giây
 
-Diem chinh:
-- v2026.3.11 la phien ban ky thuat lon nhat trong 2 nam
-- 7 CVE da va them 7 dang fix — security-first mindset
-- iOS App Store la muc tieu chinh cua Q2 2026
-- WebAssembly sandbox se thay the Node.js sandbox hien tai — an toan hon, nhanh hon
+Điểm chính:
+- v2026.3.11 là phiên bản kỹ thuật lớn nhất trong 2 năm
+- 7 CVE đã vá thêm 7 đang fix — security-first mindset
+- iOS App Store là mục tiêu chính của Q2 2026
+- WebAssembly sandbox sẽ thay thế Node.js sandbox hiện tại — an toàn hơn, nhanh hơn
 
-Su on dinh tai chinh:
-- 22,100+ GitHub stars — du lon de thu hut sponsors
-- OpenAI va Vercel dang tai tro → du tien de phat trien full-time
-- MIT license: users co the dung thuong mai mien phi
+Sự ổn định tài chính:
+- 22,100+ GitHub stars — đủ lớn để thu hút sponsors
+- OpenAI và Vercel đang tài trợ → đủ tiền để phát triển full-time
+- MIT license: users có thể dùng thương mại miễn phí
 
-Cau hoi du kien:
-Q: "Bao gio co tren iOS App Store?"
-A: "Target Q2 2026 — dang qua review Apple. Hien tai co qua TestFlight (beta public)."
+Câu hỏi dự kiến:
+Q: "Bao giờ có trên iOS App Store?"
+A: "Target Q2 2026 — đang qua review Apple. Hiện tại có qua TestFlight (beta public)."
 
-Q: "Enterprise co on premise khong?"
-A: "Co — OpenClaw da co the deploy on-prem. Enterprise tier them SSO (SAML), RBAC, audit log va support contract."`);
+Q: "Enterprise có on premise không?"
+A: "Có — OpenClaw đã có thể deploy on-prem. Enterprise tier thêm SSO (SAML), RBAC, audit log và support contract."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -966,7 +966,7 @@ A: "Co — OpenClaw da co the deploy on-prem. Enterprise tier them SSO (SAML), R
     s.background = { color: C.lightBg };
     addTopBar(s, C.green);
 
-    s.addText("Quick Start — Cai Dat & Cau Hinh", {
+    s.addText("Quick Start — Cài Đặt & Cấu Hình", {
       x: 0.5, y: 0.15, w: 9.0, h: 0.55,
       fontSize: 28, bold: true, fontFace: "Calibri", color: C.navyText,
     });
@@ -979,23 +979,23 @@ A: "Co — OpenClaw da co the deploy on-prem. Enterprise tier them SSO (SAML), R
     const steps = [
       {
         num: "1",
-        title: "Cai dat",
+        title: "Cài đặt",
         cmd: "npm install -g openclaw@latest",
-        desc: "Yeu cau Node.js >= 22",
+        desc: "Yêu cầu Node.js >= 22",
         color: C.blue,
       },
       {
         num: "2",
-        title: "Chay Wizard",
+        title: "Chạy Wizard",
         cmd: "openclaw onboard --install-daemon",
-        desc: "Cai dat daemon, chon kenh va LLM",
+        desc: "Cài đặt daemon, chọn kênh và LLM",
         color: C.purple,
       },
       {
         num: "3",
-        title: "Kiem tra",
+        title: "Kiểm tra",
         cmd: "openclaw doctor",
-        desc: 'Roi thu: openclaw agent --message "Hello"',
+        desc: 'Rồi thử: openclaw agent --message "Hello"',
         color: C.green,
       },
     ];
@@ -1064,7 +1064,7 @@ A: "Co — OpenClaw da co the deploy on-prem. Enterprise tier them SSO (SAML), R
       rectRadius: 0.1,
       fill: { color: "2A3A5A" }, line: { color: C.borderDark, width: 0 },
     });
-    s.addText("~/.openclaw/config.json — Cau hinh chinh", {
+    s.addText("~/.openclaw/config.json — Cấu hình chính", {
       x: 0.4, y: 3.05, w: 9.2, h: 0.32,
       fontSize: 10, fontFace: "Calibri", color: C.mutedDark,
       align: "center", valign: "middle", margin: 0,
@@ -1085,27 +1085,27 @@ A: "Co — OpenClaw da co the deploy on-prem. Enterprise tier them SSO (SAML), R
     });
 
     addPresenterNote(s, `SLIDE 19 — QUICK START
-Thoi gian: ~90 giay
+Thời gian: ~90 giây
 
-Diem chinh:
-- 3 lenh la du de chay: install → onboard → doctor
-- Onboard wizard tu dong hoi: chon kenh, nhap API key, chon LLM
-- openclaw doctor kiem tra: daemon running, auth ok, kenh ket noi, LLM ok
-- Config JSON rat don gian — port, auth mode, model, plugins
+Điểm chính:
+- 3 lệnh là đủ để chạy: install → onboard → doctor
+- Onboard wizard tự động hỏi: chọn kênh, nhập API key, chọn LLM
+- openclaw doctor kiểm tra: daemon running, auth ok, kênh kết nối, LLM ok
+- Config JSON rất đơn giản — port, auth mode, model, plugins
 
-Yeu cau he thong:
-- Node.js >= 22 (quan trong — khong chay tren Node 18/20)
-- 512MB RAM toi thieu (khong tinh LLM local)
-- Cho Ollama local: VRAM tuy model (llama3.3:70b can ~40GB VRAM)
+Yêu cầu hệ thống:
+- Node.js >= 22 (quan trọng — không chạy trên Node 18/20)
+- 512MB RAM tối thiểu (không tính LLM local)
+- Cho Ollama local: VRAM tùy model (llama3.3:70b cần ~40GB VRAM)
 
-3 use cases de demo:
+3 use cases để demo:
 1. DevOps automation: cron + Telegram alert + run_bash
 2. Discord bot cho game community (CCN2 use case!)
-3. Offline AI voi Ollama + Zalo (khong cloud, khong phi)
+3. Offline AI với Ollama + Zalo (không cloud, không phí)
 
-Cau hoi du kien:
-Q: "Co the dung nhieu agents cung luc khong?"
-A: "Co — config 'agents' la object, co the co main, coder, devops, moi agent co model va skills rieng."`);
+Câu hỏi dự kiến:
+Q: "Có thể dùng nhiều agents cùng lúc không?"
+A: "Có — config 'agents' là object, có thể có main, coder, devops, mỗi agent có model và skills riêng."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -1116,7 +1116,7 @@ A: "Co — config 'agents' la object, co the co main, coder, devops, moi agent c
     s.background = { color: C.darkBg };
     addTopBar(s, C.amber);
 
-    s.addText("Use Cases Thuc Te", {
+    s.addText("Use Cases Thực Tế", {
       x: 0.5, y: 0.15, w: 9.0, h: 0.55,
       fontSize: 32, bold: true, fontFace: "Arial Black", color: C.white,
     });
@@ -1126,7 +1126,7 @@ A: "Co — config 'agents' la object, co the co main, coder, devops, moi agent c
         title: "DevOps Automation",
         color: C.blue,
         features: [
-          "Cron job bao cao hang ngay",
+          "Cron job báo cáo hàng ngày",
           "Telegram alert + Slack #ops",
           "run_bash + web_fetch",
           "Monitor server health",
@@ -1139,7 +1139,7 @@ A: "Co — config 'agents' la object, co the co main, coder, devops, moi agent c
         color: C.green,
         features: [
           "Discord bot CCN2 game",
-          "Claude Haiku (re chi phi)",
+          "Claude Haiku (rẻ chi phí)",
           "Strict sandbox mode",
           "Read-only skills only",
           "Leaderboard + stats",
@@ -1174,12 +1174,12 @@ A: "Co — config 'agents' la object, co the co main, coder, devops, moi agent c
 
       // Header
       s.addShape("roundRect", {
-        x, y: 0.85, w: 3.0, h: 0.65,
+        x, y: 0.85, w: 2.85, h: 0.65,
         rectRadius: 0.1,
         fill: { color: c.color }, line: { color: c.color, width: 0 },
       });
       s.addText(c.title, {
-        x, y: 0.85, w: 3.0, h: 0.65,
+        x, y: 0.85, w: 2.85, h: 0.65,
         fontSize: 13, bold: true, fontFace: "Calibri",
         color: C.white, align: "center", valign: "middle", margin: 0,
       });
@@ -1211,26 +1211,26 @@ A: "Co — config 'agents' la object, co the co main, coder, devops, moi agent c
       });
     });
 
-    addPresenterNote(s, `SLIDE 20 — USE CASES THUC TE
-Thoi gian: ~2 phut
+    addPresenterNote(s, `SLIDE 20 — USE CASES THỰC TẾ
+Thời gian: ~2 phút
 
-Diem chinh:
-- 3 use cases thuc te, moi cai co ROI ro rang
-- Use case 2 (Game Community Bot) LIEN QUAN TRUC TIEP den CCN2 project!
-  → CCN2 la board game, co the dung OpenClaw lam Discord bot cho game
-  → Claude Haiku re nhat ($0.25/M tokens) — phu hop cho game community (nhieu query, low budget)
-  → Strict sandbox: bot chi doc (read ranking, hoi rules), KHONG ghi
+Điểm chính:
+- 3 use cases thực tế, mỗi cái có ROI rõ ràng
+- Use case 2 (Game Community Bot) LIÊN QUAN TRỰC TIẾP đến CCN2 project!
+  → CCN2 là board game, có thể dùng OpenClaw làm Discord bot cho game
+  → Claude Haiku rẻ nhất ($0.25/M tokens) — phù hợp cho game community (nhiều query, low budget)
+  → Strict sandbox: bot chỉ đọc (read ranking, hỏi rules), KHÔNG ghi
 
-Nhan manh cho khán gia developer:
-- Use case 1: neu lam DevOps/SRE, tiet kiem 2-3 gio/ngay tu dong hoa bao cao
-- Use case 3: privacy use case (bac si, luat su, ngan hang) — data khong bao gio roi may
+Nhấn mạnh cho khán giả developer:
+- Use case 1: nếu làm DevOps/SRE, tiết kiệm 2-3 giờ/ngày tự động hóa báo cáo
+- Use case 3: privacy use case (bác sĩ, luật sư, ngân hàng) — data không bao giờ rời máy
 
-Demo goi y:
-- Neu co thoi gian, demo live: "openclaw agent --message 'Xin chao, ban la ai?'"
+Demo gợi ý:
+- Nếu có thời gian, demo live: "openclaw agent --message 'Xin chào, bạn là ai?'"
 
-Cau hoi du kien:
-Q: "Chi phi voi Claude Haiku la bao nhieu?"
-A: "$0.25 per million input tokens — voi game community bot ~1000 queries/ngay, chi phi chi ~$0.01/ngay."`);
+Câu hỏi dự kiến:
+Q: "Chi phí với Claude Haiku là bao nhiêu?"
+A: "$0.25 per million input tokens — với game community bot ~1000 queries/ngày, chi phí chỉ ~$0.01/ngày."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -1241,7 +1241,7 @@ A: "$0.25 per million input tokens — voi game community bot ~1000 queries/ngay
     s.background = { color: C.lightBg };
     addTopBar(s, C.blue);
 
-    s.addText("Data Flow — Vi Du Thuc Te", {
+    s.addText("Data Flow — Ví Dụ Thực Tế", {
       x: 0.5, y: 0.15, w: 9.0, h: 0.55,
       fontSize: 28, bold: true, fontFace: "Calibri", color: C.navyText,
     });
@@ -1256,7 +1256,7 @@ A: "$0.25 per million input tokens — voi game community bot ~1000 queries/ngay
       rectRadius: 0.06,
       fill: { color: "EAF4FF" }, line: { color: C.blue, width: 1 },
     });
-    s.addText('Vi du: User Telegram hoi "Thoi tiet Ha Noi hom nay nhu the nao?"', {
+    s.addText('Ví dụ: User Telegram hỏi "Thời tiết Hà Nội hôm nay như thế nào?"', {
       x: 0.5, y: 0.82, w: 9.0, h: 0.35,
       fontSize: 11, italic: true, fontFace: "Calibri",
       color: C.navyText, align: "center", valign: "middle",
@@ -1264,9 +1264,9 @@ A: "$0.25 per million input tokens — voi game community bot ~1000 queries/ngay
 
     // Flow steps
     const flowSteps = [
-      { label: "User (Telegram)",    note: "Gui tin nhan",               color: C.blue,   x: 0.3  },
+      { label: "User (Telegram)",    note: "Gửi tin nhắn",               color: C.blue,   x: 0.3  },
       { label: "Channel Extension",  note: "Parse Telegram message",      color: "2980B9", x: 1.55 },
-      { label: "Gateway",            note: "Nhan WebSocket event",        color: C.purple, x: 2.8  },
+      { label: "Gateway",            note: "Nhận WebSocket event",        color: C.purple, x: 2.8  },
       { label: "Auth Check",         note: "Validate JWT token",          color: C.red,    x: 4.05 },
       { label: "7-Tier Router",      note: "Route: main agent",           color: C.amber,  x: 5.3  },
       { label: "Agent Runtime",      note: "8,432 tokens context",        color: C.green,  x: 6.55 },
@@ -1296,8 +1296,8 @@ A: "$0.25 per million input tokens — voi game community bot ~1000 queries/ngay
       }
       // Note below
       s.addText(step.note, {
-        x: step.x - 0.05, y: 2.08, w: 1.2, h: 0.4,
-        fontSize: 8, fontFace: "Calibri", color: C.mutedLight,
+        x: step.x - 0.08, y: 2.08, w: 1.26, h: 0.42,
+        fontSize: 7, fontFace: "Calibri", color: C.mutedLight,
         align: "center", wrap: true,
       });
     });
@@ -1305,18 +1305,18 @@ A: "$0.25 per million input tokens — voi game community bot ~1000 queries/ngay
     // Second flow row (after LLM)
     const flowSteps2 = [
       { label: "Skills Executor",    note: "web_fetch weather API",      color: C.amber,  x: 0.3  },
-      { label: "LLM (Claude)",       note: "Tong hop ket qua",           color: "16A085", x: 1.55 },
+      { label: "LLM (Claude)",       note: "Tổng hợp kết quả",           color: "16A085", x: 1.55 },
       { label: "Agent Runtime",      note: "Format response",            color: C.green,  x: 2.8  },
       { label: "Gateway",            note: "Streaming response",         color: C.purple, x: 4.05 },
       { label: "Channel Extension",  note: "Format Telegram message",    color: "2980B9", x: 5.3  },
-      { label: "User (Telegram)",    note: '"28 do C, nang, it may"',    color: C.blue,   x: 6.55 },
+      { label: "User (Telegram)",    note: '"28 độ C, nắng, ít mây"',    color: C.blue,   x: 6.55 },
     ];
 
     s.addText("↓", {
       x: 8.4, y: 1.55, w: 0.5, h: 0.8,
       fontSize: 18, color: C.mutedLight, align: "center",
     });
-    s.addText("↓ tiep theo", {
+    s.addText("↓ tiếp theo", {
       x: 7.95, y: 2.0, w: 1.1, h: 0.25,
       fontSize: 8, fontFace: "Calibri", color: C.mutedLight, align: "center",
     });
@@ -1340,8 +1340,8 @@ A: "$0.25 per million input tokens — voi game community bot ~1000 queries/ngay
         });
       }
       s.addText(step.note, {
-        x: step.x - 0.05, y: 3.43, w: 1.2, h: 0.4,
-        fontSize: 8, fontFace: "Calibri", color: C.mutedLight,
+        x: step.x - 0.08, y: 3.43, w: 1.26, h: 0.42,
+        fontSize: 7, fontFace: "Calibri", color: C.mutedLight,
         align: "center", wrap: true,
       });
     });
@@ -1353,43 +1353,43 @@ A: "$0.25 per million input tokens — voi game community bot ~1000 queries/ngay
       fill: { color: "EAF4FF" }, line: { color: C.blue, width: 1 },
     });
     const insights = [
-      "Toan bo luong xu ly: ~800ms",
-      "Approval: KHONG (weather la read-only)",
-      "Context: 8,432 tokens (lich su + memory)",
-      "Streaming: user thay response theo tung chu",
+      "Toàn bộ luồng xử lý: ~800ms",
+      "Approval: KHÔNG (weather là read-only)",
+      "Context: 8,432 tokens (lịch sử + memory)",
+      "Streaming: user thấy response theo từng chữ",
     ];
     insights.forEach((ins, i) => {
       s.addShape("rect", {
-        x: 0.7 + i * 2.35, y: 4.12, w: 0.08, h: 0.08,
+        x: 0.55 + i * 2.3, y: 4.12, w: 0.08, h: 0.08,
         fill: { color: C.blue }, line: { color: C.blue, width: 0 },
       });
       s.addText(ins, {
-        x: 0.85 + i * 2.35, y: 4.05, w: 2.2, h: 0.55,
-        fontSize: 10, fontFace: "Calibri", color: C.navyText,
+        x: 0.68 + i * 2.3, y: 4.05, w: 2.1, h: 0.55,
+        fontSize: 9, fontFace: "Calibri", color: C.navyText,
         valign: "middle", wrap: true,
       });
     });
 
     addPresenterNote(s, `SLIDE 21 — DATA FLOW
-Thoi gian: ~2 phut
+Thời gian: ~2 phút
 
-Diem chinh:
-- Vi du cu the: hoi thoi tiet qua Telegram → tra loi trong ~800ms
-- Luong di qua 10 buoc nhung hau het < 10ms moi buoc
-- Approval KHONG can vi weather la read-only skill (chi web_fetch, khong ghi gi)
-- Streaming: response hien ra theo tung token, user khong phai doi full
+Điểm chính:
+- Ví dụ cụ thể: hỏi thời tiết qua Telegram → trả lời trong ~800ms
+- Luồng đi qua 10 bước nhưng hầu hết < 10ms mỗi bước
+- Approval KHÔNG cần vì weather là read-only skill (chỉ web_fetch, không ghi gì)
+- Streaming: response hiện ra theo từng token, user không phải đợi full
 
-Nhan manh:
-- Server-authoritative: agent quyet dinh co thuc thi skill hay khong (khong phai LLM)
-- LLM chi "de nghi" tool_call, con agent runtime validate truoc khi chay
-- Context Engine giu lich su 10 tin nhan gan nhat + memory search
+Nhấn mạnh:
+- Server-authoritative: agent quyết định có thực thi skill hay không (không phải LLM)
+- LLM chỉ "đề nghị" tool_call, còn agent runtime validate trước khi chạy
+- Context Engine giữ lịch sử 10 tin nhắn gần nhất + memory search
 
-Cau hoi du kien:
-Q: "Neu weather API het han, agent lam gi?"
-A: "Failover Chain: thu provider 1 → fail → thu provider 2 → fail → bao loi thân thien cho user, khong crash."
+Câu hỏi dự kiến:
+Q: "Nếu weather API hết hạn, agent làm gì?"
+A: "Failover Chain: thử provider 1 → fail → thử provider 2 → fail → báo lỗi thân thiện cho user, không crash."
 
-Q: "800ms co qua cham khong?"
-A: "Phu thuoc network va LLM. Voi Haiku local proxy: ~200ms. Voi Claude.ai API tu Viet Nam: ~1-2s. Streaming an buffer tot hon cai cam giac."`);
+Q: "800ms có quá chậm không?"
+A: "Phụ thuộc network và LLM. Với Haiku local proxy: ~200ms. Với Claude.ai API từ Việt Nam: ~1-2s. Streaming ẩn buffer tốt hơn cái cảm giác."`);
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -1400,13 +1400,13 @@ A: "Phu thuoc network va LLM. Voi Haiku local proxy: ~200ms. Voi Claude.ai API t
     s.background = { color: C.darkBg };
     addTopBar(s, C.amber);
 
-    // Decorative circle (top-right)
+    // Decorative circle (top-right) — pushed far off-edge to avoid content overlap
     s.addShape("ellipse", {
-      x: 8.0, y: -0.5, w: 2.8, h: 2.8,
+      x: 9.2, y: -1.6, w: 1.8, h: 1.8,
       fill: { color: "1A2D42" }, line: { color: C.amber, width: 2 },
     });
 
-    s.addText("Ket Luan", {
+    s.addText("Kết Luận", {
       x: 0.5, y: 0.15, w: 6.5, h: 0.55,
       fontSize: 36, bold: true, fontFace: "Arial Black", color: C.white,
       shadow: mkShadow(),
@@ -1415,17 +1415,17 @@ A: "Phu thuoc network va LLM. Voi Haiku local proxy: ~200ms. Voi Claude.ai API t
     // ── 3 Summary Callout Boxes ─────────────────────────────────────────────
     const summaries = [
       {
-        text: "AI Gateway tu chu — chay tren may ban, 22+ kenh, 30+ LLMs",
+        text: "AI Gateway tự chủ — chạy trên máy bạn, 22+ kênh, 30+ LLMs",
         color: C.blue,
         icon: "Gateway",
       },
       {
-        text: "Cong cu cho power users — cron, browser control, shell, multi-agent",
+        text: "Công cụ cho power users — cron, browser control, shell, multi-agent",
         color: C.amber,
         icon: "Power",
       },
       {
-        text: "Privacy-first — data khong roi may, MIT license, khong vendor lock-in",
+        text: "Privacy-first — data không rời máy, MIT license, không vendor lock-in",
         color: C.green,
         icon: "Privacy",
       },
@@ -1455,15 +1455,15 @@ A: "Phu thuoc network va LLM. Voi Haiku local proxy: ~200ms. Voi Claude.ai API t
     // ── When to Use / Not Use ──────────────────────────────────────────────
     const colData = [
       {
-        header: "Dung khi",
+        header: "Dùng khi",
         color: C.green,
-        items: ["Developer / DevOps", "Can su dung Zalo", "Can privacy cao", "Muon offline AI (Ollama)", "Thich tu dong hoa"],
+        items: ["Developer / DevOps", "Cần sử dụng Zalo", "Cần privacy cao", "Muốn offline AI (Ollama)", "Thích tự động hóa"],
         tick: "OK",
       },
       {
-        header: "Khong dung khi",
+        header: "Không dùng khi",
         color: C.red,
-        items: ["Muon dung ngay (setup ~30 phut)", "Khong quen terminal", "Chi can chat don gian", "Khong co server/VPS"],
+        items: ["Muốn dùng ngay (setup ~30 phút)", "Không quen terminal", "Chỉ cần chat đơn giản", "Không có server/VPS"],
         tick: "NO",
       },
     ];
@@ -1508,29 +1508,29 @@ A: "Phu thuoc network va LLM. Voi Haiku local proxy: ~200ms. Voi Claude.ai API t
       fontSize: 10, fontFace: "Calibri", color: C.mutedDark, align: "center",
     });
 
-    addPresenterNote(s, `SLIDE 22 — KET LUAN
-Thoi gian: ~2 phut + Q&A
+    addPresenterNote(s, `SLIDE 22 — KẾT LUẬN
+Thời gian: ~2 phút + Q&A
 
-Ba diem chinh can nho:
-1. GATEWAY: OpenClaw la lop middleware giua LLM va kenh nhan tin — khong phai chatbot
-2. POWER: Danh cho developer/DevOps — co the chay shell script, browser, git tu nhien lieu chat
-3. PRIVACY: MIT license + self-hosted = zero vendor lock-in, data o lai may ban
+Ba điểm chính cần nhớ:
+1. GATEWAY: OpenClaw là lớp middleware giữa LLM và kênh nhắn tin — không phải chatbot
+2. POWER: Dành cho developer/DevOps — có thể chạy shell script, browser, git từ nhiên liệu chat
+3. PRIVACY: MIT license + self-hosted = zero vendor lock-in, data ở lại máy bạn
 
-Keu goi hanh dong:
-- "Chung ta co the thu cai dat ngay tren laptop trong 5 phut, ai muon thu sau buoi hoc?"
-- "Star repo Pi-Mono tren GitHub de ho tro team — hien co 22,100+ stars"
-- "Neu ban dang lam Discord bot cho CCN2 game, day la giai phap phu hop nhat"
+Kêu gọi hành động:
+- "Chúng ta có thể thử cài đặt ngay trên laptop trong 5 phút, ai muốn thử sau buổi học?"
+- "Star repo Pi-Mono trên GitHub để hỗ trợ team — hiện có 22,100+ stars"
+- "Nếu bạn đang làm Discord bot cho CCN2 game, đây là giải pháp phù hợp nhất"
 
-Phan Q&A goi y:
-- De mo cua: "Cac ban co cau hoi gi khong? Dac biet ve phan so sanh voi ChatGPT hay ve viec tich hop vao du an cu the?"
-- Neu khong co cau hoi: demo live 2 phut (cai dat + goi agent)
+Phần Q&A gợi ý:
+- Để mở cửa: "Các bạn có câu hỏi gì không? Đặc biệt về phần so sánh với ChatGPT hay về việc tích hợp vào dự án cụ thể?"
+- Nếu không có câu hỏi: demo live 2 phút (cài đặt + gọi agent)
 
-Cau hoi du kien:
-Q: "Co documentation tieng Viet khong?"
-A: "Hien tai docs chu yeu tieng Anh, nhung community co mot so guides tieng Viet. OpenClaw GUI (Claw Desktop) co tieng Viet."
+Câu hỏi dự kiến:
+Q: "Có documentation tiếng Việt không?"
+A: "Hiện tại docs chủ yếu tiếng Anh, nhưng community có một số guides tiếng Việt. OpenClaw GUI (Claw Desktop) có tiếng Việt."
 
-Q: "Security co audit chua?"
-A: "Community audit, khong phai formal pentest. 14 CVE da fix ke tu 2024. Cho enterprise, recommend tu chay pentest truoc deploy."`);
+Q: "Security có audit chưa?"
+A: "Community audit, không phải formal pentest. 14 CVE đã fix kể từ 2024. Cho enterprise, recommend tự chạy pentest trước deploy."`);
   }
 
 } // end addSlides12to22
