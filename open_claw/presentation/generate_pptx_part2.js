@@ -370,7 +370,7 @@ A: "Co, qua Plugin SDK — viet TypeScript, publish len ClawHub, cai voi mot len
       s.addText(ext.sub, {
         x: 6.3, y: y + 0.26, w: 3.2, h: 0.24,
         fontSize: 10, fontFace: "Calibri",
-        color: "FFFFFFCC", align: "center", valign: "middle", margin: 0,
+        color: "FFFFFF", align: "center", valign: "middle", margin: 0,
       });
     });
 
@@ -613,7 +613,7 @@ A: "Co — Android Node cho phep chay agent ngay tren thiet bi Android (offline)
       },
     ];
 
-    s.addChart("bar", chartData, {
+    s.addChart(pres.charts.BAR, chartData, {
       x: 0.5, y: 0.9, w: 6.2, h: 3.0,
       barDir: "col",
       barGrouping: "clustered",
@@ -655,7 +655,7 @@ A: "Co — Android Node cho phep chay agent ngay tren thiet bi Android (offline)
       s.addText(d.sub, {
         x: 6.9, y: y + 0.4, w: 2.7, h: 0.32,
         fontSize: 10, fontFace: "Calibri",
-        color: "FFFFFFBB", align: "center", valign: "middle", margin: 0,
+        color: "FFFFFF", align: "center", valign: "middle", margin: 0,
       });
     });
 
