@@ -70,7 +70,7 @@ Pi-Mono gồm 7 package, mỗi cái đảm nhận một vai trò rõ ràng:
 ┌─────────────────────────────────────────────────┐
 │                 TẦNG ỨNG DỤNG                   │
 │                                                 │
-│  coding-agent    mom (Slack)    pods (GPU)       │
+│  coding-agent    mom (Slack)    pods (GPU)      │
 │  (CLI viết code) (Bot chat)    (Deploy AI)      │
 └───────┬──────────┬──────────────┬───────────────┘
         │          │              │
@@ -78,14 +78,14 @@ Pi-Mono gồm 7 package, mỗi cái đảm nhận một vai trò rõ ràng:
 ┌─────────────────────────────────────────────────┐
 │              TẦNG GIAO DIỆN                     │
 │                                                 │
-│     tui (Terminal UI)    web-ui (Web UI)         │
+│     tui (Terminal UI)    web-ui (Web UI)        │
 └───────┬──────────────────┬──────────────────────┘
         │                  │
         v                  v
 ┌─────────────────────────────────────────────────┐
 │                TẦNG NỀN TẢNG                    │
 │                                                 │
-│  agent (Bộ điều khiển)   ai (Giao tiếp LLM)    │
+│  agent (Bộ điều khiển)   ai (Giao tiếp LLM)     │
 └─────────────────────────────────────────────────┘
 ```
 
