@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCN2 Agent Team — Roadmap</title>
+<style>
+  /* ============================================================
+     RESET & BASE
+  ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:        #0d1117;
+    --bg2:       #161b22;
+    --bg3:       #1c2330;
+    --border:    #30363d;
+    --text:      #e6edf3;
+    --text-muted:#8b949e;
+    --text-dim:  #586069;
+
+    --gd:   #f0883e;   /* agent_gd — amber */
+    --dev:  #58a6ff;   /* agent_dev — blue */
+    --qc:   #3fb950;   /* agent_qc — green */
+    --sys:  #bc8cff;   /* system / config — purple */
+
+    --r1: #e06c75;     /* Round 1 — red */
+    --r2: #f0883e;     /* Round 2 — amber */
+    --r3: #58a6ff;     /* Round 3 — blue */
+    --r4: #3fb950;     /* Round 4 — green */
+
+    --done:     #3fb950;
+    --progress: #f0883e;
+    --todo:     #58a6ff;
+    --blocked:  #f85149;
+
+    --radius: 8px;
+    --radius-lg: 14px;
+    --font: 'Segoe UI', 'SF Pro Display', system-ui, sans-serif;
+    --font-mono: 'Cascadia Code', 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ============================================================
+     LAYOUT
+  ============================================================ */
+  .page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ============================================================
+     HERO HEADER
+  ============================================================ */
+  .hero {
+    padding: 60px 0 40px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(88,166,255,.12);
+    border: 1px solid rgba(88,166,255,.3);
+    color: var(--dev);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+    background: linear-gradient(135deg, #e6edf3 0%, #8b949e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--gd), var(--r2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto 32px;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .meta-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .meta-chip .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--done);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: .4; }
+  }
+
+  /* ============================================================
+     NAV
+  ============================================================ */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,17,23,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    margin: 0 -24px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-link {
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all .15s;
+    border: 1px solid transparent;
+  }
+  .nav-link:hover {
+    color: var(--text);
+    background: var(--bg2);
+    border-color: var(--border);
+  }
+  .nav-link.active {
+    color: var(--text);
+    background: var(--bg3);
+    border-color: var(--border);
+  }
+
+  /* ============================================================
+     SECTION HEADERS
+  ============================================================ */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 56px 0 28px;
+  }
+  .section-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .section-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ============================================================
+     PIPELINE DIAGRAM
+  ============================================================ */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 32px;
+    margin-bottom: 40px;
+    overflow-x: auto;
+  }
+  .pipe-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 120px;
+  }
+  .pipe-icon {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    position: relative;
+  }
+  .pipe-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text);
+  }
+  .pipe-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: center;
+    font-family: var(--font-mono);
+  }
+  .pipe-arrow {
+    font-size: 20px;
+    color: var(--border);
+    margin: 0 4px;
+    padding-bottom: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ============================================================
+     AGENT CARDS
+  ============================================================ */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 768px) {
+    .agents-grid { grid-template-columns: 1fr; }
+  }
+  .agent-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .15s, border-color .15s;
+  }
+  .agent-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+  }
+  .agent-card.gd  { --accent: var(--gd); }
+  .agent-card.dev { --accent: var(--dev); }
+  .agent-card.qc  { --accent: var(--qc); }
+
+  .agent-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .agent-avatar {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    background: rgba(255,255,255,.06);
+  }
+  .agent-id {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .agent-name {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .agent-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .agent-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,.06);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+  .agent-flow {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .agent-flow .flow-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .flow-icon { color: var(--accent); flex-shrink: 0; }
+
+  /* ============================================================
+     TIMELINE / GANTT
+  ============================================================ */
+  .timeline-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+  .timeline-header {
+    display: grid;
+    grid-template-columns: 200px repeat(8, 1fr);
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+  .tl-head {
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .tl-head:first-child { text-align: left; }
+  .tl-head:last-child { border-right: none; }
+
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 200px repeat(8, 1fr);
+    border-bottom: 1px solid var(--border);
+    min-height: 48px;
+    align-items: center;
+  }
+  .timeline-row:last-child { border-bottom: none; }
+  .tl-label {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tl-cell {
+    border-right: 1px solid rgba(48,54,61,.5);
+    height: 100%;
+    position: relative;
+    min-height: 48px;
+  }
+  .tl-cell:last-child { border-right: none; }
+  .tl-bar {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 26px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #000;
+  }
+  .tl-bar.span-1 { left: 4px; right: 4px; }
+  .tl-bar.span-2 { left: 4px; }
+  .tl-row-r1 .tl-label { color: var(--r1); }
+  .tl-row-r2 .tl-label { color: var(--r2); }
+  .tl-row-r3 .tl-label { color: var(--r3); }
+  .tl-row-r4 .tl-label { color: var(--r4); }
+  .round-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ============================================================
+     ROUNDS
+  ============================================================ */
+  .round-block {
+    margin-bottom: 40px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .round-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .round-header:hover { background: #1e2533; }
+  .round-badge {
+    min-width: 80px;
+    text-align: center;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  .round-title {
+    flex: 1;
+  }
+  .round-title h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .round-title p {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .round-weeks {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+  .round-toggle {
+    color: var(--text-muted);
+    font-size: 16px;
+    transition: transform .2s;
+  }
+  .round-content {
+    padding: 0;
+  }
+
+  /* phases */
+  .phase {
+    border-bottom: 1px solid var(--border);
+  }
+  .phase:last-child { border-bottom: none; }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background: rgba(255,255,255,.02);
+    border-bottom: 1px solid rgba(48,54,61,.5);
+  }
+  .phase-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: var(--bg3);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .phase-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* tasks */
+  .task-list {
+    padding: 6px 0;
+  }
+  .task-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 24px;
+    transition: background .1s;
+    cursor: pointer;
+  }
+  .task-row:hover { background: rgba(255,255,255,.03); }
+  .task-check {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+    transition: all .15s;
+    cursor: pointer;
+  }
+  .task-check.done {
+    background: var(--done);
+    border-color: var(--done);
+    color: #000;
+  }
+  .task-check.progress {
+    background: var(--progress);
+    border-color: var(--progress);
+    color: #000;
+  }
+  .task-check.blocked {
+    background: var(--blocked);
+    border-color: var(--blocked);
+    color: #fff;
+  }
+  .task-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .task-text.done-text {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+  .task-id {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  /* ============================================================
+     STATS BAR
+  ============================================================ */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+  .stat-box {
+    background: var(--bg2);
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-val {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  @media (max-width: 600px) {
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ============================================================
+     PROGRESS RINGS
+  ============================================================ */
+  .rounds-progress {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 700px) {
+    .rounds-progress { grid-template-columns: repeat(2, 1fr); }
+  }
+  .ring-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: border-color .15s;
+  }
+  .ring-card:hover { border-color: var(--rc); }
+  svg.ring { overflow: visible; }
+  .ring-bg { fill: none; stroke: rgba(255,255,255,.07); }
+  .ring-fill { fill: none; stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
+  .ring-text {
+    font-size: 14px;
+    font-weight: 700;
+    fill: var(--text);
+    dominant-baseline: central;
+    text-anchor: middle;
+  }
+  .ring-label { font-size: 12px; font-weight: 700; text-align: center; }
+  .ring-sub { font-size: 11px; color: var(--text-muted); text-align: center; }
+
+  /* ============================================================
+     PRINCIPLES
+  ============================================================ */
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 700px) { .principles-grid { grid-template-columns: 1fr; } }
+  .principle-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .principle-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.06);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .principle-num {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-bottom: 2px;
+  }
+  .principle-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .principle-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ============================================================
+     FLOW TIMELINE (auto-pipeline)
+  ============================================================ */
+  .flow-timeline {
+    position: relative;
+    margin-bottom: 40px;
+    padding: 8px 0;
+  }
+  .flow-timeline::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--gd), var(--dev), var(--qc));
+    opacity: .4;
+  }
+  .ft-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .ft-dot {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    border: 2px solid var(--accent-ft);
+    background: var(--bg);
+  }
+  .ft-time {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--accent-ft);
+    white-space: nowrap;
+    margin-top: 10px;
+    min-width: 60px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .ft-body {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    flex: 1;
+  }
+  .ft-agent { font-family: var(--font-mono); font-size: 11px; font-weight: 700; margin-bottom: 3px; }
+  .ft-action { font-size: 13px; color: var(--text); font-weight: 500; margin-bottom: 3px; }
+  .ft-detail { font-size: 11px; color: var(--text-muted); }
+
+  /* ============================================================
+     FOOTER
+  ============================================================ */
+  .footer {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-dim);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .footer a { color: var(--text-muted); text-decoration: none; }
+  .footer a:hover { color: var(--text); }
+
+  /* ============================================================
+     UTILS
+  ============================================================ */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .kbd {
+    display: inline-block;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--bg3);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--dev);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <div class="hero">
+    <div class="hero-badge">OpenClaw Agent Team · CCN2 Project · 2026</div>
+    <h1>CCN2 <span>Agent Team</span><br>Roadmap</h1>
+    <p class="hero-sub">
+      Nhóm AI agent tự động hóa vòng lặp phát triển game — từ Concept đến GDD, Code, và Quality Report — chạy trên OpenClaw.
+    </p>
+    <div class="hero-meta">
+      <div class="meta-chip"><span class="dot"></span> 3 AI Agents</div>
+      <div class="meta-chip">🔄 4 Rounds · 8 Tuần</div>
+      <div class="meta-chip">📋 Superpowers × Speckit</div>
+      <div class="meta-chip">🏗️ ccn2_workspace</div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="nav-link active" href="#overview">Overview</a>
+      <a class="nav-link" href="#agents">Agents</a>
+      <a class="nav-link" href="#pipeline">Pipeline</a>
+      <a class="nav-link" href="#timeline">Timeline</a>
+      <a class="nav-link" href="#rounds">Rounds</a>
+      <a class="nav-link" href="#principles">Principles</a>
+      <a class="nav-link" href="#flow">Auto-Flow</a>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       STATS
+  ============================================================ -->
+  <div id="overview">
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(88,166,255,.15);color:var(--dev)">01</div>
+      <h2>Overview</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-box">
+        <div class="stat-val" style="color:var(--gd)">3</div>
+        <div class="stat-label">AI Agents</div>
+        <div class="stat-sub">GD · Dev · QC</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" style="color:var(--r3)">4</div>
+        <div class="stat-label">Rounds</div>
+        <div class="stat-sub">~8 tuần build</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" style="color:var(--sys)">32</div>
+        <div class="stat-label">Tổng Tasks</div>
+        <div class="stat-sub">Bite-sized 2–5 min</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" style="color:var(--qc)">~1h</div>
+        <div class="stat-label">Concept → Report</div>
+        <div class="stat-sub">End-to-end latency</div>
+      </div>
+    </div>
+
+    <div class="rounds-progress" id="progress-rings">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <!-- ============================================================
+       AGENTS
+  ============================================================ -->
+  <div id="agents">
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(240,136,62,.15);color:var(--gd)">02</div>
+      <h2>3 Agents trong Team</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="agents-grid">
+      <!-- agent_gd -->
+      <div class="agent-card gd">
+        <div class="agent-head">
+          <div class="agent-avatar">🎨</div>
+          <div>
+            <div class="agent-id">agent_gd</div>
+            <div class="agent-name">Game Designer</div>
+          </div>
+        </div>
+        <div class="agent-desc">
+          Chuyển gameplay concepts thô thành GDD chi tiết 8 sections. Sử dụng claude-opus-4-6 để reasoning phức tạp.
+        </div>
+        <div class="agent-tags">
+          <span class="tag">doc-wave-analysis</span>
+          <span class="tag">speckit</span>
+          <span class="tag">claude-opus-4-6</span>
+        </div>
+        <div class="agent-flow">
+          <div class="flow-item"><span class="flow-icon">📥</span><span>Reads: <code>concepts/*.md</code></span></div>
+          <div class="flow-item"><span class="flow-icon">📤</span><span>Writes: <code>design/GDD-*.md</code></span></div>
+          <div class="flow-item"><span class="flow-icon">⏱️</span><span>Cron: mỗi 15 phút, 8h–22h weekdays</span></div>
+        </div>
+      </div>
+
+      <!-- agent_dev -->
+      <div class="agent-card dev">
+        <div class="agent-head">
+          <div class="agent-avatar">💻</div>
+          <div>
+            <div class="agent-id">agent_dev</div>
+            <div class="agent-name">Developer</div>
+          </div>
+        </div>
+        <div class="agent-desc">
+          Đọc GDD → implement code JS theo kiến trúc CCN2. Không dùng ES6 modules, tuân thủ CONFIG pattern.
+        </div>
+        <div class="agent-tags">
+          <span class="tag">clientccn2-project-editor</span>
+          <span class="tag">claude-sonnet-4-6</span>
+        </div>
+        <div class="agent-flow">
+          <div class="flow-item"><span class="flow-icon">📥</span><span>Reads: <code>design/GDD-*.md</code></span></div>
+          <div class="flow-item"><span class="flow-icon">📤</span><span>Writes: <code>src/</code> + <code>src/tests/</code></span></div>
+          <div class="flow-item"><span class="flow-icon">⏱️</span><span>Cron: offset +7 phút sau agent_gd</span></div>
+        </div>
+      </div>
+
+      <!-- agent_qc -->
+      <div class="agent-card qc">
+        <div class="agent-head">
+          <div class="agent-avatar">🧪</div>
+          <div>
+            <div class="agent-id">agent_qc</div>
+            <div class="agent-name">QA Engineer</div>
+          </div>
+        </div>
+        <div class="agent-desc">
+          Viết testcases từ GDD, chạy npm test khi code thay đổi, tạo quality report và alert failures ngay lập tức.
+        </div>
+        <div class="agent-tags">
+          <span class="tag">Jest</span>
+          <span class="tag">npm test</span>
+          <span class="tag">claude-sonnet-4-6</span>
+        </div>
+        <div class="agent-flow">
+          <div class="flow-item"><span class="flow-icon">📥</span><span>Reads: <code>design/</code> + <code>src/</code></span></div>
+          <div class="flow-item"><span class="flow-icon">📤</span><span>Writes: <code>reports/</code> + <code>src/tests/</code></span></div>
+          <div class="flow-item"><span class="flow-icon">⏱️</span><span>Cron: offset +12 phút sau agent_gd</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PIPELINE
+  ============================================================ -->
+  <div id="pipeline">
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(63,185,80,.15);color:var(--qc)">03</div>
+      <h2>Automation Pipeline</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-icon" style="background:rgba(255,255,255,.06)">👤</div>
+        <div class="pipe-label">Human</div>
+        <div class="pipe-sub">drops concept</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon" style="background:rgba(240,136,62,.15)">📝</div>
+        <div class="pipe-label">concepts/</div>
+        <div class="pipe-sub">feature.md</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon" style="background:rgba(240,136,62,.15)">🎨</div>
+        <div class="pipe-label">agent_gd</div>
+        <div class="pipe-sub">T+00:00</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon" style="background:rgba(240,136,62,.12)">📐</div>
+        <div class="pipe-label">design/</div>
+        <div class="pipe-sub">GDD-*.md</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon" style="background:rgba(88,166,255,.15)">💻</div>
+        <div class="pipe-label">agent_dev</div>
+        <div class="pipe-sub">T+00:20</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon" style="background:rgba(88,166,255,.12)">⚙️</div>
+        <div class="pipe-label">src/</div>
+        <div class="pipe-sub">*.js</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon" style="background:rgba(63,185,80,.15)">🧪</div>
+        <div class="pipe-label">agent_qc</div>
+        <div class="pipe-sub">T+00:35</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon" style="background:rgba(63,185,80,.12)">📊</div>
+        <div class="pipe-label">reports/</div>
+        <div class="pipe-sub">quality-*.md</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon" style="background:rgba(255,255,255,.06)">📱</div>
+        <div class="pipe-label">Telegram</div>
+        <div class="pipe-sub">notification</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       GANTT TIMELINE
+  ============================================================ -->
+  <div id="timeline">
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(188,140,255,.15);color:var(--sys)">04</div>
+      <h2>Gantt Timeline — 8 Tuần</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="timeline-wrap">
+      <div class="timeline-header">
+        <div class="tl-head">Phase</div>
+        <div class="tl-head">W1</div>
+        <div class="tl-head">W2</div>
+        <div class="tl-head">W3</div>
+        <div class="tl-head">W4</div>
+        <div class="tl-head">W5</div>
+        <div class="tl-head">W6</div>
+        <div class="tl-head">W7</div>
+        <div class="tl-head">W8</div>
+      </div>
+
+      <!-- R1 rows -->
+      <div class="timeline-row tl-row-r1">
+        <div class="tl-label" style="--accent:var(--r1)"><span class="round-dot" style="background:var(--r1)"></span>Workspace Setup</div>
+        <div class="tl-cell"><div class="tl-bar span-1" style="background:var(--r1);left:4px;right:4px">T1.1</div></div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+      </div>
+      <div class="timeline-row tl-row-r1">
+        <div class="tl-label" style="--accent:var(--r1)"><span class="round-dot" style="background:var(--r1)"></span>Agent Config + AGENTS.md</div>
+        <div class="tl-cell"></div>
+        <div class="tl-cell"><div class="tl-bar span-1" style="background:var(--r1);left:4px;right:4px">T1.2–T1.3</div></div>
+        <div class="tl-cell"></div><div class="tl-cell"></div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+      </div>
+
+      <!-- R2 rows -->
+      <div class="timeline-row tl-row-r2">
+        <div class="tl-label" style="--accent:var(--r2)"><span class="round-dot" style="background:var(--r2)"></span>agent_gd Workflow</div>
+        <div class="tl-cell"></div><div class="tl-cell"></div>
+        <div class="tl-cell"><div class="tl-bar span-1" style="background:var(--r2);left:4px;right:4px">P2.1</div></div>
+        <div class="tl-cell"></div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+      </div>
+      <div class="timeline-row tl-row-r2">
+        <div class="tl-label" style="--accent:var(--r2)"><span class="round-dot" style="background:var(--r2)"></span>agent_dev + agent_qc</div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+        <div class="tl-cell"><div class="tl-bar span-1" style="background:var(--r2);left:4px;right:4px">P2.2–P2.3</div></div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+      </div>
+
+      <!-- R3 rows -->
+      <div class="timeline-row tl-row-r3">
+        <div class="tl-label" style="--accent:var(--r3)"><span class="round-dot" style="background:var(--r3)"></span>Cron + State Tracking</div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+        <div class="tl-cell"><div class="tl-bar span-1" style="background:var(--r3);left:4px;right:4px">P3.1–P3.2</div></div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+      </div>
+      <div class="timeline-row tl-row-r3">
+        <div class="tl-label" style="--accent:var(--r3)"><span class="round-dot" style="background:var(--r3)"></span>E2E Integration Test</div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+        <div class="tl-cell"><div class="tl-bar span-1" style="background:var(--r3);left:4px;right:4px">P3.3–P3.4</div></div>
+        <div class="tl-cell"></div><div class="tl-cell"></div>
+      </div>
+
+      <!-- R4 rows -->
+      <div class="timeline-row tl-row-r4">
+        <div class="tl-label" style="--accent:var(--r4)"><span class="round-dot" style="background:var(--r4)"></span>Error Handling</div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+        <div class="tl-cell"><div class="tl-bar span-1" style="background:var(--r4);left:4px;right:4px">P4.1</div></div>
+        <div class="tl-cell"></div>
+      </div>
+      <div class="timeline-row tl-row-r4">
+        <div class="tl-label" style="--accent:var(--r4)"><span class="round-dot" style="background:var(--r4)"></span>Monitoring + Docs</div>
+        <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+        <div class="tl-cell"><div class="tl-bar span-1" style="background:var(--r4);left:4px;right:4px">P4.2–P4.3</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       ROUNDS (expandable)
+  ============================================================ -->
+  <div id="rounds">
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(240,136,62,.15);color:var(--r2)">05</div>
+      <h2>Rounds & Tasks</h2>
+      <div class="divider"></div>
+    </div>
+
+    <!-- ROUND 1 -->
+    <div class="round-block">
+      <div class="round-header" onclick="toggleRound(1)">
+        <div class="round-badge" style="background:rgba(224,108,117,.15);color:var(--r1)">Round 1</div>
+        <div class="round-title">
+          <h3>Foundation</h3>
+          <p>Workspace, 3 agents configured, heartbeat chạy được, verify bằng smoke test</p>
+        </div>
+        <div class="round-weeks">Tuần 1–2</div>
+        <div class="round-toggle" id="toggle-1">▼</div>
+      </div>
+      <div class="round-content" id="content-1">
+        <!-- Phase 1.1 -->
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">1.1</span>
+            <span class="phase-name">Workspace Structure</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo folder structure: <code>concepts/</code>, <code>design/</code>, <code>src/</code>, <code>reports/</code>, <code>.state/</code></div>
+              <span class="task-id">T1.1.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo <code>ccn2_workspace/WORKSPACE.md</code> — team contract & file ownership</div>
+              <span class="task-id">T1.1.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo README.md cho mỗi thư mục (concepts, design, src, reports)</div>
+              <span class="task-id">T1.1.3</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo <code>.state/</code> README.md giải thích format state files (JSON hash map)</div>
+              <span class="task-id">T1.1.4</span>
+            </div>
+          </div>
+        </div>
+        <!-- Phase 1.2 -->
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">1.2</span>
+            <span class="phase-name">OpenClaw Agent Config</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Thêm <code>agent_gd</code> vào <code>openclaw.config.yaml</code> (model: opus, workspace, skills)</div>
+              <span class="task-id">T1.2.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Thêm <code>agent_dev</code> vào <code>openclaw.config.yaml</code> (model: sonnet, workspace, skills)</div>
+              <span class="task-id">T1.2.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Thêm <code>agent_qc</code> vào <code>openclaw.config.yaml</code></div>
+              <span class="task-id">T1.2.3</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Thêm cron config global (enabled, maxConcurrentRuns, sessionRetention, failureAlert)</div>
+              <span class="task-id">T1.2.4</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Verify: <code>openclaw agents list</code> → thấy 3 agents mới</div>
+              <span class="task-id">T1.2.5</span>
+            </div>
+          </div>
+        </div>
+        <!-- Phase 1.3 -->
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">1.3</span>
+            <span class="phase-name">AGENTS.md & Bootstrap Files</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo <code>agents/agent_gd/AGENTS.md</code> — identity, workflow, GDD template</div>
+              <span class="task-id">T1.3.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo <code>agents/agent_dev/AGENTS.md</code> — CCN2 architecture rules, workflow</div>
+              <span class="task-id">T1.3.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo <code>agents/agent_qc/AGENTS.md</code> — test workflow, quality report format</div>
+              <span class="task-id">T1.3.3</span>
+            </div>
+          </div>
+        </div>
+        <!-- Phase 1.4 -->
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">1.4</span>
+            <span class="phase-name">Smoke Test</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Test agent_gd responds to Telegram message trong 1 phút</div>
+              <span class="task-id">T1.4.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Test agent_dev + agent_qc responds</div>
+              <span class="task-id">T1.4.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Kiểm tra heartbeat log có entries sau 30 phút</div>
+              <span class="task-id">T1.4.3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROUND 2 -->
+    <div class="round-block">
+      <div class="round-header" onclick="toggleRound(2)">
+        <div class="round-badge" style="background:rgba(240,136,62,.15);color:var(--r2)">Round 2</div>
+        <div class="round-title">
+          <h3>Agent Specialization</h3>
+          <p>Mỗi agent có skill riêng, xử lý được use case cơ bản khi trigger thủ công</p>
+        </div>
+        <div class="round-weeks">Tuần 3–4</div>
+        <div class="round-toggle" id="toggle-2">▼</div>
+      </div>
+      <div class="round-content" id="content-2">
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">2.1</span>
+            <span class="phase-name">agent_gd — GDD Workflow</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo <code>design/GDD-TEMPLATE.md</code> (8 sections standard)</div>
+              <span class="task-id">T2.1.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Test manual: gửi concept → agent_gd tạo GDD đầy đủ 8 sections</div>
+              <span class="task-id">T2.1.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Viết <code>agents/agent_gd/HEARTBEAT.md</code> — hash check workflow</div>
+              <span class="task-id">T2.1.3</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo concept mẫu: <code>concepts/ladder-mechanic.md</code></div>
+              <span class="task-id">T2.1.4</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Verify: 1 heartbeat cycle (30 min) → GDD được tạo tự động</div>
+              <span class="task-id">T2.1.5</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">2.2</span>
+            <span class="phase-name">agent_dev — Code Workflow</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Test manual: GDD → agent_dev tạo code skeleton đúng CCN2 architecture</div>
+              <span class="task-id">T2.2.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Verify code skeleton: không ES6, có CONFIG, có JSDoc</div>
+              <span class="task-id">T2.2.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Viết <code>agents/agent_dev/HEARTBEAT.md</code></div>
+              <span class="task-id">T2.2.3</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">2.3</span>
+            <span class="phase-name">agent_qc — Test Workflow</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Test manual: GDD → agent_qc viết testcases (Jest format)</div>
+              <span class="task-id">T2.3.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Test manual run: <code>npm test</code> → quality report với pass/fail counts</div>
+              <span class="task-id">T2.3.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Viết <code>agents/agent_qc/HEARTBEAT.md</code> (Part A + Part B)</div>
+              <span class="task-id">T2.3.3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROUND 3 -->
+    <div class="round-block">
+      <div class="round-header" onclick="toggleRound(3)">
+        <div class="round-badge" style="background:rgba(88,166,255,.15);color:var(--r3)">Round 3</div>
+        <div class="round-title">
+          <h3>Automation & Integration</h3>
+          <p>File change detection tự động, agents phối hợp không cần trigger thủ công</p>
+        </div>
+        <div class="round-weeks">Tuần 5–6</div>
+        <div class="round-toggle" id="toggle-3">▼</div>
+      </div>
+      <div class="round-content" id="content-3">
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">3.1</span>
+            <span class="phase-name">Cron Jobs & State Tracking</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo cron job <code>ccn2-gd-workspace-scan</code> (*/15 min, 8–22h weekdays)</div>
+              <span class="task-id">T3.1.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo cron job <code>ccn2-dev-workspace-scan</code> (offset +7 phút)</div>
+              <span class="task-id">T3.1.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo cron job <code>ccn2-qc-workspace-scan</code> (offset +12 phút)</div>
+              <span class="task-id">T3.1.3</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Implement hash comparison trong AGENTS.md (MD5 via PowerShell)</div>
+              <span class="task-id">T3.1.4</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">3.2</span>
+            <span class="phase-name">File Change Detection</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Test: sửa concept file → agent_gd nhận biết trong 15 phút</div>
+              <span class="task-id">T3.2.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Test idempotency: không thay đổi → agent KHÔNG re-process</div>
+              <span class="task-id">T3.2.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Test edge case: xóa file → agent không crash</div>
+              <span class="task-id">T3.2.3</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">3.3</span>
+            <span class="phase-name">Cross-agent Coordination</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">agent_gd Telegram notification → agent_dev/agent_qc pick up via Telegram</div>
+              <span class="task-id">T3.3.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Verify pipeline timing: GDD → code → tests trong đúng sequence</div>
+              <span class="task-id">T3.3.2</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">3.4</span>
+            <span class="phase-name">End-to-End Integration Test</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo <code>concepts/reward-system.md</code> (feature mới)</div>
+              <span class="task-id">T3.4.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Theo dõi đủ timeline: T+00 → T+15 GDD → T+35 Code → T+60 Quality Report</div>
+              <span class="task-id">T3.4.2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROUND 4 -->
+    <div class="round-block">
+      <div class="round-header" onclick="toggleRound(4)">
+        <div class="round-badge" style="background:rgba(63,185,80,.15);color:var(--r4)">Round 4</div>
+        <div class="round-title">
+          <h3>Polish & Production</h3>
+          <p>Error handling, monitoring, runbooks — team chạy ổn định không cần can thiệp</p>
+        </div>
+        <div class="round-weeks">Tuần 7–8</div>
+        <div class="round-toggle" id="toggle-4">▼</div>
+      </div>
+      <div class="round-content" id="content-4">
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">4.1</span>
+            <span class="phase-name">Error Handling & Reliability</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Failure alert config: alert sau 2 failures liên tiếp → Telegram</div>
+              <span class="task-id">T4.1.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Retry policy: maxAttempts=3, backoffMs=[30s,60s,300s]</div>
+              <span class="task-id">T4.1.2</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">AGENTS.md: thêm error handling instructions (skip, log, continue)</div>
+              <span class="task-id">T4.1.3</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">4.2</span>
+            <span class="phase-name">Monitoring & Dashboards</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Weekly digest cron (agent_qc, Thứ 2 9am): metrics tuần qua</div>
+              <span class="task-id">T4.2.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">agent_qc track <code>.state/metrics.json</code> theo ngày</div>
+              <span class="task-id">T4.2.2</span>
+            </div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-num">4.3</span>
+            <span class="phase-name">Documentation & Runbooks</span>
+          </div>
+          <div class="task-list">
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Tạo <code>ccn2_workspace/README.md</code> (user-facing quick start)</div>
+              <span class="task-id">T4.3.1</span>
+            </div>
+            <div class="task-row" onclick="toggleTask(this)">
+              <div class="task-check">○</div>
+              <div class="task-text">Runbook: <code>docs/runbook-add-agent.md</code> — 7 bước thêm agent mới</div>
+              <span class="task-id">T4.3.2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PRINCIPLES
+  ============================================================ -->
+  <div id="principles">
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(188,140,255,.15);color:var(--sys)">06</div>
+      <h2>7 Design Principles (Constitution)</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="principles-grid">
+      <div class="principle-card">
+        <div class="principle-icon">📁</div>
+        <div>
+          <div class="principle-num">P1</div>
+          <div class="principle-title">Workspace = Source of Truth</div>
+          <div class="principle-desc">Tất cả communication giữa agents đi qua filesystem. Mọi artifact phải được lưu thành file trước khi agent khác consume.</div>
+        </div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">📡</div>
+        <div>
+          <div class="principle-num">P2</div>
+          <div class="principle-title">Push-Based, Not Poll-Based</div>
+          <div class="principle-desc">Agents không busy-poll trạng thái nhau. Dùng heartbeat/cron định kỳ kiểm tra workspace — khi phát hiện thay đổi, tự hành động.</div>
+        </div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">🔁</div>
+        <div>
+          <div class="principle-num">P3</div>
+          <div class="principle-title">Idempotent Actions</div>
+          <div class="principle-desc">Mỗi action phải idempotent — chạy lại cùng input ra cùng output, không tạo duplicate artifacts.</div>
+        </div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">🎯</div>
+        <div>
+          <div class="principle-num">P4</div>
+          <div class="principle-title">Single Responsibility</div>
+          <div class="principle-desc">Mỗi agent chỉ làm 1 loại việc. Không agent nào "kiêm" nhiều vai trò trong vòng đời của mình.</div>
+        </div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">💾</div>
+        <div>
+          <div class="principle-num">P5</div>
+          <div class="principle-title">State Tracking is Mandatory</div>
+          <div class="principle-desc">Mỗi agent duy trì state file với MD5 hash. Không xử lý file đã done trừ khi file đó thay đổi.</div>
+        </div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">🚦</div>
+        <div>
+          <div class="principle-num">P6</div>
+          <div class="principle-title">Quality Gate Before Delivery</div>
+          <div class="principle-desc">agent_qc có quyền block delivery nếu quality score &lt; threshold. agent_dev phải fix trước khi team report "done".</div>
+        </div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">🔬</div>
+        <div>
+          <div class="principle-num">P7</div>
+          <div class="principle-title">Evidence Before Completion</div>
+          <div class="principle-desc">Không agent nào được báo "done" mà không có artifact evidence: file path, pass count, metrics.</div>
+        </div>
+      </div>
+      <div class="principle-card" style="background: rgba(255,255,255,.02);">
+        <div class="principle-icon">📋</div>
+        <div>
+          <div class="principle-num">Methodology</div>
+          <div class="principle-title">Superpowers × Speckit</div>
+          <div class="principle-desc">
+            <strong>Superpowers</strong>: brainstorming → writing-plans → executing-plans<br>
+            <strong>Speckit</strong>: constitution → specify → plan → tasks
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       AUTO-FLOW TIMELINE
+  ============================================================ -->
+  <div id="flow">
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(63,185,80,.15);color:var(--qc)">07</div>
+      <h2>Auto-Flow — Concept → Quality Report trong ~1 giờ</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="flow-timeline">
+      <div class="ft-item">
+        <div class="ft-time" style="color:#8b949e">T+00:00</div>
+        <div class="ft-dot" style="--accent-ft:#8b949e">👤</div>
+        <div class="ft-body">
+          <div class="ft-agent" style="color:#8b949e">Human Developer</div>
+          <div class="ft-action">Tạo concept file</div>
+          <div class="ft-detail"><code>concepts/reward-system.md</code> — mô tả gameplay mechanic mới</div>
+        </div>
+      </div>
+
+      <div class="ft-item">
+        <div class="ft-time" style="color:var(--gd)">T+00:15</div>
+        <div class="ft-dot" style="--accent-ft:var(--gd)">🎨</div>
+        <div class="ft-body">
+          <div class="ft-agent" style="color:var(--gd)">agent_gd</div>
+          <div class="ft-action">Cron fires → phát hiện file mới, hash khác state</div>
+          <div class="ft-detail">Read concept → generate GDD 8 sections → update .state/</div>
+        </div>
+      </div>
+
+      <div class="ft-item">
+        <div class="ft-time" style="color:var(--gd)">T+00:20</div>
+        <div class="ft-dot" style="--accent-ft:var(--gd)">📐</div>
+        <div class="ft-body">
+          <div class="ft-agent" style="color:var(--gd)">agent_gd</div>
+          <div class="ft-action">GDD hoàn thành, Telegram notification</div>
+          <div class="ft-detail"><code>design/GDD-reward-system.md</code> (8 sections: Overview, Core Mechanics, Edge Cases...)</div>
+        </div>
+      </div>
+
+      <div class="ft-item">
+        <div class="ft-time" style="color:var(--dev)">T+00:22</div>
+        <div class="ft-dot" style="--accent-ft:var(--dev)">💻</div>
+        <div class="ft-body">
+          <div class="ft-agent" style="color:var(--dev)">agent_dev</div>
+          <div class="ft-action">Cron fires (+7 min offset) → phát hiện GDD mới</div>
+          <div class="ft-detail">Read GDD sections 2,4,7 → implement code theo CCN2 architecture</div>
+        </div>
+      </div>
+
+      <div class="ft-item">
+        <div class="ft-time" style="color:var(--qc)">T+00:27</div>
+        <div class="ft-dot" style="--accent-ft:var(--qc)">🧪</div>
+        <div class="ft-body">
+          <div class="ft-agent" style="color:var(--qc)">agent_qc</div>
+          <div class="ft-action">Cron fires (+12 min offset) → phát hiện GDD mới</div>
+          <div class="ft-detail">Extract test scenarios từ GDD sections 4, 8 → viết testcases</div>
+        </div>
+      </div>
+
+      <div class="ft-item">
+        <div class="ft-time" style="color:var(--dev)">T+00:35</div>
+        <div class="ft-dot" style="--accent-ft:var(--dev)">⚙️</div>
+        <div class="ft-body">
+          <div class="ft-agent" style="color:var(--dev)">agent_dev</div>
+          <div class="ft-action">Code + test skeleton hoàn thành, Telegram notification</div>
+          <div class="ft-detail"><code>src/reward-system.js</code> + <code>src/tests/reward-system.test.js</code></div>
+        </div>
+      </div>
+
+      <div class="ft-item">
+        <div class="ft-time" style="color:var(--qc)">T+00:42</div>
+        <div class="ft-dot" style="--accent-ft:var(--qc)">🔬</div>
+        <div class="ft-body">
+          <div class="ft-agent" style="color:var(--qc)">agent_qc</div>
+          <div class="ft-action">Cron fires → phát hiện code thay đổi → chạy npm test</div>
+          <div class="ft-detail">Parse test output: 12 tests, 12 passed, coverage: 84%</div>
+        </div>
+      </div>
+
+      <div class="ft-item">
+        <div class="ft-time" style="color:var(--qc)">T+00:50</div>
+        <div class="ft-dot" style="--accent-ft:var(--qc)">📊</div>
+        <div class="ft-body">
+          <div class="ft-agent" style="color:var(--qc)">agent_qc</div>
+          <div class="ft-action">Quality Report + Telegram notification</div>
+          <div class="ft-detail"><code>reports/quality-2026-03-18-09.md</code> · <span style="color:var(--done)">✅ Tests passed: 12/12</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>CCN2 Agent Team Roadmap · Built with OpenClaw · 2026-03-17</p>
+    <p style="margin-top:6px">
+      <a href="00-overview.md">Overview</a> ·
+      <a href="01-constitution.md">Constitution</a> ·
+      <a href="02-spec.md">Spec</a> ·
+      <a href="03-roadmap.md">Roadmap</a> ·
+      <a href="04-openclaw-config.md">Config</a> ·
+      <a href="05-agent-profiles.md">Profiles</a>
+    </p>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// ROUND TOGGLES
+// ============================================================
+function toggleRound(n) {
+  const content = document.getElementById('content-' + n);
+  const toggle = document.getElementById('toggle-' + n);
+  const isOpen = content.style.display !== 'none';
+  content.style.display = isOpen ? 'none' : '';
+  toggle.textContent = isOpen ? '▶' : '▼';
+}
+
+// ============================================================
+// TASK CHECKBOXES
+// ============================================================
+function toggleTask(row) {
+  const check = row.querySelector('.task-check');
+  const text = row.querySelector('.task-text');
+  const states = ['', 'progress', 'done'];
+  const icons = ['○', '◐', '✓'];
+  let cur = check.dataset.state || 0;
+  cur = (parseInt(cur) + 1) % 3;
+  check.dataset.state = cur;
+  check.className = 'task-check' + (cur > 0 ? ' ' + (cur === 1 ? 'progress' : 'done') : '');
+  check.textContent = icons[cur];
+  text.className = 'task-text' + (cur === 2 ? ' done-text' : '');
+  updateProgress();
+}
+
+// ============================================================
+// PROGRESS RINGS
+// ============================================================
+const ROUNDS_DATA = [
+  { num: 1, label: 'Foundation',      weeks: 'Tuần 1–2', color: '#e06c75', tasks: 12 },
+  { num: 2, label: 'Specialization',  weeks: 'Tuần 3–4', color: '#f0883e', tasks: 11 },
+  { num: 3, label: 'Automation',      weeks: 'Tuần 5–6', color: '#58a6ff', tasks:  9 },
+  { num: 4, label: 'Polish',          weeks: 'Tuần 7–8', color: '#3fb950', tasks:  7 },
+];
+
+function buildRings() {
+  const wrap = document.getElementById('progress-rings');
+  ROUNDS_DATA.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'ring-card';
+    card.style.setProperty('--rc', r.color);
+    card.id = 'ring-' + r.num;
+    const R = 30, CIRC = 2 * Math.PI * R;
+    card.innerHTML = `
+      <svg class="ring" width="80" height="80" viewBox="0 0 80 80">
+        <circle class="ring-bg" cx="40" cy="40" r="${R}" stroke-width="6"/>
+        <circle class="ring-fill" cx="40" cy="40" r="${R}" stroke="${r.color}"
+          stroke-width="6" stroke-dasharray="${CIRC}" stroke-dashoffset="${CIRC}"
+          transform="rotate(-90 40 40)" id="ring-fill-${r.num}"/>
+        <text class="ring-text" x="40" y="40" id="ring-pct-${r.num}">0%</text>
+      </svg>
+      <div class="ring-label" style="color:${r.color}">Round ${r.num}</div>
+      <div class="ring-sub">${r.label}</div>
+      <div class="ring-sub">${r.weeks}</div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+function updateProgress() {
+  ROUNDS_DATA.forEach(r => {
+    const content = document.getElementById('content-' + r.num);
+    const checks = content ? content.querySelectorAll('.task-check') : [];
+    const done = Array.from(checks).filter(c => c.dataset.state == 2).length;
+    const total = checks.length || r.tasks;
+    const pct = total > 0 ? Math.round(done / total * 100) : 0;
+    const R = 30, CIRC = 2 * Math.PI * R;
+    const fillEl = document.getElementById('ring-fill-' + r.num);
+    const pctEl = document.getElementById('ring-pct-' + r.num);
+    if (fillEl) fillEl.style.strokeDashoffset = CIRC - (CIRC * pct / 100);
+    if (pctEl) pctEl.textContent = pct + '%';
+  });
+}
+
+// ============================================================
+// NAV ACTIVE
+// ============================================================
+function updateNav() {
+  const sections = ['overview','agents','pipeline','timeline','rounds','principles','flow'];
+  const links = document.querySelectorAll('.nav-link');
+  let active = sections[0];
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 80) active = id;
+  });
+  links.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + active);
+  });
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  buildRings();
+  updateProgress();
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+});
+</script>
+
+</body>
+</html>
