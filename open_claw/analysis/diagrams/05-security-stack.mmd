@@ -1,0 +1,135 @@
+# Security Architecture
+## 8-Layer Defense Stack
+
+```mermaid
+graph TD
+    REQ[Incoming Request] --> L1
+
+    subgraph LAYER1[" Layer 1: Authentication "]
+        L1{ auth.mode? }
+        L1 -->|none| PERMIT[✅ Allow (localhost only)]
+        L1 -->|token| TOKEN{Validate<br/>Bearer token}
+        L1 -->|password| PASS{Verify<br/>bcrypt hash}
+        L1 -->|trusted-proxy| PROXY{Check<br/>X-Forwarded-For}
+        L1 -->|invalid| DENY1[❌ 401 Unauthorized]
+        TOKEN -->|valid| PERMIT
+        TOKEN -->|invalid| DENY1
+        PASS -->|valid| PERMIT
+        PASS -->|invalid| DENY1
+        PROXY -->|trusted| PERMIT
+        PROXY -->|untrusted| DENY1
+    end
+
+    PERMIT --> L2
+    subgraph LAYER2[" Layer 2: Role & Scopes "]
+        L2{role?}
+        L2 -->|operator| OP[Full access<br/>+ approvals]
+        L2 -->|user| USER[Chat + limited tools]
+        L2 -->|internal| SYS[System services]
+    end
+
+    OP & USER & SYS --> L3
+    subgraph LAYER3[" Layer 3: Tool Policy "]
+        L3{policy?}
+        L3 -->|messaging| MSG[Only send/read msg]
+        L3 -->|minimal| MIN[Read/write files<br/>approved bash]
+        L3 -->|full| FULL[All tools<br/>(includes dangerous)]
+    end
+
+    MSG & MIN & FULL --> L4
+    subgraph LAYER4[" Layer 4: Approval System "]
+        L4{Requires approval?}
+        L4 -->|Yes| APPROVAL{Pending<br/>operator OK?}
+        L4 -->|No| SKIP[Skip approval]
+        APPROVAL -->|Approved| EXEC[Execute]
+        APPROVAL -->|Denied/Timeout| BLOCK[❌ Block]
+        APPROVAL -->|No response| TIMEOUT[❌ Timeout]
+    end
+
+    SKIP --> L5
+    EXEC --> L5
+    BLOCK --> LOG[Security Log<br/>📝Audit trail]
+    TIMEOUT --> LOG
+
+    subgraph LAYER5[" Layer 5: Prompt Injection Defense "]
+        L5[Wrap user content<br/>in XML tags<br/>Strip control chars<br/>Apply 13 regex patterns]
+    end
+
+    L5 --> L6
+    subgraph LAYER6[" Layer 6: Sandbox Execution "]
+        L6{sandbox.level?}
+        L6 -->|none| RUN[Run unrestricted<br/>⚠️  risky]
+        L6 -->|workspace| WS[Restrict to<br/>agent workspace]
+        L6 -->|strict| STRICT[Allowlist bins<br/>+ paths]
+        L6 -->|container| DOCKER[Docker<br/>isolation]
+    end
+
+    RUN & WS & STRICT & DOCKER --> L7
+    subgraph LAYER7[" Layer 7: Secrets Management "]
+        L7[No plaintext keys<br/>Use $ref pattern<br/>Keychain / cred manager<br/>Rotate on compromise]
+    end
+
+    L7 --> L8
+    subgraph LAYER8[" Layer 8: Security Audit "]
+        L8[detect-secrets scan<br/>dangerous-config check<br/>file permission audit<br/>network egress monitor]
+    end
+
+    L8 --> FINAL[🤖 Agent<br/>(Still untrusted!)]
+    LOG --> FINAL
+
+    %% Styling
+    style L4 fill:#ffebee,stroke:#f44336,stroke-width:3px
+    style L6 fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+    style L8 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+    style DENY1 fill:#ffcdd2,stroke:#c62828
+    style BLOCK fill:#ffcdd2,stroke:#c62828
+    style TIMEOUT fill:#ffecb3,stroke:#ff8f00
+    style FINAL fill:#f5f5f5,stroke:#616161
+```
+
+**Layer 1: Authentication (4 modes)**
+
+| Mode | Use Case | Example |
+|------|----------|---------|
+| `none` | Localhost only, trusted network | Development, single-user |
+| `token` | API access, cloud deployment | `Authorization: Bearer xyz` |
+| `password` | Manual UI access | Basic auth prompt |
+| `trusted-proxy` | Behind Nginx/Cloudflare | `X-Forwarded-For` from trusted IPs |
+
+**Layer 4: Approval System**
+
+Tools requiring approval (configurable):
+- `run_bash` with dangerous commands (`rm`, `sudo`, `dd`, `mkfs`)
+- `delete_file` outside workspace
+- `git_push` to protected branches
+- `send_email` to external recipients
+- `browser_*` with sensitive sites (banking, corporate)
+
+**Approval flow:**
+```
+User → Agent → Tool needs approval → Notification to operator →
+Operator UI: [Approve] [Deny] [Always allow] → Execute/Block
+```
+
+**Layer 5: Injection Defense**
+
+13 regex patterns detect:
+- Unicode homoglyphs (fаke Cyrillic а)
+- XML/HTML tag injection
+- Command injection (`;`, `&&`, `|`)
+- Path traversal (`../`, `..\\`)
+- Prompt escape sequences (`\x1b`, `\u202e`)
+
+**Layer 6: Sandbox Levels**
+
+| Level | Isolation | Use Case |
+|-------|-----------|----------|
+| `none` | None | Trusted internal agents |
+| `workspace` | Filesystem仅限于 workspace | Default for user agents |
+| `strict` | Allowlist bins + paths | Production, multi-user |
+| `container` | Docker container (planned) | High-security environments |
+
+---
+
+**Source:** `src/auth/`, `src/tool-policy.ts`, `src/exec-approval-manager.ts`, `src/chat-sanitize.ts`  
+**Purpose:** Understand multi-layer security model

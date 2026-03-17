@@ -1,0 +1,110 @@
+# 7-Tier Routing Algorithm
+## Gateway Routing Decision Tree
+
+```mermaid
+flowchart TD
+    START[📩 Receive Message<br/>channel: ${channelId}<br/>account: ${accountId}<br/>peer: ${peer.id}] --> TIER1
+
+    subgraph TIER1[" Tier 1: binding.peer<br/>(Exact match)"]
+        T1{binding.peer<br/>== peer.id?}
+        T1 -- Yes --> R1[Route to<br/>agent: {agentId}<br/>📝 matched by: "peer"]
+    end
+
+    T1 -- No --> TIER2
+    subgraph TIER2[" Tier 2: binding.peer.parent<br/>(Thread parent)"]
+        T2{peer.parent<br/>exists?<br/>AND match?}
+        T2 -- Yes --> R2[Route to<br/>agent: {agentId}<br/>📝 matched by: "peer.parent"]
+    end
+
+    T2 -- No --> TIER3
+    subgraph TIER3[" Tier 3: guild + roles<br/>(Discord server + role)"]
+        T3{guild match?<br/>AND roles in<br/>{roles}?}
+        T3 -- Yes --> R3[Route to<br/>agent: {agentId}<br/>📝 matched by: "guild+roles"]
+    end
+
+    T3 -- No --> TIER4
+    subgraph TIER4[" Tier 4: binding.guild<br/>(Any role in guild)"]
+        T4{guild match?}
+        T4 -- Yes --> R4[Route to<br/>agent: {agentId}<br/>📝 matched by: "guild"]
+    end
+
+    T4 -- No --> TIER5
+    subgraph TIER5[" Tier 5: binding.team<br/>(Workspace level)"]
+        T5{team match?<br/>(Slack workspace)}
+        T5 -- Yes --> R5[Route to<br/>agent: {agentId}<br/>📝 matched by: "team"]
+    end
+
+    T5 -- No --> TIER6
+    subgraph TIER6[" Tier 6: binding.account<br/>(Account-wide)"]
+        T6{accountId<br/>match?}
+        T6 -- Yes --> R6[Route to<br/>agent: {agentId}<br/>📝 matched by: "account"]
+    end
+
+    T6 -- No --> DEFAULT
+    subgraph DEFAULT[" Tier 7 (Last Resort)"]
+        DEF[Route to<br/>agent: "main"<br/>📝 matched by: "default"]
+    end
+
+    R1 & R2 & R3 & R4 & R5 & R6 --> END[✅ Agent Resolved<br/>Proceed to dispatch]
+    DEF --> END
+
+    %% Styling
+    style START fill:#bbdefb,stroke:#2196f3,stroke-width:2px
+    style END fill:#c8e6c9,stroke:#4caf50,stroke-width:3px
+    style DEFAULT fill:#ffcdd2,stroke:#f44336,stroke-width:2px
+    style R1 fill:#fff9c4,stroke:#ffeb3b
+    style R2 fill:#fff9c4,stroke:#ffeb3b
+    style R3 fill:#fff9c4,stroke:#ffeb3b
+    style R4 fill:#fff9c4,stroke:#ffeb3b
+    style R5 fill:#fff9c4,stroke:#ffeb3b
+    style R6 fill:#fff9c4,stroke:#ffeb3b
+
+    classDef tier fill:#e1bee7,stroke:#8e24aa,stroke-width:1px
+    class TIER1,TIER2,TIER3,TIER4,TIER5,TIER6 tier
+```
+
+**Configuration Example:**
+
+```json
+{
+  "agentBindings": [
+    {
+      "agentId": "vip-support",
+      "peer": "123456789",                    // Tier 1
+      "description": "VIP customers via direct message"
+    },
+    {
+      "agentId": "moderator-bot",
+      "guild": "987654321",
+      "roles": ["admin", "moderator"],       // Tier 3
+      "description": "Admin/moderator in Discord server"
+    },
+    {
+      "agentId": "team-bot",
+      "team": "T12345",                       // Tier 5
+      "description": "Slack workspace assistant"
+    },
+    {
+      "agentId": "personal-assistant",
+      "account": "U99999"                     // Tier 6
+    }
+  ]
+}
+```
+
+**Real-World Scenarios:**
+
+| Messaging Platform | Peer ID | Guild | Team | Binding Hit |
+|-------------------|---------|-------|------|-------------|
+| Telegram DM | `u123456` | - | - | Tier 6 (account) or Default |
+| Telegram Group | `c-987654` | - | - | Tier 6 (account) or Default |
+| Discord Channel | `c123:text` | `987654321` | - | Tier 4 (guild) or Tier 3 (guild+roles) |
+| Slack Channel | `C12345` | - | `T67890` | Tier 5 (team) |
+| Thread reply | `t789` (parent `p456`) | - | - | Tier 2 (peer.parent) |
+
+**Source Code:** `src/gateway/resolve-route.ts`
+
+---
+
+**Generated from:** OpenClaw analysis  
+**Purpose:** Understand how Gateway routes messages to correct agent

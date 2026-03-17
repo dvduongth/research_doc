@@ -1,0 +1,110 @@
+# Dual-Loop Agent Execution
+## Pi-Mono Core Execution Flow
+
+```mermaid
+sequenceDiagram
+    participant GW as Gateway
+    participant AG as Agent Runtime
+    participant CTX as Context Engine
+    participant LLM as LLM Provider
+    participant TOOL as Tool Executor
+    participant STORE as Session Store
+
+    %% OUTER LOOP START
+    Note over AG,LLM: ━━━━━━━━━━━━━━━━━━━━<br/>⭕ OUTER LOOP START<br/>━━━━━━━━━━━━━━━━━━━━
+
+    GW->>AG: dispatch(message, sessionKey)
+    AG->>CTX: assemble(sessionKey, newMessage)
+    CTX-->>AG: context (tokens: X,XXX)
+    AG->>LLM: stream(context, tools=[...])
+
+    LLM-->>AG: AssistantMessage (streaming chunks)
+    AG-->>GW: Forward stream (user sees typing)
+
+    LLM-->>AG: done (stream complete)
+
+    AG->>AG: Parse tool calls from assistant message
+
+    alt Has tool calls
+        Note over AG,TOOL: ━━━━━━━━━━━━━━━━━<br/>🔧 INNER LOOP START<br/>━━━━━━━━━━━━━━━━━
+
+        loop Execute each tool sequentially
+            AG->>TOOL: execute(tool_i, params_i)
+            TOOL-->>AG: ToolResultMessage
+
+            AG->>LLM: Continue with tool result
+
+            LLM-->>AG: Next chunk (text OR next tool call)
+
+            AG->>AG: Check steering messages (user intervention?)
+            alt Steering detected (user said "stop")
+                AG->>AG: Skip remaining tools (break inner loop)
+            else No steering
+                continue loop
+            end
+        end
+
+        Note over AG,TOOL: ━━━━━━━━━━━━━━━━━<br/>🔚 INNER LOOP END<br/>━━━━━━━━━━━━━━━━━
+    end
+
+    AG->>AG: Check follow-up queue (pending messages)
+    alt Follow-up exists
+        AG->>AG: Process next (back to outer loop start)
+    else No follow-up
+        AG->>CTX: ingest(final turn)
+        CTX->>STORE: Persist to JSONL
+        CTX->>CTX: Maybe compaction if budget exceeded
+
+        AG-->>GW: Final response
+    end
+
+    Note over AG,LLM: ━━━━━━━━━━━━━━━━━━<br/>⭕ OUTER LOOP END<br/>━━━━━━━━━━━━━━━━━━━━
+```
+
+**Key Concepts:**
+
+1. **Outer Loop** (vòng ngoài):
+   - Chạy một "turn" hoàn chỉnh (user message → agent response)
+   - Sau khi turn xong, check follow-up queue (tin nhắn bổ sung đang chờ)
+   - Nếu có follow-up → chạy lại outer loop
+
+2. **Inner Loop** (vòng trong):
+   - Chạy khi LLM gọi tool calls
+   - Thực thi từng tool một, theo thứ tự
+   - Sau mỗi tool, check "steering messages" (user có thể can thiệp giữa chừng)
+   - Nếu steering detected → bỏ qua tools còn lại
+
+3. **Steering** (lǎi đà/điều khiển):
+   - User có thể gửi tin nhắn mới trong khi agent đang chạy
+   - Ví dụ: Agent đang đọc 100 files, user nói "Dừng lại, đọc file khác"
+   - Agent nhận steering → dừng tools đang chạy, ưu tiên user message mới
+
+4. **Follow-up** (bổ sung):
+   - Các tin nhắn khác đang chờ trong queue (từ same user)
+   - Khi agent free, tự động lấy follow-up tiếp
+   - Tránh user phải đợi hoàn toàn mới gửi tin tiếp
+
+**Example Timeline:**
+
+```
+T=0ms   User: "Tính tổng 100 số"
+T=100ms Agent: Gọi LLM
+T=500ms LLM: "Tôi cần dùng Python để tính"
+T=600ms Tool: run_python("sum(range(100))"
+T=700ms Tool: returns 4950
+T=800ms LLM: "Tổng là 4950"
+T=900ms Agent: ✅ Reply to user
+
+(Meanwhile, at T=400ms user sent follow-up)
+T=400ms User: "Nhân với 2"
+T=900ms Agent: (finishes first turn)
+T=901ms Agent: Sees follow-up → Outer loop again
+T=1s    Agent: "4950 × 2 = 9900"
+```
+
+**Source:** `packages/agent/src/agent-loop.ts`
+
+---
+
+**Generated from:** OpenClaw analysis  
+**Purpose:** Understand agent execution model (unique dual-loop design)

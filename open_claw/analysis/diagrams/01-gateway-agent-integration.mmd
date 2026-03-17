@@ -1,0 +1,83 @@
+# Gateway & Agent Integration Architecture
+## Module-Level Deep Dive
+
+```mermaid
+graph TB
+    subgraph "GATEWAY MODULES (src/gateway/)"
+        GW_MAIN[server.impl.ts<br/>⭐ Main Entry Point<br/>38KB]
+        GW_HTTP[server-http.ts<br/>Hono HTTP Server<br/>27KB]
+        GW_WS[server-ws-runtime.ts<br/>WebSocket Runtime<br/>1.5KB]
+        GW_CHAN[server-channels.ts<br/>Channel Lifecycle<br/>15KB]
+        GW_CHAT[server-chat.ts<br/>Message Dispatch<br/>20KB]
+        GW_ROUTE[resolve-route.ts<br/>7-Tier Router<br/>4KB]
+        GW_LANE[server-lanes.ts<br/>Concurrency Control<br/>600B]
+        GW_SESSION[session-key.ts<br/>Session Key Gen<br/>876B]
+        GW_BOOT[boot.ts<br/>Startup Tasks<br/>6KB]
+        GW_STARTUP[server-startup.ts<br/>Boot Sequence<br/>6KB]
+    end
+
+    subgraph "AGENT MODULES (src/agents/)"
+        AG_SCOPE[agent-scope.ts<br/>⭐ Agent Config & Lifetime<br/>6KB]
+        AG_CTX[context-engine/<br/>Bootstrap, Assemble, Compact<br/>20KB total]
+        AG_MEM[memory/<br/>LanceDB + Search<br/>15KB total]
+        AG_SKILL[skills/<br/>Discovery + Loading<br/>25KB total]
+        AG_SUB[subagent-registry.ts<br/>Subagent Spawning<br/>15KB]
+        AG_SYSTEM[system-prompt.ts<br/>Prompt Building<br/>6KB]
+        AG_COMPACT[compaction.ts<br/>Session Summarization<br/>8KB]
+        AG_PATHS[agent-paths.ts<br/>Workspace Mgmt<br/>2KB]
+    end
+
+    subgraph "PI-MONO CORE (packages/agent/src/)"
+        PI_LOOP[agent-loop.ts<br/>⭐ Dual-Loop Execution<br/>180 lines]
+        PI_TOOLS[pi-tools.ts<br/>Tool Adapter System<br/>40KB total]
+        PI_EVENTS[pi-embedded-subscribe/<br/>Event Handlers<br/>30KB total]
+        PI_AUTH[pi-auth-credentials.ts<br/>Credential Mgmt<br/>4KB]
+    end
+
+    %% Critical Integration Paths
+    GW_CHAT --> GW_ROUTE
+    GW_ROUTE --> AG_SCOPE
+    GW_CHAT -->|dispatchToLane| GW_LANE
+    GW_LANE --> AG_SCOPE
+
+    AG_SCOPE -->|resolves config| AG_CTX
+    AG_CTX -->|search| AG_MEM
+    AG_CTX -->|load| AG_SKILL
+    AG_SCOPE -->|spawn| AG_SUB
+    AG_CTX -->|assemble| AG_SYSTEM
+    AG_CTX -->|may trigger| AG_COMPACT
+
+    AG_SCOPE -->|creates| PI_LOOP
+    AG_SKILL -->|registers| PI_TOOLS
+    AG_CTX -->|subscribes| PI_EVENTS
+
+    GW_HTTP -->|forwards webhook| GW_MAIN
+    GW_WS -->|forwards WS msg| GW_MAIN
+    GW_CHAN -->|channel events| GW_MAIN
+    GW_BOOT -->|runs once| GW_MAIN
+    GW_STARTUP -->|bootstraps| GW_MAIN
+
+    %% Styling
+    style GW_MAIN fill:#e3f2fd,stroke:#2196f3,stroke-width:3px
+    style AG_SCOPE fill:#e8f5e9,stroke:#4caf50,stroke-width:3px
+    style PI_LOOP fill:#fff3e0,stroke:#ff9800,stroke-width:3px
+
+    style GW_CHAT fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    style GW_ROUTE fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    style AG_CTX fill:#e0f2f1,stroke:#009688,stroke-width:2px
+    style AG_SKILL fill:#e0f2f1,stroke:#009688,stroke-width:2px
+    style PI_TOOLS fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+```
+
+**Key Connections:**
+1. **Gateway → Agent:** `server-chat.ts` calls `agent-scope.ts` via `dispatchToLane()`
+2. **Agent → Context:** `agent-scope` creates context engine for session
+3. **Context → Skills:** Context loads skills during `assemble()`
+4. **Context → Memory:** Memory search happens in `assemble()` if needed
+5. **Agent → Pi-Loop:** Agent runtime wraps `agent-loop.ts` (dual-loop execution)
+6. **Skills → Pi-Tools:** Skills register tools via `pi-tools.ts` adapter
+
+---
+
+**Generated from:** `D:\PROJECT\CCN2\research_doc\open_claw\analysis\analysis.md`
+**Purpose:** Visualize module-level dependencies between Gateway, Agent Runtime, and Pi-Mono Core

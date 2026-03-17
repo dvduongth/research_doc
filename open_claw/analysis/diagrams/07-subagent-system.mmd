@@ -1,0 +1,161 @@
+# Subagent System (ACP Protocol)
+## Agent-to-Agent Communication
+
+```mermaid
+graph TB
+    subgraph "PARENT AGENT"
+        P_CTX[Parent Context<br/>Session: agent:main:xxx]
+        P_REG[Subagent Registry<br/>Track children]
+        P_DECISION[LLM: "Cần research 2 nguồn"]
+    end
+
+    subgraph "CHILD AGENT 1"
+        C1_CTX[Child Context<br/>Session: agent:researcher:abc123]
+        C1_MODEL[Model: Claude Haiku<br/>(cheaper, faster)]
+        C1_SKILLS[Skills: web_search, read_file]
+        C1_TASK[Task: "Tìm SV 2025"]
+        C1_RESULT[Result: "SV 2025 ra mắt..."]
+    end
+
+    subgraph "CHILD AGENT 2"
+        C2_CTX[Child Context<br/>Session: agent:researcher:def456]
+        C2_MODEL[Model: Claude Sonnet<br/>(better quality)]
+        C2_SKILLS[Skills: analyze, summarize]
+        C2_TASK[Task: "Phân tích pricing"]
+        C2_RESULT[Result: "Pricing: Basic $10/Pro $30"]
+    end
+
+    subgraph "SYSTEM"
+        LANE[Command Lane<br/>Subagent: max 3 concurrent]
+        ACP[ACP Protocol<br/>(WebSocket)]
+    end
+
+    %% Spawn flow
+    P_DECISION -->|"spawn(agentId='researcher',<br/>config={...})"| P_REG
+    P_REG -->|validate depth| LANE
+    LANE -->|enqueue| ACP
+    ACP -->|create session| C1_CTX
+    ACP -->|create session| C2_CTX
+
+    %% Execution
+    C1_CTX --> C1_TASK
+    C2_CTX --> C2_TASK
+
+    C1_TASK --> C1_RESULT
+    C2_TASK --> C2_RESULT
+
+    %% Announce/collect
+    C1_RESULT -.->|"announce(result)"| P_REG
+    C2_RESULT -.->|"announce(result)"| P_REG
+
+    P_REG -->|Promise.all([...])| P_DECISION
+    P_DECISION -->|Synthesize final answer| PARENT_OUTPUT[Final Response]
+
+    subgraph "Spawn Constraints (subagent-spawn.ts)"
+        RULE1[Max depth: 3 (configurable)]
+        RULE2[Max concurrent: 3 (lane limit)]
+        RULE3[Workspace isolation: each child gets /tmp/agent-<id>]
+        RULE4[Inheritance: parent context copied]
+    end
+
+    %% Styling
+    style P_DECISION fill:#e3f2fd,stroke:#2196f3
+    style C1_RESULT fill:#e8f5e9,stroke:#4caf50
+    style C2_RESULT fill:#e8f5e9,stroke:#4caf50
+    style ACP fill:#fff3e0,stroke:#ff9800
+    style PARENT_OUTPUT fill:#f3e5f5,stroke:#9c27b0
+
+    classDef child fill:#e8f5e9,stroke:#4caf50
+    class C1_CTX,C1_MODEL,C1_SKILLS,C1_TASK,C1_RESULT child
+    class C2_CTX,C2_MODEL,C2_SKILLS,C2_TASK,C2_RESULT child
+```
+
+**Subagent Spawn Flow:**
+
+```typescript
+// 1. Parent agent decides to spawn (via LLM tool call)
+const subagentRegistry = getSubagentRegistry();
+const childSession = await subagentRegistry.spawn({
+  agentId: "researcher",
+  config: {
+    model: "claude-haiku",           // Different model
+    workspace: "/tmp/research-" + id,
+    skills: ["web_search", "read_file"],
+  },
+  parentSessionKey: parentKey,
+});
+
+// 2. Registry validates
+if (getCurrentDepth(parentKey) >= maxDepth) {
+  throw new Error("Max subagent depth exceeded");
+}
+
+// 3. Create session key
+const childKey = `agent:researcher:${generateId()}`;
+
+// 4. Prepare context (copy from parent)
+await contextEngine.prepareSubagentSpawn({
+  parentSessionKey,
+  childSessionKey,
+});
+
+// 5. Dispatch to subagent lane
+await dispatchToLane({
+  lane: CommandLane.Subagent,
+  sessionKey: childKey,
+  content: {
+    type: "subagent_spawn",
+    config: childConfig,
+  },
+});
+
+// 6. Send task
+await sendToSession(childKey, {
+  role: "user",
+  content: "Research latest AI trends...",
+});
+
+// 7. Wait for completion (with timeout)
+const result = await subagentRegistry.waitForCompletion(childKey, {
+  timeout: 5 * 60 * 1000, // 5 minutes
+});
+
+// 8. Use result in parent
+```
+
+**ACP Protocol (Agent Communication Protocol):**
+
+Subagents communicate via WebSocket using ACP:
+
+```typescript
+// Parent sends to child
+ws.send(JSON.stringify({
+  type: "message",
+  sessionKey: childKey,
+  content: { role: "user", text: "Do research..." },
+}));
+
+// Child replies
+ws.send(JSON.stringify({
+  type: "announce",
+  sessionKey: parentKey,
+  content: {
+    type: "subagent_result",
+    result: { findings: "..." },
+  },
+}));
+```
+
+**Use Cases:**
+
+| Use Case | Child Agent Config | Parent Benefit |
+|----------|-------------------|----------------|
+| Parallel research | Multiple subagents, each search different source | Reduce total time by 70% |
+| Specialized tasks | Child with coding-agent skills | Parent doesn't need those skills |
+| Cost optimization | Child uses cheaper model (Haiku vs Sonnet) | Save 80% cost on simple tasks |
+| Isolation | Child in container sandbox | Security boundary |
+
+---
+
+**Source:** `src/agents/subagent-registry.ts`, `src/agents/subagent-spawn.ts`, `extensions/acpx/`  
+**Purpose:** Understand multi-agent orchestration

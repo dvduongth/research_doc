@@ -1,0 +1,151 @@
+# Memory System Architecture
+## LanceDB Vector Store + Short-Term Context
+
+```mermaid
+graph LR
+    subgraph "SHORT-TERM (Session Store)"
+        SESSION[sessions/<session-key>.jsonl]
+        SESSIONS[📄 Full conversation history]
+        COMPACT[Compaction & Summarization]
+    end
+
+    subgraph "LONG-TERM (Vector DB)"
+        LANCEDB[~/.openclaw/memory/lancedb/]
+        TABLES[Multiple tables:<br/>- memory<br/>- sessions<br/>- files]
+        EMBED[Embeddings:<br/>Google Gemini<br/>OpenAI<br/>Local ONNX]
+    end
+
+    subgraph "FLOW"
+        NEW[New message<br/>or file] --> INDEX[Auto-indexing]
+        INDEX --> CHUNK[Chunk into<br/>500-1000 char blocks]
+        CHUNK --> EMBED_VEC[Generate<br/>embedding vector]
+        EMBED_VEC --> INSERT[Insert into<br/>LanceDB]
+    end
+
+    subgraph "SEARCH QUERY"
+        QUERY[User query<br/>or context] --> QUERY_EMBED[Embed query<br/>(same model)]
+        QUERY_EMBED --> SEARCH[Vector similarity search<br/>cosine distance]
+        SEARCH --> TOPK[Top-K results<br/>(default: 5)]
+        TOPK --> MMR[Maximal Marginal<br/>Relevance (diversity)]
+        MMR --> INJECT[Inject into<br/>LLM context]
+    end
+
+    SESSIONS -->|Sync on session end| LANCEDB
+    INSERT --> LANCEDB
+    INJECT --> LLM[LLM Context]
+
+    COMPACT -.->|Summarize old turns| SESSIONS
+
+    %% Styling
+    style SESSIONS fill:#e3f2fd,stroke:#2196f3
+    style LANCEDB fill:#e8f5e9,stroke:#4caf50
+    style EMBED fill:#fff9c4,stroke:#febd1f
+    style INJECT fill:#f3e5f5,stroke:#9c27b0
+```
+
+**Memory Layers Explained:**
+
+### 1. Short-Term (Session Store)
+
+**Location:** `~/.openclaw/sessions/<session-key>.jsonl`
+
+**Format:** JSONL (one JSON object per turn)
+
+```json
+{"role":"user","content":"Hello","timestamp":1700000000,"tokens":5}
+{"role":"assistant","content":"Hi there!","timestamp":1700000001,"tokens":8}
+{"role":"tool","name":"read_file","content":"...","timestamp":1700000002}
+```
+
+**Compaction:** When total tokens exceed budget (e.g., 100K for Claude):
+- Summarize oldest 40% of messages
+- Keep recent 60% + summaries
+- Preserve: tool results, UUIDs, IDs, current task state
+
+### 2. Long-Term (LanceDB Vector Store)
+
+**Location:** `~/.openclaw/memory/lancedb/`
+
+**Schema:**
+
+```typescript
+interface MemoryRecord {
+  id: string;
+  text: string;           // Original text chunk
+  vector: number[];       // Embedding (768-1536 dims)
+  category: string;       // "conversation", "document", "code"
+  sessionKey?: string;    // Source session
+  timestamp: number;
+  metadata?: Record<string, any>;
+}
+```
+
+**Auto-indexing triggers:**
+- `onSessionEnd`: Index entire session
+- `onSearch`: Index pending changes before search
+- `watch`: File watcher for workspace changes (debounced)
+- `intervalMinutes`: Periodic sync (default: 60min)
+
+**Embedding providers (from `src/agents/memory-search.ts`):**
+
+| Provider | Model | Dimensions | Speed | Cost |
+|----------|-------|------------|-------|------|
+| `google` | `text-embedding-004` | 768 | Fast | Free tier |
+| `openai` | `text-embedding-3-small` | 1536 | Fast | $0.02/M tokens |
+| `ollama` | `nomic-embed-text` | 768 | Medium | Free (local) |
+| `local-onnx` | `all-MiniLM-L6-v2` | 384 | Slow | Free (no internet) |
+| `auto` | (selects best available) | - | - | - |
+
+**MMR (Maximal Marginal Relevance):**
+
+Precision + diversity. If top-5 results are too similar, MMR re-ranks:
+
+```
+score(MMR) = λ * relevance - (1-λ) * similarity_to_selected
+λ = 0.7 (balance)
+```
+
+### 3. Search Flow
+
+```
+User: "Làm sao cấu hình Zalo bot?"
+
+1. Query embedding: "Làm sao cấu hình Zalo bot?" → [0.12, -0.34, ...]
+
+2. LanceDB search: cosine similarity against 10K vectors
+   Results:
+   - [0.89] "Zalo integration requires API key from zalo.me"
+   - [0.87] "To setup Zalo OA: 1. Register 2. Get token 3. Config"
+   - [0.85] "Slack bot configuration..."
+   - [0.84] "Telegram webhook setup..."
+   - [0.82] "Zalo Personal mode uses different API..."
+
+3. MMR re-rank (avoid duplicate Zalo info):
+   Final: [0.89, 0.85, 0.82, 0.87, 0.84]
+   (Diverse sources, not just Zalo)
+
+4. Inject into system prompt:
+   [Memory 0.89]: Zalo integration requires API key...
+   [Memory 0.85]: To setup Zalo OA: 1. Register...
+   ...
+
+5. LLM generates answer using these memories
+```
+
+**Auto-capture (memory-lancedb extension):**
+
+```typescript
+api.on("llm_output", (event) => {
+  // Automatically store important outputs
+  for (const text of event.assistantTexts) {
+    if (text.length > 100 && !text.startsWith("```")) {
+      db.insert({ text, category: "conversation" });
+    }
+  }
+});
+```
+
+---
+
+**Source:** `src/agents/memory/`, `extensions/memory-lancedb/`  
+**Purpose:** Understand long-term memory + semantic search

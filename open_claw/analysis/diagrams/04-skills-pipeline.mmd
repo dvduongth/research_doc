@@ -1,0 +1,150 @@
+# Skills Discovery & Loading Pipeline
+## From SKILL.md Files to LLM Tool API
+
+```mermaid
+flowchart TD
+    subgraph DISCOVERY[" 1. DISCOVERY "]
+        D1["~/.openclaw/skills/"]
+        D2["Bundled (52 built-in)"]
+        D3["Plugin extensions"]
+        D4["ClawHub marketplace"]
+    end
+
+    subgraph SCAN[" Scan directories "]
+        SCAN1["Read package.json<br/>openclaw.extensions field"]
+        SCAN2["Find SKILL.md files"]
+        SCAN3["Parse YAML frontmatter<br/>(name, description, requires)"]
+    end
+
+    DISCOVERY --> SCAN
+
+    subgraph FILTER[" 2. FILTERING "]
+        F1["Check requires.bins<br/>✅ binary in PATH?"]
+        F2["Check requires.env<br/>✅ env vars set?"]
+        F3["Check requires.config<br/>✅ config keys exist?"]
+        F4["Check os<br/>✅ darwin/linux/win32?"]
+        F5["Agent allowlist<br/>✅ skill ∈ agent.skills?"]
+    end
+
+    SCAN --> FILTER
+
+    subgraph VALIDATE[" Validate each skill "]
+        V1["Schema validation"]
+        V2["Description ≤ 256 chars"]
+        V3["No duplicate names"]
+        V4["File size ≤ 256KB"]
+    end
+
+    FILTER --> VALIDATE
+
+    subgraph SERIALIZE[" 3. SERIALIZATION "]
+        S1["Enforce limits:<br/>- Max 150 skills<br/>- Max 30K chars total<br/>- Max 256KB/file"]
+        S2["Format each skill:<br/>name: string<br/>description: 1 sentence<br/>path: ~/relative"]
+        S3["Sort by:<br/>1. Managed skills first<br/>2. Alphabetical"]
+        S4["Build prompt string"]
+    end
+
+    VALIDATE --> SERIALIZE
+
+    subgraph INJECT[" 4. INJECTION "]
+        I1["Add to system prompt<br/>before user message"]
+        I2["Format:<br/>---<br/>Skill: name<br/>Desc: description<br/>Path: ~/path/SKILL.md<br/>---"]
+        I3["Total tokens: ~15-30/skill"]
+    end
+
+    SERIALIZE --> INJECT
+
+    subgraph EXECUTE[" 5. EXECUTION "]
+        E1["LLM sees tool definitions<br/>in system prompt"]
+        E2["LLM decides to call tool<br/>with JSON parameters"]
+        E3["Tool catalog resolves<br/>tool name → implementation"]
+        E4["Execute in sandbox<br/>(workspace/container)"]
+        E5["Result → LLM<br/>loop if more calls"]
+    end
+
+    INJECT --> EXECUTE
+
+    %% Styling
+    style DISCOVERY fill:#bbdefb,stroke:#2196f3
+    style FILTER fill:#fff9c4,stroke:#febd1f
+    style SERIALIZE fill:#f3e5f5,stroke:#9c27b0
+    style INJECT fill:#e8f5e9,stroke:#4caf50
+    style EXECUTE fill:#ffebee,stroke:#f44336
+
+    classDef step fill:#e0e0e0,stroke:#424242
+    class SCAN,VALIDATE step
+```
+
+**Pipeline Details:**
+
+### Discovery Phase
+
+Scans multiple sources in order:
+1. **Bundled skills**: `openclaw/skills/` (52 built-in)
+2. **Workspace skills**: `~/.openclaw/skills/` (user-installed)
+3. **Plugin skills**: Plugin directories declaring skills
+4. **ClawHub**: Downloaded marketplace skills (async)
+
+### Filtering Phase
+
+Each skill has `requires` field in frontmatter:
+
+```yaml
+---
+name: github
+description: GitHub operations
+requires:
+  bins: ["gh"]              # Must have gh CLI installed
+  env: ["GITHUB_TOKEN"]     # Must have GITHUB_TOKEN env var
+  config: ["github.api"]    # Must have config.github.api set
+os: ["darwin", "linux"]     # Platform restrictions
+---
+```
+
+If any check fails → skill hidden (not included in prompt).
+
+### Serialization Phase
+
+**Token budgeting:**
+- Each skill: ~15-30 tokens (name, desc, path)
+- 150 skills max = ~4,500 tokens
+- System prompt limit: 30,000 chars max (security)
+- File size limit: 256KB per skill (prevent DoS)
+
+**Format example:**
+
+```
+---
+Skill: github
+Desc: GitHub operations: PR, issues, CI
+Path: ~/.openclaw/skills/github/SKILL.md
+---
+
+Skill: notion
+Desc: Notion pages and databases
+Path: ~/.openclaw/skills/notion/SKILL.md
+---
+```
+
+### Execution Phase
+
+When LLM calls tool:
+```json
+{
+  "tool": "github",
+  "method": "create_pr",
+  "params": { "title": "Fix bug", "base": "main", "head": "feat/x" }
+}
+```
+
+Tool executor:
+1. Resolves skill path: `~/.openclaw/skills/github/SKILL.md`
+2. Reads SKILL.md to understand how to execute
+3. Runs command(s) defined in SKILL (bash, API call, etc.)
+4. Returns result to LLM
+5. LLM decides next step
+
+---
+
+**Source:** `src/agents/skills/skills.ts`, `src/agents/skills/build.ts`  
+**Purpose:** Understand how skills become tools AI can use
