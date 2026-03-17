@@ -2,9 +2,10 @@
 
 > **Methodology**: Superpowers (brainstorming → writing-plans → executing-plans) × Speckit (constitution → specify → plan → tasks)
 >
-> **Output directory**: `D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan\`
+> **Output directory**: `D:\workspace\CCN2\research_doc\open_claw\agent_team_plan\`
 >
 > **Created**: 2026-03-17
+> **Last updated**: 2026-03-17 (Round 1 Phase 1.1–1.3 completed)
 
 ---
 
@@ -57,16 +58,23 @@ Xây dựng một **agent team tự động hóa** cho dự án CCN2 — một n
 
 | Phase | Task | Status |
 |-------|------|--------|
-| 1.1 Workspace Setup | Tạo cấu trúc `ccn2_workspace/` | ⬜ TODO |
-| 1.1 Workspace Setup | Tạo file `WORKSPACE.md` index | ⬜ TODO |
-| 1.1 Workspace Setup | Tạo `concepts/`, `design/`, `src/`, `reports/` | ⬜ TODO |
-| 1.2 Agent Config | Thêm `agent_gd` vào openclaw.config.yaml | ⬜ TODO |
-| 1.2 Agent Config | Thêm `agent_dev` vào openclaw.config.yaml | ⬜ TODO |
-| 1.2 Agent Config | Thêm `agent_qc` vào openclaw.config.yaml | ⬜ TODO |
-| 1.3 AGENTS.md | Viết AGENTS.md cho agent_gd | ⬜ TODO |
-| 1.3 AGENTS.md | Viết AGENTS.md cho agent_dev | ⬜ TODO |
-| 1.3 AGENTS.md | Viết AGENTS.md cho agent_qc | ⬜ TODO |
-| 1.4 Heartbeat Test | Test heartbeat từng agent hoạt động | ⬜ TODO |
+| 1.1 Workspace Setup | Tạo cấu trúc `ccn2_workspace/` | ✅ DONE |
+| 1.1 Workspace Setup | Tạo file `WORKSPACE.md` index | ✅ DONE |
+| 1.1 Workspace Setup | Tạo `concepts/`, `design/`, `src/`, `reports/`, `.state/` | ✅ DONE |
+| 1.1 Workspace Setup | Tạo README.md cho từng folder + GDD-TEMPLATE.md | ✅ DONE |
+| 1.1 Workspace Setup | Khởi tạo `.state/*.json` = `{}` | ✅ DONE |
+| 1.1 Workspace Setup | Tạo `concepts/ladder-mechanic.md` (sample) | ✅ DONE |
+| 1.2 Agent Config | Tạo SOUL.md + AGENTS.md + HEARTBEAT.md cho agent_gd | ✅ DONE |
+| 1.2 Agent Config | Tạo SOUL.md + AGENTS.md + HEARTBEAT.md cho agent_dev | ✅ DONE |
+| 1.2 Agent Config | Tạo SOUL.md + AGENTS.md + HEARTBEAT.md cho agent_qc | ✅ DONE |
+| 1.2 Agent Config | Tạo `OPENCLAW_CONFIG_SNIPPET.json` | ✅ DONE |
+| 1.3 OpenClaw Config | Thêm agent_gd vào openclaw.json | ⬜ TODO (manual) |
+| 1.3 OpenClaw Config | Thêm agent_dev vào openclaw.json | ⬜ TODO (manual) |
+| 1.3 OpenClaw Config | Thêm agent_qc vào openclaw.json | ⬜ TODO (manual) |
+| 1.4 Heartbeat Test | Test agent_gd responds to message | ⬜ TODO |
+| 1.4 Heartbeat Test | Test agent_dev responds to message | ⬜ TODO |
+| 1.4 Heartbeat Test | Test agent_qc responds to message | ⬜ TODO |
+| 1.4 Heartbeat Test | Verify heartbeat log sau 30 phút | ⬜ TODO |
 
 ### Round 2 — Agent Specialization (Tuần 3–4)
 **Goal**: Mỗi agent có skill và workflow riêng, xử lý được use case cơ bản
