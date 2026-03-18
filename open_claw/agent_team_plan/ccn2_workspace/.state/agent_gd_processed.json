@@ -1,4 +1,10 @@
 {
   "game_gdd_last_synced": null,
-  "features_included": []
+  "features_included": [],
+  "ladder-mechanic.md": {
+    "hash": "24A4F715020331FB3599EDA698A308A8",
+    "processedAt": "2026-03-18T10:30:00Z",
+    "lastScore": 100,
+    "status": "Review"
+  }
 }
