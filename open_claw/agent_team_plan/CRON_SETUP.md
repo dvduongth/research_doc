@@ -16,7 +16,7 @@ Mở OpenClaw web UI → Cron → Add Job, paste JSON sau vào từng job.
   "id": "ccn2-gd-workspace-scan",
   "agentId": "agent_gd",
   "name": "CCN2 GD — Scan concepts/",
-  "description": "Scan ccn2_workspace/concepts/ moi 15 phut de tao GDD moi",
+  "description": "Scan ccn2_workspace/concepts/ mỗi 15 phút để tạo GDD mới",
   "enabled": true,
   "schedule": {
     "kind": "cron",
@@ -46,7 +46,7 @@ Mở OpenClaw web UI → Cron → Add Job, paste JSON sau vào từng job.
   "id": "ccn2-dev-workspace-scan",
   "agentId": "agent_dev",
   "name": "CCN2 Dev — Implement from GDDs",
-  "description": "Scan ccn2_workspace/design/ moi 15 phut de implement code",
+  "description": "Scan ccn2_workspace/design/ mỗi 15 phút để implement code",
   "enabled": true,
   "schedule": {
     "kind": "cron",
@@ -76,7 +76,7 @@ Mở OpenClaw web UI → Cron → Add Job, paste JSON sau vào từng job.
   "id": "ccn2-qc-workspace-scan",
   "agentId": "agent_qc",
   "name": "CCN2 QC — Test automation",
-  "description": "Scan design/ + src/ moi 15 phut de chay tests va tao report",
+  "description": "Scan design/ + src/ mỗi 15 phút để chạy tests và tạo report",
   "enabled": true,
   "schedule": {
     "kind": "cron",
