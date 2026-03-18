@@ -1,25 +1,19 @@
 {
-    "design/GDD-FEATURE-ladder-mechanic.md":  "248FDEE59877405709C2B556BD4DEFD2",
-    "design/GDD-ladder-mechanic.md":  "9A6C5566260E46BEF479EF916657DCE4",
-    "design/GDD-TEMPLATE.md":  "2A75840A5B3AEED697243D223FFADBEA",
-    "src/ladder-mechanic.js":  "C2EF0AA061BE092FB44FE0BD62D71E73",
-    "lastScan":  "2026-03-18T18:12:00+07:00",
-    "lastTestRun":  "2026-03-18T17:57:00+07:00",
-    "testsPass":  true,
-    "totalTests":  175,
-    "failedTests":  0,
-    "GDD-FEATURE-ladder-mechanic":  {
-                                        "hash":  "248FDEE59877405709C2B556BD4DEFD2",
-                                        "testcasesCreated":  "2026-03-18T17:42:00+07:00",
-                                        "testFile":  "src/tests/ladder-mechanic.test.js",
-                                        "reportFile":  "reports/testcases-ladder-mechanic.md",
-                                        "testCount":  28
-                                    },
-    "eval-ladder-mechanic":  {
-                                 "hash":  "248FDEE59877405709C2B556BD4DEFD2",
-                                 "evalScore":  83,
-                                 "evalDate":  "2026-03-18T17:42:00+07:00",
-                                 "result":  "ĐẠT",
-                                 "evalFile":  "eval/GDD-EVAL-ladder-mechanic-2026-03-18.md"
-                             }
+    "design/GDD-TEMPLATE.md": "2A75840A5B3AEED697243D223FFADBEA",
+    "design/GDD-TEMPLATE-FEATURE.md": "0CD1AA05D016C4F5C59A84D6F651A795",
+    "design/GDD-TEMPLATE-GAME.md": "56ECD07B56CC1753C62F4CCC8D580F16",
+    "src/ladder-mechanic.js": "C2EF0AA061BE092FB44FE0BD62D71E73",
+    "lastScan": "2026-03-18T18:42:00+07:00",
+    "lastTestRun": "2026-03-18T17:57:00+07:00",
+    "testsPass": true,
+    "totalTests": 175,
+    "failedTests": 0,
+    "notes": "GDD-FEATURE-ladder-mechanic.md and GDD-ladder-mechanic.md deleted at ~18:12-18:42. Test file src/tests/ladder-mechanic.test.js still present but source unchanged.",
+    "eval-ladder-mechanic": {
+        "hash": "248FDEE59877405709C2B556BD4DEFD2",
+        "evalScore": 83,
+        "evalDate": "2026-03-18T17:42:00+07:00",
+        "result": "ĐẠT",
+        "evalFile": "eval/GDD-EVAL-ladder-mechanic-2026-03-18.md"
+    }
 }
