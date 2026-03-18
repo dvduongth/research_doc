@@ -1,7 +1,7 @@
 # CCN2 Agent Team — Progress Tracker
 
 > File này được cập nhật sau mỗi task hoàn thành.
-> Last updated: 2026-03-18 (Round 1 ✅ HOÀN THÀNH — Phase 1.1–1.4 all done; Round 2 🔄 ĐANG TIẾN HÀNH — agent_gd GDD Workflow)
+> Last updated: 2026-03-18 (Round 1 ✅ HOÀN THÀNH; Round 2 Phase 2.1 ✅ GDD Workflow DONE; Round 2 Phase 2.2 ✅ Code Workflow DONE)
 
 ---
 
@@ -69,11 +69,27 @@
 ---
 
 ## Round 2 — Specialization
+
 | Phase | Status | Ngày | Ghi chú |
 |-------|--------|------|---------|
-| agent_gd GDD Workflow | 🔄 ĐANG TIẾN HÀNH | 2026-03-18 | Templates + Eval Rubric + AGENTS.md upgrade |
-| agent_dev Code Workflow | ⬜ TODO | — | — |
-| agent_qc Test Workflow | ⬜ TODO | — | — |
+| Phase 2.1 — agent_gd GDD Workflow | ✅ DONE | 2026-03-18 | Templates (10-section Feature + Game), GDD-EVAL-RUBRIC, AGENTS.md v2, sample GDD, agent_qc Part C |
+| Phase 2.2 — agent_dev Code Workflow | ✅ DONE | 2026-03-18 | 4-phase pipeline, 3 sub-agents (Pixel/Forge/Panel), CODE-EVAL-RUBRIC, staging area, openclaw.json updated |
+| Phase 2.3 — agent_qc Test Workflow | ⬜ TODO | — | Brainstorming → speckit → implementation |
+
+### Phase 2.2 — agent_dev Code Workflow: Deliverables
+
+| # | File | Status | Ghi chú |
+|---|------|--------|---------|
+| 1 | `ccn2_workspace/analysis/` folder | ✅ DONE | Tạo với .gitkeep |
+| 2 | `ccn2_workspace/eval/CODE-EVAL-RUBRIC.md` | ✅ DONE | 3 modes: Client/Server/Admin, pass ≥80 |
+| 3 | `ccn2_workspace/.state/agent_dev_processed.json` | ✅ DONE | Schema: gdd_hash, req_score, design_score, combined_score |
+| 4 | `ccn2_workspace/.state/agent_dev_dispatched.json` | ✅ DONE | Schema: per feature per sub-agent status tracking |
+| 5 | `openclaw/agents/agent_dev/AGENTS.md` upgraded | ✅ DONE | Full overwrite — Round 1 giữ nguyên + Round 2 Phase 1-4 |
+| 6 | `openclaw/agents/agent_dev_client/AGENTS.md` + `SOUL.md` | ✅ DONE | Pixel — TypeScript/Vite/Cocos2d, 7-step workflow |
+| 7 | `openclaw/agents/agent_dev_server/AGENTS.md` + `SOUL.md` | ✅ DONE | Forge — Kotlin/Ktor/Actor, 7-step workflow |
+| 8 | `openclaw/agents/agent_dev_admin/AGENTS.md` + `SOUL.md` | ✅ DONE | Panel — Java+React/REST, 7-step workflow |
+| 9 | `~/.openclaw/openclaw.json` — 3 agents mới | ✅ DONE | agent_dev_client, agent_dev_server, agent_dev_admin |
+| 10 | `ccn2_workspace/progress/PROGRESS.md` updated | ✅ DONE | File này |
 
 ## Round 3 — Automation
 | Phase | Status |

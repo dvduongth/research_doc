@@ -1,11 +1,14 @@
 {
-  "GDD-ladder-mechanic.md": {
-    "hash": "9A6C5566260E46BEF479EF916657DCE4",
-    "processedAt": "2026-03-18T14:20:00+07:00"
+  "GDD-gdd-overview-v2-elemental-hunter.md": {
+    "hash": "7C863E2DD4BBFF8C515595315FEA7BFE",
+    "processedAt": "2026-03-18T18:52:00+07:00",
+    "notes": "Master game overview for Elemental Hunter. Contains full game spec (board, tokens, turn structure, combos, combat, artifacts, levels). NOT a feature-specific GDD — requires breaking into individual feature GDDs (GDD-FEATURE-*.md) for agent_dev implementation."
   },
-  "GDD-FEATURE-ladder-mechanic.md": {
-    "hash": "248FDEE59877405709C2B556BD4DEFD2",
-    "processedAt": "2026-03-18T17:37:00+07:00",
-    "notes": "Minor GDD text updates (typo fixes in §10). Implementation fully matches spec. Flag: extra_turn_on_doubles from §6 not yet implemented — may need GDD clarification on trigger condition."
+  "_existing_implementation": {
+    "ladder-mechanic.js": {
+      "hash": "N/A",
+      "processedAt": "2026-03-18T17:37:00+07:00",
+      "notes": "Implemented from former GDD-FEATURE-ladder-mechanic.md. Test skeleton at src/tests/ladder-mechanic.test.js. Source GDD files (GDD-ladder-mechanic.md, GDD-FEATURE-ladder-mechanic.md) were removed by anh on 2026-03-18 as legacy. Implementation remains active unless anh decides to remove it."
+    }
   }
 }
