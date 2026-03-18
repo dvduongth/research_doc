@@ -6,5 +6,12 @@
     "processedAt": "2026-03-18T10:30:00Z",
     "lastScore": 100,
     "status": "Review"
+  },
+  "GDD_Overview_v2_ElementalHunter.md": {
+    "hash": "EF3DBB60A9BA56D8F29F9A8A6DD5DC83",
+    "processedAt": "2026-03-18T11:30:00Z",
+    "lastScore": 0,
+    "status": "SKIPPED",
+    "reason": "Concept describes 'Elemental Hunter' game, not CCN2. Incompatible board size (61 vs 44), player count (2 vs 2-4), tokens (3 vs 2), mechanics (Element Queue/Combo/Artifacts), currency (ATK/MAG/HP vs DIAMOND)."
   }
 }
