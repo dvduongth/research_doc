@@ -33,7 +33,7 @@
 
 #### 1.1 Bàn cờ
 
-Elemental Hunter sử dụng bàn cờ hình thập (+) gồm 61 ô (ID 0–60), chia làm 4 cánh. Mỗi cánh được gắn với 1 Player (Player1, Player2, Player3, Player4) nhưng game thực chất là **2 người chơi** — chỉ Player1 và Player2 tham gia. 4 cánh vẫn tồn tại trên bàn cờ và tất cả đường đi vẫn hoạt động; 2 cánh còn lại là địa hình của bàn cờ nhưng không có người chơi.
+Elemental Hunter sử dụng bàn cờ hình Chữ thập(+) isomatic gồm 61 ô (ID 0–60), chia làm 4 cánh. Mỗi cánh được gắn với 1 Player (Player1, Player2, Player3, Player4) nhưng game thực chất là **2 người chơi** — chỉ Player1 và Player2 tham gia. 4 cánh vẫn tồn tại trên bàn cờ và tất cả đường đi vẫn hoạt động; 2 cánh còn lại là địa hình của bàn cờ nhưng không có người chơi.
 
 **Cấu trúc bàn cờ:**
 
