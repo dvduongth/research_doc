@@ -1,7 +1,7 @@
 # Cron Jobs Setup — CCN2 Agent Team
 
-> **Status**: Ready to add — manual step required via OpenClaw UI or API
-> **Created**: 2026-03-18
+> **Status**: Jobs 1-3 ✅ ACTIVE | Jobs 5-7 ⬜ TODO (thêm thủ công vào OpenClaw UI)
+> **Created**: 2026-03-18 | **Updated**: 2026-03-18 (thêm 3 implementation agents)
 
 ## Cách thêm cron job trong OpenClaw
 
@@ -123,17 +123,117 @@ Mở OpenClaw web UI → Cron → Add Job, paste JSON sau vào từng job.
 
 ---
 
+## Job 5: agent_dev_client — Client Implementation
+
+```json
+{
+  "id": "ccn2-dev-client-workspace-scan",
+  "agentId": "agent_dev_client",
+  "name": "CCN2 Dev Client — Implement TypeScript/Cocos2d",
+  "description": "Scan dispatched.json mỗi 30 phút để implement client layer",
+  "enabled": true,
+  "schedule": {
+    "kind": "cron",
+    "expr": "17,47 8-22 * * 1-5",
+    "tz": "Asia/Ho_Chi_Minh"
+  },
+  "sessionTarget": "isolated",
+  "payload": {
+    "type": "system_event",
+    "text": "WORKSPACE_SCAN: Follow HEARTBEAT.md instructions exactly. Read D:/PROJECT/CCN2/research_doc/open_claw/agent_team_plan/ccn2_workspace/.state/agent_dev_dispatched.json. For each feature WHERE client_status='dispatched': read analysis/REQ-<name>.md + analysis/DESIGN-<name>.md, implement TypeScript/Cocos2d code in src/client/<name>/, write self-eval to eval/CODE-EVAL-client-<name>-<date>.md, update dispatched.json client_status='done'. If nothing to do, output HEARTBEAT_OK."
+  },
+  "failureAlert": {
+    "enabled": true,
+    "after": 3
+  }
+}
+```
+
+**Runs**: Weekdays 8h–22h, mỗi 30 phút (`:17, :47`) — sau khi GD→Dev→QC cycle hoàn chỉnh
+
+---
+
+## Job 6: agent_dev_server — Server Implementation
+
+```json
+{
+  "id": "ccn2-dev-server-workspace-scan",
+  "agentId": "agent_dev_server",
+  "name": "CCN2 Dev Server — Implement Kotlin/Ktor",
+  "description": "Scan dispatched.json mỗi 30 phút để implement server layer",
+  "enabled": true,
+  "schedule": {
+    "kind": "cron",
+    "expr": "19,49 8-22 * * 1-5",
+    "tz": "Asia/Ho_Chi_Minh"
+  },
+  "sessionTarget": "isolated",
+  "payload": {
+    "type": "system_event",
+    "text": "WORKSPACE_SCAN: Follow HEARTBEAT.md instructions exactly. Read D:/PROJECT/CCN2/research_doc/open_claw/agent_team_plan/ccn2_workspace/.state/agent_dev_dispatched.json. For each feature WHERE server_status='dispatched': read analysis/REQ-<name>.md + analysis/DESIGN-<name>.md, implement Kotlin/Ktor/Actor code in src/server/<name>/, write self-eval to eval/CODE-EVAL-server-<name>-<date>.md, update dispatched.json server_status='done'. If nothing to do, output HEARTBEAT_OK."
+  },
+  "failureAlert": {
+    "enabled": true,
+    "after": 3
+  }
+}
+```
+
+**Runs**: Weekdays 8h–22h, mỗi 30 phút (`:19, :49`) — offset +2 so với agent_dev_client
+
+---
+
+## Job 7: agent_dev_admin — Admin Implementation
+
+```json
+{
+  "id": "ccn2-dev-admin-workspace-scan",
+  "agentId": "agent_dev_admin",
+  "name": "CCN2 Dev Admin — Implement Java+React/REST",
+  "description": "Scan dispatched.json mỗi 30 phút để implement admin layer",
+  "enabled": true,
+  "schedule": {
+    "kind": "cron",
+    "expr": "21,51 8-22 * * 1-5",
+    "tz": "Asia/Ho_Chi_Minh"
+  },
+  "sessionTarget": "isolated",
+  "payload": {
+    "type": "system_event",
+    "text": "WORKSPACE_SCAN: Follow HEARTBEAT.md instructions exactly. Read D:/PROJECT/CCN2/research_doc/open_claw/agent_team_plan/ccn2_workspace/.state/agent_dev_dispatched.json. For each feature WHERE admin_status='dispatched': read analysis/REQ-<name>.md + analysis/DESIGN-<name>.md, implement Java+React/REST code in src/admin/<name>/, write self-eval to eval/CODE-EVAL-admin-<name>-<date>.md, update dispatched.json admin_status='done'. If nothing to do, output HEARTBEAT_OK."
+  },
+  "failureAlert": {
+    "enabled": true,
+    "after": 3
+  }
+}
+```
+
+**Runs**: Weekdays 8h–22h, mỗi 30 phút (`:21, :51`) — offset +2 so với agent_dev_server
+
+---
+
 ## Timing Overview
 
 ```
-:00  agent_gd scans concepts/
-:07  agent_dev scans design/
-:12  agent_qc scans design/ + src/
+Cycle 15 phút (main agents):
+:00  agent_gd       — scan concepts/ → tạo GDD
+:07  agent_dev      — scan design/ → dispatch cho 3 implementation agents
+:12  agent_qc       — scan design/ + src/ → test + code review
 
-:15  agent_gd (next cycle)
-:22  agent_dev
-:27  agent_qc
+Cycle 30 phút (implementation agents):
+:17  agent_dev_client  — scan dispatched.json → implement TypeScript/Cocos2d
+:19  agent_dev_server  — scan dispatched.json → implement Kotlin/Ktor
+:21  agent_dev_admin   — scan dispatched.json → implement Java+React
+
+:32  (next GD cycle)
 ...
+
+Mon 9am:
+agent_qc — weekly digest
 ```
 
-Offset giữa các agents đảm bảo GDD được tạo trước khi dev/qc chạy.
+**Thiết kế offset:**
+- Main agents chạy mỗi 15 phút, staggered đảm bảo GDD → Code → QC theo thứ tự
+- Implementation agents chạy mỗi 30 phút, bắt đầu sau :12 (khi QC xong cycle đầu)
+- 3 implementation agents cách nhau 2 phút để tránh race condition trên dispatched.json

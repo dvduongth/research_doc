@@ -83,19 +83,19 @@
 | 1 | `ccn2_workspace/analysis/` folder | ✅ DONE | Tạo với .gitkeep |
 | 2 | `ccn2_workspace/eval/CODE-EVAL-RUBRIC.md` | ✅ DONE | 3 modes: Client/Server/Admin, pass ≥80 |
 | 3 | `ccn2_workspace/.state/agent_dev_processed.json` | ✅ DONE | Schema: gdd_hash, req_score, design_score, combined_score |
-| 4 | `ccn2_workspace/.state/agent_dev_dispatched.json` | ✅ DONE | Schema: per feature per sub-agent status tracking |
+| 4 | `ccn2_workspace/.state/agent_dev_dispatched.json` | ✅ DONE | Schema: per feature per agent status tracking |
 | 5 | `openclaw/agents/agent_dev/AGENTS.md` upgraded | ✅ DONE | Full overwrite — Round 1 giữ nguyên + Round 2 Phase 1-4 |
-| 6 | `openclaw/agents/agent_dev_client/AGENTS.md` + `SOUL.md` | ✅ DONE | Pixel — TypeScript/Vite/Cocos2d, 7-step workflow |
-| 7 | `openclaw/agents/agent_dev_server/AGENTS.md` + `SOUL.md` | ✅ DONE | Forge — Kotlin/Ktor/Actor, 7-step workflow |
-| 8 | `openclaw/agents/agent_dev_admin/AGENTS.md` + `SOUL.md` | ✅ DONE | Panel — Java+React/REST, 7-step workflow |
-| 9 | `~/.openclaw/openclaw.json` — 3 agents mới | ✅ DONE | agent_dev_client, agent_dev_server, agent_dev_admin |
+| 6 | `openclaw/agents/agent_dev_client/AGENTS.md` + `SOUL.md` | ✅ DONE | agent Pixel — TypeScript/Vite/Cocos2d, 7-step workflow |
+| 7 | `openclaw/agents/agent_dev_server/AGENTS.md` + `SOUL.md` | ✅ DONE | agent Forge — Kotlin/Ktor/Actor, 7-step workflow |
+| 8 | `openclaw/agents/agent_dev_admin/AGENTS.md` + `SOUL.md` | ✅ DONE | agent Panel — Java+React/REST, 7-step workflow |
+| 9 | `~/.openclaw/openclaw.json` — 6 agents tổng | ✅ DONE | agent_gd, agent_dev, agent_qc, agent_dev_client, agent_dev_server, agent_dev_admin |
 | 10 | `ccn2_workspace/progress/PROGRESS.md` updated | ✅ DONE | File này |
 
 ## Round 3 — Automation
-| Phase | Status |
-|-------|--------|
-| Cron Jobs & State Tracking | ⬜ TODO |
-| File Change Detection | ⬜ TODO |
+| Phase | Status | Ghi chú |
+|-------|--------|---------|
+| Cron Jobs (6 agents) | 🔄 IN PROGRESS | Jobs 1-3 ✅ active; Jobs 5-7 ⬜ cần add vào OpenClaw (CRON_SETUP.md Job 5,6,7) |
+| File Change Detection | ⬜ TODO | Brainstorming đang tiến hành |
 | Cross-agent Coordination | ⬜ TODO |
 | E2E Integration Test | ⬜ TODO |
 

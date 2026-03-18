@@ -1,5 +1,5 @@
 # Round 2 — Tiến trình thực hiện (GDD + Code Workflow)
-**Cập nhật lần cuối**: 2026-03-18
+**Cập nhật lần cuối**: 2026-03-18 (Round 3 bắt đầu — cron jobs Job 5-7 thêm vào CRON_SETUP.md)
 **Session**: William Đào 👌
 
 ---
@@ -140,10 +140,10 @@ openclaw/agents/
 | 3 | `ccn2_workspace/.state/agent_dev_processed.json` | ✅ XONG | Chunk A — schema mới với gdd_hash, scores |
 | 4 | `ccn2_workspace/.state/agent_dev_dispatched.json` | ✅ XONG | Chunk A — `{}` |
 | 5 | `openclaw/agents/agent_dev/AGENTS.md` upgraded | ✅ XONG | Chunk B — 293 lines, Round 1 giữ nguyên + Round 2 Phase 1-4 |
-| 6 | `openclaw/agents/agent_dev_client/AGENTS.md` + `SOUL.md` | ✅ XONG | Chunk C — Pixel, TypeScript/Vite/Cocos2d, 7-step flow |
-| 7 | `openclaw/agents/agent_dev_server/AGENTS.md` + `SOUL.md` | ✅ XONG | Chunk C — Forge, Kotlin/Ktor/Actor, 7-step flow |
-| 8 | `openclaw/agents/agent_dev_admin/AGENTS.md` + `SOUL.md` | ✅ XONG | Chunk C — Panel, Java+React/REST, 7-step flow |
-| 9 | `~/.openclaw/openclaw.json` — thêm 3 agents | ✅ XONG | Chunk C + anh khởi tạo manual |
+| 6 | `openclaw/agents/agent_dev_client/AGENTS.md` + `SOUL.md` | ✅ XONG | Chunk C — agent Pixel, TypeScript/Vite/Cocos2d, 7-step flow |
+| 7 | `openclaw/agents/agent_dev_server/AGENTS.md` + `SOUL.md` | ✅ XONG | Chunk C — agent Forge, Kotlin/Ktor/Actor, 7-step flow |
+| 8 | `openclaw/agents/agent_dev_admin/AGENTS.md` + `SOUL.md` | ✅ XONG | Chunk C — agent Panel, Java+React/REST, 7-step flow |
+| 9 | `~/.openclaw/openclaw.json` — thêm 3 agents | ✅ XONG | Chunk C + anh khởi tạo manual (agent_dev_client, agent_dev_server, agent_dev_admin) |
 | 10 | `ccn2_workspace/progress/PROGRESS.md` updated | ✅ XONG | Chunk D |
 
 **Spec**: `specs/2026-03-18-agent-dev-workflow-design.md` (v3)
