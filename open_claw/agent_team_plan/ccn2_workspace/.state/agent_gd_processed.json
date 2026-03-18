@@ -8,10 +8,10 @@
     "status": "Review"
   },
   "GDD_Overview_v2_ElementalHunter.md": {
-    "hash": "EF3DBB60A9BA56D8F29F9A8A6DD5DC83",
-    "processedAt": "2026-03-18T11:30:00Z",
+    "hash": "8E77CF4CB2E9CE2C4A9FC7BA448DA23A",
+    "processedAt": "2026-03-18T12:15:00Z",
     "lastScore": 0,
     "status": "SKIPPED",
-    "reason": "Concept describes 'Elemental Hunter' game, not CCN2. Incompatible board size (61 vs 44), player count (2 vs 2-4), tokens (3 vs 2), mechanics (Element Queue/Combo/Artifacts), currency (ATK/MAG/HP vs DIAMOND)."
+    "reason": "Incompatible with CCN2: describes Elemental Hunter (61-tile cross board, 3 tokens, ATK/MAG/HP mechanics, KO/HP win condition) — does not match CCN2's 44-tile circular board, 2 tokens, DIAMOND currency, and Ladder gate system."
   }
 }
