@@ -1,7 +1,7 @@
 # CCN2 Agent Team — Progress Tracker
 
 > File này được cập nhật sau mỗi task hoàn thành.
-> Last updated: 2026-03-18 (Round 1 ✅ HOÀN THÀNH; Round 2 Phase 2.1 ✅ GDD Workflow DONE; Round 2 Phase 2.2 ✅ Code Workflow DONE)
+> Last updated: 2026-03-18 (Round 1 ✅; Round 2 ✅ HOÀN THÀNH — Phase 2.1 GDD ✅ + Phase 2.2 Code ✅ + Phase 2.3 Test ✅)
 
 ---
 
@@ -74,7 +74,7 @@
 |-------|--------|------|---------|
 | Phase 2.1 — agent_gd GDD Workflow | ✅ DONE | 2026-03-18 | Templates (10-section Feature + Game), GDD-EVAL-RUBRIC, AGENTS.md v2, sample GDD, agent_qc Part C |
 | Phase 2.2 — agent_dev Code Workflow | ✅ DONE | 2026-03-18 | 4-phase pipeline, 3 sub-agents (Pixel/Forge/Panel), CODE-EVAL-RUBRIC, staging area, openclaw.json updated |
-| Phase 2.3 — agent_qc Test Workflow | ⬜ TODO | — | Brainstorming → speckit → implementation |
+| Phase 2.3 — agent_qc Test Workflow | ✅ DONE | 2026-03-18 | Part D (Code Review) + Part E (Test Generation), 6 deliverables |
 
 ### Phase 2.2 — agent_dev Code Workflow: Deliverables
 

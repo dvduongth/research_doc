@@ -23,8 +23,24 @@
 ### Phase 2.3 — agent_qc Test Workflow
 | Giai đoạn | Trạng thái | Thời gian |
 |-----------|-----------|-----------|
-| Brainstorming + Design | ⬜ TODO | — |
-| Spec + Implementation | ⬜ TODO | — |
+| Brainstorming + Design (5 sections) | ✅ XONG | 2026-03-18 |
+| Spec review + fix (3 WARNING) | ✅ XONG | 2026-03-18 |
+| Implementation (6/6 deliverables) | ✅ XONG | 2026-03-18 |
+
+## Phase 2.3 — agent_qc Test Workflow Deliverables
+
+| # | File | Trạng thái | Ghi chú |
+|---|------|-----------|---------|
+| 1 | `src/tests/client/` folder | ✅ XONG | .gitkeep |
+| 2 | `src/tests/server/` folder | ✅ XONG | .gitkeep |
+| 3 | `src/tests/admin/` folder | ✅ XONG | .gitkeep |
+| 4 | `openclaw/agents/agent_qc/AGENTS.md` upgraded | ✅ XONG | 162→315 lines, Part D + E added |
+| 5 | `.state/agent_qc_processed.json` schema updated | ✅ XONG | code_review:{}, test_gen:{} added |
+| 6 | `progress/PROGRESS.md` updated | ✅ XONG | Round 2 ✅ HOÀN THÀNH |
+
+**Spec**: `specs/2026-03-18-agent-qc-workflow-design.md` (v2)
+**Plan**: `plans/round2-agent-qc-workflow-impl.md`
+**Design**: `plans/round2-agent-qc-workflow.md`
 
 ---
 

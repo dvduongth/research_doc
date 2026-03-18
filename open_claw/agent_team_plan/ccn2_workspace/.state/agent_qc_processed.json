@@ -1,28 +1,29 @@
 {
-    "design/GDD-TEMPLATE.md": "2A75840A5B3AEED697243D223FFADBEA",
-    "design/GDD-TEMPLATE-FEATURE.md": "0CD1AA05D016C4F5C59A84D6F651A795",
-    "design/GDD-TEMPLATE-GAME.md": "56ECD07B56CC1753C62F4CCC8D580F16",
-    "design/GDD-gdd-overview-v2-elemental-hunter.md": "7C863E2DD4BBFF8C515595315FEA7BFE",
-    "src/ladder-mechanic.js": "C2EF0AA061BE092FB44FE0BD62D71E73",
-    "lastScan": "2026-03-18T18:57:00+07:00",
-    "lastTestRun": "2026-03-18T18:57:00+07:00",
-    "testsPass": true,
-    "totalTests": 175,
-    "failedTests": 0,
-    "notes": "New GDD-gdd-overview-v2-elemental-hunter.md detected. Test cases written to reports/ and src/tests/. All 175 existing tests pass.",
-    "eval-ladder-mechanic": {
-        "hash": "248FDEE59877405709C2B556BD4DEFD2",
-        "evalScore": 83,
-        "evalDate": "2026-03-18T17:42:00+07:00",
-        "result": "ĐẠT",
-        "evalFile": "eval/GDD-EVAL-ladder-mechanic-2026-03-18.md"
-    },
-    "testcases-gdd-overview-v2-elemental-hunter": {
-        "hash": "7C863E2DD4BBFF8C515595315FEA7BFE",
-        "testFile": "src/tests/gdd-overview-v2-elemental-hunter.test.js",
-        "reportFile": "reports/testcases-gdd-overview-v2-elemental-hunter.md",
-        "generatedDate": "2026-03-18T18:57:00+07:00",
-        "testCount": 78,
-        "note": "Test file references game-engine module not yet implemented — tests will fail until src/game-engine.js is created. This is expected for design-first workflow."
-    }
+  "design/GDD-TEMPLATE.md": "2A75840A5B3AEED697243D223FFADBEA",
+  "design/GDD-TEMPLATE-FEATURE.md": "0CD1AA05D016C4F5C59A84D6F651A795",
+  "design/GDD-TEMPLATE-GAME.md": "56ECD07B56CC1753C62F4CCC8D580F16",
+  "src/ladder-mechanic.js": "C2EF0AA061BE092FB44FE0BD62D71E73",
+  "lastScan": "2026-03-18T19:42:00+07:00",
+  "lastTestRun": "2026-03-18T18:57:00+07:00",
+  "testsPass": true,
+  "totalTests": 175,
+  "failedTests": 0,
+  "notes": "No changes detected. GDD-gdd-overview-v2-elemental-hunter.md removed from design/ (was previously processed). All hashes match prior state.",
+  "eval-ladder-mechanic": {
+    "hash": "248FDEE59877405709C2B556BD4DEFD2",
+    "evalScore": 83,
+    "evalDate": "2026-03-18T17:42:00+07:00",
+    "result": "ĐẠT",
+    "evalFile": "eval/GDD-EVAL-ladder-mechanic-2026-03-18.md"
+  },
+  "testcases-gdd-overview-v2-elemental-hunter": {
+    "hash": "7C863E2DD4BBFF8C515595315FEA7BFE",
+    "testFile": "src/tests/gdd-overview-v2-elemental-hunter.test.js",
+    "reportFile": "reports/testcases-gdd-overview-v2-elemental-hunter.md",
+    "generatedDate": "2026-03-18T18:57:00+07:00",
+    "testCount": 78,
+    "note": "GDD file removed from disk. Test scaffolding preserved."
+  },
+  "code_review": {},
+  "test_gen": {}
 }
