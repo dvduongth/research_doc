@@ -1,7 +1,7 @@
 # CCN2 Agent Team — Progress Tracker
 
 > File này được cập nhật sau mỗi task hoàn thành.
-> Last updated: 2026-03-18 (Phase 1.1 ✅, 1.2 ✅, 1.3 partial, 1.4 ⬜ smoke test pending)
+> Last updated: 2026-03-18 (Round 1 ✅ HOÀN THÀNH — Phase 1.1–1.4 all done; Round 2 🔄 ĐANG TIẾN HÀNH — agent_gd GDD Workflow)
 
 ---
 
@@ -61,19 +61,19 @@
 ### Phase 1.4: Smoke Test
 | Task | Status | Date | Notes |
 |------|--------|------|-------|
-| Test agent_gd responds to message | ⬜ TODO | — | Gửi Telegram message bất kỳ → verify response + IDENTITY.md setup |
-| Test agent_dev responds to message | ⬜ TODO | — | Tương tự |
-| Test agent_qc responds to message | ⬜ TODO | — | Tương tự |
-| Verify heartbeat + cron chạy | ⬜ TODO | — | Sau khi add cron jobs, chờ 15 phút đầu tiên |
+| Test agent_gd responds to message | ✅ DONE | 2026-03-18 | Manual — anh xác nhận hoàn thành |
+| Test agent_dev responds to message | ✅ DONE | 2026-03-18 | Manual — anh xác nhận hoàn thành |
+| Test agent_qc responds to message | ✅ DONE | 2026-03-18 | Manual — anh xác nhận hoàn thành |
+| Verify heartbeat + cron chạy | ✅ DONE | 2026-03-18 | Manual — anh xác nhận hoàn thành |
 
 ---
 
 ## Round 2 — Specialization
-| Phase | Status |
-|-------|--------|
-| agent_gd GDD Workflow | ⬜ TODO |
-| agent_dev Code Workflow | ⬜ TODO |
-| agent_qc Test Workflow | ⬜ TODO |
+| Phase | Status | Ngày | Ghi chú |
+|-------|--------|------|---------|
+| agent_gd GDD Workflow | 🔄 ĐANG TIẾN HÀNH | 2026-03-18 | Templates + Eval Rubric + AGENTS.md upgrade |
+| agent_dev Code Workflow | ⬜ TODO | — | — |
+| agent_qc Test Workflow | ⬜ TODO | — | — |
 
 ## Round 3 — Automation
 | Phase | Status |
@@ -92,11 +92,12 @@
 
 ---
 
-## ✅ Đã Hoàn Thành Round 1 (trừ manual steps)
+## ✅ Đã Hoàn Thành Round 1
 
 Phase 1.1 ✅ — Workspace structure
 Phase 1.2 ✅ — Agent files: SOUL, AGENTS, HEARTBEAT, USER — CCN2-specific, correct paths
 Phase 1.3 ✅ — 3 agents added to OpenClaw; CRON_SETUP.md ready
+Phase 1.4 ✅ — Smoke test hoàn thành (manual)
 
 ## 🔧 Còn Lại (Manual Steps)
 
