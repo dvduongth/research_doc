@@ -1,18 +1,30 @@
-# Round 2 — GDD Workflow: Tiến trình thực hiện
+# Round 2 — Tiến trình thực hiện (GDD + Code Workflow)
 **Cập nhật lần cuối**: 2026-03-18
 **Session**: William Đào 👌
-**Spec**: `specs/2026-03-18-gdd-workflow-design.md`
-**Plan chi tiết**: `plans/round2-gdd-workflow-impl.md`
 
 ---
 
 ## Tóm tắt
 
+### Phase 2.1 — agent_gd GDD Workflow
 | Giai đoạn | Trạng thái | Thời gian |
 |-----------|-----------|-----------|
 | Brainstorming + Design (5 sections) | ✅ XONG | 2026-03-18 |
-| Spec review + fix issues (1 CRITICAL + 5 WARNING) | ✅ XONG | 2026-03-18 |
-| Implementation (8 deliverables) | ✅ XONG | 2026-03-18 |
+| Spec review + fix (1 CRITICAL + 5 WARNING) | ✅ XONG | 2026-03-18 |
+| Implementation (9 deliverables) | ✅ XONG | 2026-03-18 |
+
+### Phase 2.2 — agent_dev Code Workflow
+| Giai đoạn | Trạng thái | Thời gian |
+|-----------|-----------|-----------|
+| Brainstorming + Design (5 sections) | ✅ XONG | 2026-03-18 |
+| Spec review + fix (2 CRITICAL + 6 WARNING + 3 MINOR) | ✅ XONG | 2026-03-18 |
+| Implementation (10 deliverables) | ⬜ TODO | — |
+
+### Phase 2.3 — agent_qc Test Workflow
+| Giai đoạn | Trạng thái | Thời gian |
+|-----------|-----------|-----------|
+| Brainstorming + Design | ⬜ TODO | — |
+| Spec + Implementation | ⬜ TODO | — |
 
 ---
 
@@ -97,8 +109,30 @@ openclaw/agents/
 | Phase | Trạng thái | Ghi chú |
 |-------|-----------|---------|
 | agent_gd GDD Workflow | ✅ XONG | Templates, eval, AGENTS.md, sample GDD |
-| agent_dev Code Workflow | ⬜ TODO | Round 2 Phase 2 |
+| agent_dev Code Workflow — Design+Spec | ✅ XONG | Brainstorming 5 sections, spec v3 APPROVED |
+| agent_dev Code Workflow — Implementation | ⬜ TODO | 10 deliverables — xem `round2-agent-dev-workflow-impl.md` |
 | agent_qc Test Workflow | ⬜ TODO | Round 2 Phase 3 |
+
+---
+
+## Phase 2.2 — agent_dev Code Workflow Deliverables
+
+| # | File | Trạng thái | Ghi chú |
+|---|------|-----------|---------|
+| 1 | `ccn2_workspace/analysis/` folder | ⬜ TODO | Chunk A |
+| 2 | `ccn2_workspace/eval/CODE-EVAL-RUBRIC.md` | ⬜ TODO | Chunk A — 3 modes |
+| 3 | `ccn2_workspace/.state/agent_dev_processed.json` | ⬜ TODO | Chunk A |
+| 4 | `ccn2_workspace/.state/agent_dev_dispatched.json` | ⬜ TODO | Chunk A |
+| 5 | `openclaw/agents/agent_dev/AGENTS.md` upgraded | ⬜ TODO | Chunk B — full overwrite + Round 2 |
+| 6 | `openclaw/agents/agent_dev_client/AGENTS.md` + `SOUL.md` | ⬜ TODO | Chunk C — Pixel |
+| 7 | `openclaw/agents/agent_dev_server/AGENTS.md` + `SOUL.md` | ⬜ TODO | Chunk C — Forge |
+| 8 | `openclaw/agents/agent_dev_admin/AGENTS.md` + `SOUL.md` | ⬜ TODO | Chunk C — Panel |
+| 9 | `~/.openclaw/openclaw.json` — thêm 3 agents | ⬜ TODO | Chunk C |
+| 10 | `ccn2_workspace/progress/PROGRESS.md` updated | ⬜ TODO | Chunk D |
+
+**Spec**: `specs/2026-03-18-agent-dev-workflow-design.md` (v3)
+**Plan**: `plans/round2-agent-dev-workflow-impl.md`
+**Design**: `plans/round2-agent-dev-workflow.md`
 
 ---
 

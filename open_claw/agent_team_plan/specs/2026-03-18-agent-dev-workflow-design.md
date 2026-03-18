@@ -1,7 +1,7 @@
 # Design Spec: agent_dev Code Workflow — Round 2
 **Date**: 2026-03-18
 **Author**: William Đào 👌
-**Status**: Approved (v2 — post spec-review fixes)
+**Status**: Approved (v3 — N1/N2/N3 minor fixes)
 **Reference**:
 - `D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan\demo-main\` — TypeScript/Vite stack
 - `D:\PROJECT\CCN2\research_doc\GDD_Overview_v2_ElementalHunter.md`
@@ -102,6 +102,11 @@ Phase 4: Dispatch
 
 ```
 ccn2_workspace/
+├── design/                             ← GDD input files (read-only by agent_dev)
+│   ├── GDD-TEMPLATE-FEATURE.md
+│   ├── GDD-TEMPLATE-GAME.md
+│   └── GDD-FEATURE-<name>.md           ← output của agent_gd, input cho agent_dev
+│
 ├── analysis/                           ← orchestrator artifacts (read/write by agent_dev)
 │   ├── REQ-<feature>.md                ← Phase 1: Requirements + UseCase diagram
 │   ├── DESIGN-<feature>.md             ← Phase 2: System Design + 4 Mermaid diagrams
@@ -267,7 +272,7 @@ Sau mỗi WORKSPACE_SCAN, agent_dev poll .state/agent_dev_dispatched.json:
 
 ### Orchestrator Constraints
 
-- Chỉ READ `design/`, `eval/`, `.state/` — KHÔNG write vào `src/`
+- READ từ `design/` (GDD input), `eval/`, `.state/`; WRITE vào `analysis/` và `.state/` — KHÔNG write vào `src/`
 - Max 2 re-eval iterations per phase — lần 3 = BLOCKED + flag human
 - Max 1 Telegram batch/WORKSPACE_SCAN
 - KHÔNG dispatch nếu combined eval score < 70
@@ -337,7 +342,7 @@ Sau mỗi WORKSPACE_SCAN, agent_dev poll .state/agent_dev_dispatched.json:
 2. IDENTIFY server components từ DESIGN.md Server layer breakdown:
    - New module → Module.kt + RequestHandler + EventListener
    - New ability → abilities/execute/<Type>Executor.kt
-   - New config → config/<domain>/<Name>Cfg.kt + res/*.json
+   - New config → config/<domain>/<Name>Cfg.kt + staging res JSON
    - DB change → sql/ table + SqlVersioning update
 3. GENERATE Kotlin content (in-memory):
    - Actor model (suspend function + coroutine scope, không blocking)
@@ -352,8 +357,8 @@ Sau mỗi WORKSPACE_SCAN, agent_dev poll .state/agent_dev_dispatched.json:
 ```
 
 **Server constraints:**
-- KHÔNG modify `concepts/`, `res/` trong workspace
-- Config thay đổi → ghi cả res/*.json lẫn Kotlin loader
+- KHÔNG modify `concepts/`, workspace root `res/` — config JSON output vào `src/server/<feature>/` (staging)
+- Config thay đổi → ghi cả Kotlin loader lẫn JSON vào staging folder
 - Actor model: không blocking call trong coroutine scope
 
 ---
