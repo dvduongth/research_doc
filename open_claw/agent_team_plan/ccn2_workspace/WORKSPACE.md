@@ -33,6 +33,6 @@ Last updated: 2026-03-17
 | agent_qc | :12, :27, :42, :57 | +12 min, sees both GDD and code |
 
 ## Agent Workspaces
-- agent_gd: `D:/workspace/CCN2/openclaw/agents/agent_gd/`
-- agent_dev: `D:/workspace/CCN2/openclaw/agents/agent_dev/`
-- agent_qc: `D:/workspace/CCN2/openclaw/agents/agent_qc/`
+- agent_gd: `{$project_dir}/openclaw/agents//agent_gd/`
+- agent_dev: `{$project_dir}/openclaw/agents//agent_dev/`
+- agent_qc: `{$project_dir}/openclaw/agents//agent_qc/`

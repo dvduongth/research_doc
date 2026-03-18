@@ -5,7 +5,7 @@
 > **Output directory**: `D:\workspace\CCN2\research_doc\open_claw\agent_team_plan\`
 >
 > **Created**: 2026-03-17
-> **Last updated**: 2026-03-17 (Round 1 Phase 1.1–1.3 completed)
+> **Last updated**: 2026-03-18 (verified actual state — 1.1 ✅, 1.3 ✅, 1.2 ⚠️ generic, 1.4 ⬜)
 
 ---
 
@@ -64,13 +64,16 @@ Xây dựng một **agent team tự động hóa** cho dự án CCN2 — một n
 | 1.1 Workspace Setup | Tạo README.md cho từng folder + GDD-TEMPLATE.md | ✅ DONE |
 | 1.1 Workspace Setup | Khởi tạo `.state/*.json` = `{}` | ✅ DONE |
 | 1.1 Workspace Setup | Tạo `concepts/ladder-mechanic.md` (sample) | ✅ DONE |
-| 1.2 Agent Config | Tạo SOUL.md + AGENTS.md + HEARTBEAT.md cho agent_gd | ✅ DONE |
-| 1.2 Agent Config | Tạo SOUL.md + AGENTS.md + HEARTBEAT.md cho agent_dev | ✅ DONE |
-| 1.2 Agent Config | Tạo SOUL.md + AGENTS.md + HEARTBEAT.md cho agent_qc | ✅ DONE |
+| 1.2 Agent Config | Ghi đè AGENTS.md CCN2-specific cho agent_gd | ⚠️ GENERIC (cần ghi đè) |
+| 1.2 Agent Config | Ghi đè AGENTS.md CCN2-specific cho agent_dev | ⚠️ GENERIC (cần ghi đè) |
+| 1.2 Agent Config | Ghi đè AGENTS.md CCN2-specific cho agent_qc | ⚠️ GENERIC (cần ghi đè) |
+| 1.2 Agent Config | Ghi đè HEARTBEAT.md workspace scan cho 3 agents | ❌ EMPTY (cần điền) |
 | 1.2 Agent Config | Tạo `OPENCLAW_CONFIG_SNIPPET.json` | ✅ DONE |
-| 1.3 OpenClaw Config | Thêm agent_gd vào openclaw.json | ⬜ TODO (manual) |
-| 1.3 OpenClaw Config | Thêm agent_dev vào openclaw.json | ⬜ TODO (manual) |
-| 1.3 OpenClaw Config | Thêm agent_qc vào openclaw.json | ⬜ TODO (manual) |
+| 1.3 OpenClaw Config | Thêm agent_gd vào openclaw.json | ✅ DONE (manual step by anh) |
+| 1.3 OpenClaw Config | Thêm agent_dev vào openclaw.json | ✅ DONE (manual step by anh) |
+| 1.3 OpenClaw Config | Thêm agent_qc vào openclaw.json | ✅ DONE (manual step by anh) |
+| 1.3 OpenClaw Config | Fix workspace path → trỏ đúng vào ccn2_workspace | ⬜ TODO (path hiện sai) |
+| 1.3 OpenClaw Config | Setup 3 cron jobs workspace scan | ⬜ TODO |
 | 1.4 Heartbeat Test | Test agent_gd responds to message | ⬜ TODO |
 | 1.4 Heartbeat Test | Test agent_dev responds to message | ⬜ TODO |
 | 1.4 Heartbeat Test | Test agent_qc responds to message | ⬜ TODO |
