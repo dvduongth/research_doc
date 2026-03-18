@@ -64,20 +64,28 @@ Xây dựng một **agent team tự động hóa** cho dự án CCN2 — một n
 | 1.1 Workspace Setup | Tạo README.md cho từng folder + GDD-TEMPLATE.md | ✅ DONE |
 | 1.1 Workspace Setup | Khởi tạo `.state/*.json` = `{}` | ✅ DONE |
 | 1.1 Workspace Setup | Tạo `concepts/ladder-mechanic.md` (sample) | ✅ DONE |
-| 1.2 Agent Config | Ghi đè AGENTS.md CCN2-specific cho agent_gd | ⚠️ GENERIC (cần ghi đè) |
-| 1.2 Agent Config | Ghi đè AGENTS.md CCN2-specific cho agent_dev | ⚠️ GENERIC (cần ghi đè) |
-| 1.2 Agent Config | Ghi đè AGENTS.md CCN2-specific cho agent_qc | ⚠️ GENERIC (cần ghi đè) |
-| 1.2 Agent Config | Ghi đè HEARTBEAT.md workspace scan cho 3 agents | ❌ EMPTY (cần điền) |
+| 1.2 Agent Config | SOUL.md Designia (agent_gd) | ✅ DONE |
+| 1.2 Agent Config | AGENTS.md CCN2 workflow (agent_gd) | ✅ DONE |
+| 1.2 Agent Config | HEARTBEAT.md workspace scan (agent_gd) | ✅ DONE |
+| 1.2 Agent Config | USER.md Daniel info (agent_gd) | ✅ DONE |
+| 1.2 Agent Config | SOUL.md Codera (agent_dev) | ✅ DONE |
+| 1.2 Agent Config | AGENTS.md CCN2 workflow (agent_dev) | ✅ DONE |
+| 1.2 Agent Config | HEARTBEAT.md workspace scan (agent_dev) | ✅ DONE |
+| 1.2 Agent Config | USER.md Daniel info (agent_dev) | ✅ DONE |
+| 1.2 Agent Config | SOUL.md Verita (agent_qc) | ✅ DONE |
+| 1.2 Agent Config | AGENTS.md CCN2 workflow (agent_qc) | ✅ DONE |
+| 1.2 Agent Config | HEARTBEAT.md workspace scan (agent_qc) | ✅ DONE |
+| 1.2 Agent Config | USER.md Daniel info (agent_qc) | ✅ DONE |
 | 1.2 Agent Config | Tạo `OPENCLAW_CONFIG_SNIPPET.json` | ✅ DONE |
 | 1.3 OpenClaw Config | Thêm agent_gd vào openclaw.json | ✅ DONE (manual step by anh) |
 | 1.3 OpenClaw Config | Thêm agent_dev vào openclaw.json | ✅ DONE (manual step by anh) |
 | 1.3 OpenClaw Config | Thêm agent_qc vào openclaw.json | ✅ DONE (manual step by anh) |
-| 1.3 OpenClaw Config | Fix workspace path → trỏ đúng vào ccn2_workspace | ⬜ TODO (path hiện sai) |
-| 1.3 OpenClaw Config | Setup 3 cron jobs workspace scan | ⬜ TODO |
-| 1.4 Heartbeat Test | Test agent_gd responds to message | ⬜ TODO |
-| 1.4 Heartbeat Test | Test agent_dev responds to message | ⬜ TODO |
-| 1.4 Heartbeat Test | Test agent_qc responds to message | ⬜ TODO |
-| 1.4 Heartbeat Test | Verify heartbeat log sau 30 phút | ⬜ TODO |
+| 1.3 OpenClaw Config | Tạo CRON_SETUP.md (4 cron jobs JSON) | ✅ DONE |
+| 1.3 OpenClaw Config | Add 4 cron jobs vào OpenClaw | ⬜ TODO (manual — xem CRON_SETUP.md) |
+| 1.4 Smoke Test | Test agent_gd responds to message | ⬜ TODO |
+| 1.4 Smoke Test | Test agent_dev responds to message | ⬜ TODO |
+| 1.4 Smoke Test | Test agent_qc responds to message | ⬜ TODO |
+| 1.4 Smoke Test | Verify cron chạy sau 15 phút đầu | ⬜ TODO |
 
 ### Round 2 — Agent Specialization (Tuần 3–4)
 **Goal**: Mỗi agent có skill và workflow riêng, xử lý được use case cơ bản
