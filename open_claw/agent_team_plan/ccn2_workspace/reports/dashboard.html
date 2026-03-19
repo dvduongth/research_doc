@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="900">
+  <title>CCN2 Agent Team — Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface2: #263348;
+      --border: #334155;
+      --primary: #6366f1;
+      --primary-dim: #4f52c9;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --muted: #64748b;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --radius: 8px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.3px;
+    }
+    header .meta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .stale-badge {
+      background: var(--warning);
+      color: #000;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      display: none;
+    }
+    .stale-badge.visible { display: inline-block; }
+
+    /* ── Layout ── */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-card .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+    }
+    .stat-card .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .stat-card .sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .stat-card.primary { border-top: 3px solid var(--primary); }
+    .stat-card.success { border-top: 3px solid var(--success); }
+    .stat-card.warning { border-top: 3px solid var(--warning); }
+    .stat-card.danger  { border-top: 3px solid var(--danger); }
+
+    /* ── Section header ── */
+    .section-header {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    /* ── GDD Flow ── */
+    .gdd-flow {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .flow-stages {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+    .flow-stage {
+      flex: 1;
+      min-width: 110px;
+      text-align: center;
+      padding: 12px 8px;
+      position: relative;
+    }
+    .flow-stage:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .flow-stage .stage-name {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .flow-stage .stage-count {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .flow-stage .stage-items {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .flow-stage.active .stage-name { color: var(--primary); }
+    .flow-stage.active .stage-count { color: var(--primary); }
+
+    /* ── Agent Cards ── */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .agent-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .agent-name {
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .agent-role {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .status-dot.online { background: var(--success); box-shadow: 0 0 6px var(--success); }
+    .status-dot.error  { background: var(--danger); }
+    .status-dot.idle   { background: var(--warning); }
+
+    .agent-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .agent-stat {
+      text-align: center;
+      background: var(--surface2);
+      border-radius: 6px;
+      padding: 8px 4px;
+    }
+    .agent-stat .n { font-size: 18px; font-weight: 700; }
+    .agent-stat .l { font-size: 10px; color: var(--text-dim); text-transform: uppercase; }
+    .agent-last-run {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── Smoke Checks Grid ── */
+    .smoke-grid {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .checks-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .checks-table th {
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--text-dim);
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .checks-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .checks-table tr:last-child td { border-bottom: none; }
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge.pass    { background: rgba(34,197,94,0.15);  color: var(--success); }
+    .badge.fail    { background: rgba(239,68,68,0.15);  color: var(--danger); }
+    .badge.unknown { background: rgba(100,116,139,0.2); color: var(--muted); }
+    .badge.degraded { background: rgba(245,158,11,0.15); color: var(--warning); }
+
+    /* ── Recent Errors ── */
+    .errors-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .error-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .error-item {
+      background: var(--surface2);
+      border-left: 3px solid var(--danger);
+      border-radius: 0 6px 6px 0;
+      padding: 8px 12px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+      word-break: break-all;
+    }
+    .error-item .ts { color: var(--muted); }
+    .error-item .agent-tag { color: var(--primary); font-weight: 600; }
+    .error-item .err-type { color: var(--danger); }
+    .no-errors {
+      color: var(--success);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .no-errors::before { content: '✓'; font-weight: 700; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .agents-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .stats-bar { grid-template-columns: 1fr; }
+      .agents-grid { grid-template-columns: 1fr; }
+      main { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>CCN2 Agent Team — Pipeline Dashboard</h1>
+  </div>
+  <div class="meta">
+    <span class="stale-badge" id="staleBadge">STALE</span>
+    <span id="lastRefresh">Loading…</span>
+    <span>Auto-refresh: 15 min</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-card primary">
+      <div class="label">Active Agents</div>
+      <div class="value" id="stat-agents">—</div>
+      <div class="sub">of 6 configured</div>
+    </div>
+    <div class="stat-card success">
+      <div class="label">Cron Jobs</div>
+      <div class="value" id="stat-cron">—</div>
+      <div class="sub">running</div>
+    </div>
+    <div class="stat-card" id="stat-smoke-card">
+      <div class="label">Smoke Status</div>
+      <div class="value" id="stat-smoke">—</div>
+      <div class="sub" id="stat-smoke-sub">last run</div>
+    </div>
+    <div class="stat-card" id="stat-stuck-card">
+      <div class="label">Stuck GDDs</div>
+      <div class="value" id="stat-stuck">—</div>
+      <div class="sub">&gt;48h without update</div>
+    </div>
+  </div>
+
+  <!-- GDD Flow -->
+  <div class="gdd-flow">
+    <div class="section-header">GDD Pipeline Flow</div>
+    <div class="flow-stages" id="gdd-flow-stages">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <!-- Agent Cards -->
+  <div>
+    <div class="section-header">Agent Status</div>
+    <div class="agents-grid" id="agents-grid">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <!-- Smoke Checks -->
+  <div class="smoke-grid">
+    <div class="section-header">Smoke Checks — Latest Run</div>
+    <table class="checks-table">
+      <thead>
+        <tr>
+          <th>Check ID</th>
+          <th>Description</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="smoke-checks-body">
+        <!-- rendered by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Recent Errors -->
+  <div class="errors-panel">
+    <div class="section-header">Recent Errors (last 10)</div>
+    <div id="errors-container">
+      <p class="no-errors">No errors logged.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  CCN2 Agent Team Dashboard — auto-refresh every 15 minutes — data from ccn2_workspace/.state/
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────────
+// DASHBOARD_DATA — inject pipeline data here (update via agent_qc)
+// ─────────────────────────────────────────────────────────────────
+const DASHBOARD_DATA = {
+  generated_at: "",          // ISO8601+07:00 — when this data was written
+  agents: {
+    agent_gd:         { status: "unknown", lastRun: "", processed: 0, skipped: 0, errors: 0 },
+    agent_dev:        { status: "unknown", lastRun: "", processed: 0, skipped: 0, errors: 0 },
+    agent_dev_client: { status: "unknown", lastRun: "", processed: 0, skipped: 0, errors: 0 },
+    agent_dev_server: { status: "unknown", lastRun: "", processed: 0, skipped: 0, errors: 0 },
+    agent_dev_admin:  { status: "unknown", lastRun: "", processed: 0, skipped: 0, errors: 0 },
+    agent_qc:         { status: "unknown", lastRun: "", processed: 0, skipped: 0, errors: 0 }
+  },
+  gdd_flow: {
+    Draft:   { count: 0, items: [] },
+    Review:  { count: 0, items: [] },
+    InDev:   { count: 0, items: [] },
+    InQC:    { count: 0, items: [] },
+    Done:    { count: 0, items: [] },
+    Flagged: { count: 0, items: [] }
+  },
+  smoke: {
+    overall: "unknown",        // "pass" | "DEGRADED" | "fail" | "ERROR" | "unknown"
+    last_run: "",
+    checks: {}                 // populated from pipeline-health.json checks
+  },
+  stuck_gdds: [],              // array of { name, status, hours }
+  recent_errors: []            // array of strings (raw log lines, newest first, max 10)
+};
+
+// ─────────────────────────────────────────────────────────────────
+// CHECK_LABELS — compound keys matching pipeline-health.json
+// ─────────────────────────────────────────────────────────────────
+const CHECK_LABELS = {
+  C1_concepts:       "Concepts",
+  C2_design:         "Design/GDD",
+  C3_gdd_header:     "GDD Headers",
+  C4_src:            "src/ dirs",
+  C5_quality_report: "Quality rpt",
+  C6_state_json:     "State JSON"
+};
+
+// ─────────────────────────────────────────────────────────────────
+// Agent display metadata
+// ─────────────────────────────────────────────────────────────────
+const AGENT_META = {
+  agent_gd:         { displayName: "agent_gd",         role: "Designia — Game Designer" },
+  agent_dev:        { displayName: "agent_dev",         role: "Codera — Orchestrator" },
+  agent_dev_client: { displayName: "agent_dev_client",  role: "Pixel — Client Dev" },
+  agent_dev_server: { displayName: "agent_dev_server",  role: "Forge — Server Dev" },
+  agent_dev_admin:  { displayName: "agent_dev_admin",   role: "Panel — Admin Dev" },
+  agent_qc:         { displayName: "agent_qc",          role: "Verita — QA" }
+};
+
+// ─────────────────────────────────────────────────────────────────
+// Render helpers
+// ─────────────────────────────────────────────────────────────────
+function statusDotClass(s) {
+  if (s === "online" || s === "done") return "online";
+  if (s === "error") return "error";
+  return "idle";
+}
+
+function smokeBadge(val) {
+  if (!val || val === "unknown") return '<span class="badge unknown">UNKNOWN</span>';
+  if (val === "pass") return '<span class="badge pass">PASS</span>';
+  if (val === "DEGRADED") return '<span class="badge degraded">DEGRADED</span>';
+  if (val === "fail" || val === "ERROR") return '<span class="badge fail">' + val.toUpperCase() + '</span>';
+  return '<span class="badge unknown">' + val + '</span>';
+}
+
+function checkBadge(val) {
+  if (val === "pass") return '<span class="badge pass">PASS</span>';
+  if (val === "fail") return '<span class="badge fail">FAIL</span>';
+  return '<span class="badge unknown">—</span>';
+}
+
+function fmtTime(iso) {
+  if (!iso) return "—";
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour12: false });
+  } catch { return iso; }
+}
+
+function isStale(iso, minutesThreshold) {
+  if (!iso) return false;
+  try {
+    const diff = Date.now() - new Date(iso).getTime();
+    return diff > minutesThreshold * 60 * 1000;
+  } catch { return false; }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Render functions
+// ─────────────────────────────────────────────────────────────────
+function renderStats() {
+  const d = DASHBOARD_DATA;
+
+  // Active agents (status not unknown)
+  const activeAgents = Object.values(d.agents).filter(a => a.status !== "unknown").length;
+  document.getElementById("stat-agents").textContent = activeAgents;
+
+  // Cron jobs = same count
+  document.getElementById("stat-cron").textContent = activeAgents;
+
+  // Smoke
+  const smokeEl = document.getElementById("stat-smoke");
+  const smokeCard = document.getElementById("stat-smoke-card");
+  const overall = d.smoke.overall;
+  smokeEl.textContent = overall || "—";
+  if (overall === "pass") { smokeCard.style.borderTopColor = "var(--success)"; smokeEl.style.color = "var(--success)"; }
+  else if (overall === "DEGRADED") { smokeCard.style.borderTopColor = "var(--warning)"; smokeEl.style.color = "var(--warning)"; }
+  else if (overall === "fail" || overall === "ERROR") { smokeCard.style.borderTopColor = "var(--danger)"; smokeEl.style.color = "var(--danger)"; }
+  if (d.smoke.last_run) {
+    document.getElementById("stat-smoke-sub").textContent = fmtTime(d.smoke.last_run);
+  }
+
+  // Stuck
+  const stuckCount = (d.stuck_gdds || []).length;
+  const stuckEl = document.getElementById("stat-stuck");
+  const stuckCard = document.getElementById("stat-stuck-card");
+  stuckEl.textContent = stuckCount;
+  if (stuckCount > 0) {
+    stuckCard.style.borderTopColor = "var(--warning)";
+    stuckEl.style.color = "var(--warning)";
+  } else {
+    stuckCard.style.borderTopColor = "var(--success)";
+    stuckEl.style.color = "var(--success)";
+  }
+}
+
+function renderGDDFlow() {
+  const flow = DASHBOARD_DATA.gdd_flow;
+  const stages = ["Draft", "Review", "InDev", "InQC", "Done", "Flagged"];
+  const activeStages = ["InDev", "InQC"];
+  const container = document.getElementById("gdd-flow-stages");
+  container.innerHTML = stages.map(s => {
+    const data = flow[s] || { count: 0, items: [] };
+    const active = activeStages.includes(s) && data.count > 0 ? " active" : "";
+    const items = (data.items || []).slice(0, 3).map(i =>
+      '<div>' + i.replace(/^GDD-FEATURE-/, "").replace(/\.md$/, "") + '</div>'
+    ).join("") + (data.items && data.items.length > 3 ? '<div>…</div>' : "");
+    return `<div class="flow-stage${active}">
+      <div class="stage-name">${s}</div>
+      <div class="stage-count">${data.count}</div>
+      <div class="stage-items">${items || '&nbsp;'}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderAgents() {
+  const agents = DASHBOARD_DATA.agents;
+  const container = document.getElementById("agents-grid");
+  container.innerHTML = Object.entries(AGENT_META).map(([id, meta]) => {
+    const a = agents[id] || { status: "unknown", lastRun: "", processed: 0, skipped: 0, errors: 0 };
+    const dotClass = statusDotClass(a.status);
+    return `<div class="agent-card">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">${meta.displayName}</div>
+          <div class="agent-role">${meta.role}</div>
+        </div>
+        <div class="status-dot ${dotClass}" title="${a.status}"></div>
+      </div>
+      <div class="agent-stats">
+        <div class="agent-stat">
+          <div class="n" style="color:var(--success)">${a.processed}</div>
+          <div class="l">Done</div>
+        </div>
+        <div class="agent-stat">
+          <div class="n" style="color:var(--muted)">${a.skipped}</div>
+          <div class="l">Skip</div>
+        </div>
+        <div class="agent-stat">
+          <div class="n" style="color:${a.errors > 0 ? 'var(--danger)' : 'var(--muted)'}">${a.errors}</div>
+          <div class="l">Err</div>
+        </div>
+      </div>
+      <div class="agent-last-run">Last run: ${fmtTime(a.lastRun)}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderSmokeChecks() {
+  const checks = DASHBOARD_DATA.smoke.checks || {};
+  const tbody = document.getElementById("smoke-checks-body");
+  tbody.innerHTML = Object.entries(CHECK_LABELS).map(([key, label]) => {
+    const val = checks[key];
+    return `<tr>
+      <td><code>${key}</code></td>
+      <td>${label}</td>
+      <td>${checkBadge(val)}</td>
+    </tr>`;
+  }).join("");
+}
+
+function renderErrors() {
+  const errors = DASHBOARD_DATA.recent_errors || [];
+  const container = document.getElementById("errors-container");
+  if (!errors.length) {
+    container.innerHTML = '<p class="no-errors">No errors logged.</p>';
+    return;
+  }
+  container.innerHTML = '<ul class="error-list">' +
+    errors.slice(0, 10).map(line => {
+      // Parse: [timestamp] agent_id | file=... | error=ErrorType: msg
+      const escaped = line
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      const formatted = escaped
+        .replace(/(\[\d{4}-\d{2}-\d{2}T[^\]]+\])/g, '<span class="ts">$1</span>')
+        .replace(/(agent_\w+)/g, '<span class="agent-tag">$1</span>')
+        .replace(/(error=[A-Za-z]+Error[^|]*)/g, '<span class="err-type">$1</span>');
+      return `<li class="error-item">${formatted}</li>`;
+    }).join("") + '</ul>';
+}
+
+function renderHeader() {
+  const now = new Date();
+  document.getElementById("lastRefresh").textContent =
+    "Loaded: " + now.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour12: false });
+
+  // Show stale badge if generated_at is > 60 min ago
+  if (DASHBOARD_DATA.generated_at && isStale(DASHBOARD_DATA.generated_at, 60)) {
+    document.getElementById("staleBadge").classList.add("visible");
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Init
+// ─────────────────────────────────────────────────────────────────
+(function init() {
+  renderHeader();
+  renderStats();
+  renderGDDFlow();
+  renderAgents();
+  renderSmokeChecks();
+  renderErrors();
+})();
+</script>
+</body>
+</html>

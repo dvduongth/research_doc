@@ -13,6 +13,8 @@
     "admin_status": "done",
     "admin_score": 100,
     "admin_output": "src/admin/elemental-hunter/",
-    "admin_eval": "eval/CODE-EVAL-admin-elemental-hunter-2026-03-19.md"
+    "admin_eval": "eval/CODE-EVAL-admin-elemental-hunter-2026-03-19.md",
+    "qc_reviewed": true,
+    "qc_overall": "WARNING"
   }
 }

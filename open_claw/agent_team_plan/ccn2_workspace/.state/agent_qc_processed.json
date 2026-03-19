@@ -18,29 +18,55 @@
     "notes": "Template file — processed for reference only"
   },
   "GDD-FEATURE-elemental-hunter": {
-    "hash": "E6FCF660F255D5F37111625D17EEBC37",
-    "processedAt": "2026-03-19T11:22:00+07:00",
+    "hash": "671A805E227EC908A93F40BDDAB7B5B9",
+    "processedAt": "2026-03-19T12:42:00+07:00",
     "testcases": "reports/testcases-elemental-hunter.md",
     "testFile": "src/tests/elemental-hunter.test.js",
     "status": "done",
     "evalScore": 99,
-    "evalDate": "2026-03-19T11:22:00+07:00",
+    "evalDate": "2026-03-19T12:42:00+07:00",
     "result": "ĐẠT"
   },
   "sourceHashes": {
-    "src/elemental-hunter.js": "D9D2D25F0F0BEC3EC2A295D170CF19DD",
-    "src/rules.js": "6F2871AE4D3A9193442BEB4DBE5F1B6B"
+    "src/elemental-hunter.js": "B1FDE89635CC0F3C613BB14DF2AC4DC0",
+    "src/rules.js": "77AA3C6CC6BC80EBE24CDB04E8164DD2"
   },
   "test_gen": {
     "elemental-hunter": {
-      "req_hash": "9D603F615655623FA3625F55D9E096D4",
-      "design_hash": "8D532B6BD7042617EC45F34922597B23",
-      "generated_at": "2026-03-19T10:55:00+07:00",
+      "req_hash": "046E525380C7484F493C9D69B6CB8221",
+      "design_hash": "946AB55BBBCBE7CC6833116801653889",
+      "generated_at": "2026-03-19T12:42:00+07:00",
       "files": [
         "src/tests/client/elemental-hunter.test.ts",
         "src/tests/server/elemental-hunter.test.kt",
         "src/tests/admin/elemental-hunterTest.java"
       ]
+    }
+  },
+  "code_review": {
+    "elemental-hunter": {
+      "reviewed_at": "2026-03-19T12:42:00+07:00",
+      "layers": {
+        "client": {
+          "qc_score": 78,
+          "self_score": 79,
+          "flag": false,
+          "eval_file": "eval/CODE-EVAL-QC-client-elemental-hunter-2026-03-19.md"
+        },
+        "server": {
+          "qc_score": 82,
+          "self_score": 83,
+          "flag": false,
+          "eval_file": "eval/CODE-EVAL-QC-server-elemental-hunter-2026-03-19.md"
+        },
+        "admin": {
+          "qc_score": 100,
+          "self_score": 100,
+          "flag": false,
+          "eval_file": "eval/CODE-EVAL-QC-admin-elemental-hunter-2026-03-19.md"
+        }
+      },
+      "overall": "WARNING"
     }
   }
 }

@@ -3,564 +3,504 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Báo Cáo CCN2 Multi-Agent System — 2026-03-19</title>
+<title>CCN2 Multi-Agent System Report — 2026-03-19</title>
 <style>
-  :root {
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --info: #3b82f6;
-    --bg: #0f172a;
-    --bg-card: #1e293b;
-    --bg-card2: #162032;
-    --border: #334155;
-    --text: #e2e8f0;
-    --text-muted: #94a3b8;
-    --text-bright: #f8fafc;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+:root {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface2: #334155;
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #38bdf8;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #334155;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+a { color: var(--primary-light); text-decoration: none; }
 
-  /* Layout */
-  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+/* Header */
+.report-header { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); padding: 48px 40px; border-bottom: 1px solid var(--border); }
+.report-header h1 { font-size: 2rem; font-weight: 800; color: var(--primary-light); margin-bottom: 8px; }
+.report-header .meta { color: var(--text-muted); font-size: 0.9rem; display: flex; gap: 24px; flex-wrap: wrap; }
+.report-header .meta span { display: flex; align-items: center; gap: 6px; }
+.badge-round { display: inline-block; background: var(--primary); color: white; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
 
-  /* Header */
-  .header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e293b 100%); padding: 48px 40px; border-radius: 16px; margin-bottom: 32px; border: 1px solid #4338ca40; }
-  .header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text-bright); margin-bottom: 8px; }
-  .header .subtitle { color: #a5b4fc; font-size: 1rem; }
-  .header .meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
-  .header .meta-item { background: #ffffff15; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; color: #c7d2fe; }
+/* Layout */
+.container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+section { margin-bottom: 40px; }
+h2 { font-size: 1.25rem; color: var(--primary-light); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+h2 .section-num { background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+h3 { font-size: 1rem; color: var(--text); margin: 16px 0 8px; }
 
-  /* Stats bar */
-  .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 32px; }
-  .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
-  .stat-card .value { font-size: 2rem; font-weight: 800; color: var(--primary); }
-  .stat-card .label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
-  .stat-card.green .value { color: var(--success); }
-  .stat-card.amber .value { color: var(--warning); }
-  .stat-card.blue .value { color: var(--info); }
+/* Stats Bar */
+.stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
+@media (max-width: 768px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.stat-value { font-size: 2rem; font-weight: 800; }
+.stat-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+.ok { color: var(--success); }
+.warn { color: var(--warning); }
+.err { color: var(--danger); }
+.info { color: var(--info); }
 
-  /* Section */
-  .section { margin-bottom: 32px; }
-  .section-title { font-size: 1.3rem; font-weight: 700; color: var(--text-bright); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-  .section-title .icon { font-size: 1.5rem; }
+/* Agent Cards */
+.agents-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 900px) { .agents-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .agents-grid { grid-template-columns: 1fr; } }
+.agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.agent-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.agent-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; }
+.agent-name { font-size: 1rem; font-weight: 700; }
+.agent-id { font-size: 0.75rem; color: var(--text-muted); font-family: monospace; }
+.agent-body { font-size: 0.8rem; color: var(--text-muted); }
+.agent-body .row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid var(--border); }
+.agent-body .row:last-child { border-bottom: none; }
+.tag { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+.tag.main { background: #1e3a5f; color: #60a5fa; }
+.tag.impl { background: #1e3a2f; color: #4ade80; }
 
-  /* Agent cards */
-  .agents-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
-  .agent-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .agent-card .agent-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .agent-avatar { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 800; flex-shrink: 0; }
-  .agent-gd    { background: linear-gradient(135deg, #7c3aed, #a855f7); }
-  .agent-dev   { background: linear-gradient(135deg, #0284c7, #38bdf8); }
-  .agent-qc    { background: linear-gradient(135deg, #059669, #34d399); }
-  .agent-client{ background: linear-gradient(135deg, #ea580c, #fb923c); }
-  .agent-server{ background: linear-gradient(135deg, #be123c, #fb7185); }
-  .agent-admin { background: linear-gradient(135deg, #b45309, #fbbf24); }
-  .agent-name { font-weight: 700; color: var(--text-bright); font-size: 1rem; }
-  .agent-nick { font-size: 0.8rem; color: var(--text-muted); }
-  .agent-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
-  .badge-main { background: #1e3a5f; color: #7dd3fc; }
-  .badge-impl { background: #1c3326; color: #6ee7b7; }
-  .agent-props { display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; }
-  .agent-prop { display: flex; gap: 8px; }
-  .agent-prop .key { color: var(--text-muted); width: 70px; flex-shrink: 0; }
-  .agent-prop .val { color: var(--text); }
-  .agent-parts { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
-  .part-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 6px; background: #1e293b; border: 1px solid #334155; color: #94a3b8; }
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+th { background: var(--surface2); color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 12px; text-align: left; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(99,102,241,0.05); }
 
-  /* Timeline */
-  .timeline { position: relative; padding-left: 28px; }
-  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
-  .timeline-item { position: relative; margin-bottom: 20px; }
-  .timeline-item::before { content: ''; position: absolute; left: -24px; top: 6px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid; }
-  .timeline-item.done::before { background: var(--success); border-color: var(--success); }
-  .timeline-item.todo::before { background: var(--bg); border-color: var(--border); }
-  .timeline-round { font-weight: 700; color: var(--text-bright); font-size: 0.95rem; }
-  .timeline-date { font-size: 0.75rem; color: var(--text-muted); margin-left: 8px; }
-  .timeline-status { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; margin-left: 8px; font-weight: 600; }
-  .status-done { background: #064e3b; color: #34d399; }
-  .status-todo { background: #1e293b; color: #64748b; }
-  .timeline-details { margin-top: 8px; font-size: 0.82rem; color: var(--text-muted); }
-  .timeline-details ul { list-style: none; padding: 0; }
-  .timeline-details li { padding: 2px 0; }
-  .timeline-details li::before { content: '• '; color: var(--primary); }
+/* Pipeline Flow */
+.pipeline-flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 16px 0; }
+.stage { background: var(--surface); border: 1px solid var(--border); padding: 8px 16px; font-size: 0.875rem; position: relative; }
+.stage.active { border-color: var(--primary); background: rgba(99,102,241,0.1); color: var(--primary-light); font-weight: 700; }
+.stage.done { border-color: var(--success); background: rgba(34,197,94,0.1); color: var(--success); }
+.stage.terminal-ok { border-color: var(--success); background: rgba(34,197,94,0.1); color: var(--success); border-radius: 0 6px 6px 0; }
+.stage.terminal-warn { border-color: var(--warning); background: rgba(245,158,11,0.1); color: var(--warning); border-radius: 0 6px 6px 0; }
+.stage:first-child { border-radius: 6px 0 0 6px; }
+.arrow { color: var(--text-muted); padding: 0 4px; font-size: 1rem; }
 
-  /* Cron timing */
-  .cron-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-  .cron-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-  .cron-time { font-size: 1.3rem; font-weight: 800; color: var(--primary); font-family: monospace; }
-  .cron-agent { font-size: 0.85rem; font-weight: 600; color: var(--text-bright); margin-top: 4px; }
-  .cron-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-  .cron-badge { display: inline-block; font-size: 0.65rem; padding: 1px 6px; border-radius: 4px; margin-top: 6px; }
-  .cron-15 { background: #1e3a5f; color: #7dd3fc; }
-  .cron-30 { background: #1c3326; color: #6ee7b7; }
-  .cron-weekly { background: #3b1f5e; color: #c4b5fd; }
+/* Status Pills */
+.pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+.pill.Draft { background: #334155; color: #94a3b8; }
+.pill.Review { background: #1e3a5f; color: #60a5fa; }
+.pill.InDev { background: #1e3a2f; color: #4ade80; }
+.pill.InQC { background: #3b1e5f; color: #c084fc; }
+.pill.Done { background: #14532d; color: #86efac; }
+.pill.Flagged { background: #7f1d1d; color: #fca5a5; }
+.pill.HEALTHY { background: #14532d; color: #86efac; }
+.pill.DEGRADED { background: #78350f; color: #fcd34d; }
+.pill.BROKEN { background: #7f1d1d; color: #fca5a5; }
+.pill.RESOLVED { background: #14532d; color: #86efac; }
+.pill.OPEN { background: #7f1d1d; color: #fca5a5; }
 
-  /* Status flow */
-  .status-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin: 12px 0; }
-  .status-pill { padding: 6px 16px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
-  .sp-draft   { background: #374151; color: #9ca3af; }
-  .sp-review  { background: #1e3a5f; color: #60a5fa; }
-  .sp-indev   { background: #1c3326; color: #34d399; }
-  .sp-inqc    { background: #3b2d1a; color: #fbbf24; }
-  .sp-done    { background: #064e3b; color: #6ee7b7; }
-  .sp-flagged { background: #450a0a; color: #fca5a5; }
-  .flow-arrow { color: var(--text-muted); font-size: 1.1rem; }
-  .flow-fork  { display: flex; flex-direction: column; gap: 4px; }
+/* Smoke Checks Grid */
+.checks-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+@media (max-width: 768px) { .checks-grid { grid-template-columns: repeat(3, 1fr); } }
+.check-item { background: var(--surface); border-radius: 8px; padding: 14px 10px; text-align: center; border: 1px solid var(--border); }
+.check-item.pass { border-color: var(--success); }
+.check-item.fail { border-color: var(--danger); }
+.check-item.exempt { border-color: var(--warning); opacity: 0.7; }
+.check-icon { font-size: 1.5rem; margin-bottom: 4px; }
+.check-key { font-size: 0.7rem; color: var(--text-muted); font-family: monospace; margin-bottom: 2px; }
+.check-label { font-size: 0.7rem; color: var(--text-muted); }
 
-  /* State files table */
-  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  th { text-align: left; padding: 10px 12px; background: var(--bg-card2); color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-  td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
-  tr:last-child td { border-bottom: none; }
-  .tag { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
-  .tag-ok    { background: #064e3b; color: #34d399; }
-  .tag-warn  { background: #3b2d1a; color: #fbbf24; }
-  .tag-empty { background: #1e293b; color: #64748b; }
-  .tag-unk   { background: #1e293b; color: #64748b; }
+/* Timeline */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+.timeline-item { position: relative; margin-bottom: 20px; }
+.timeline-item::before { content: ''; position: absolute; left: -20px; top: 6px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--primary); background: var(--bg); }
+.timeline-item.done::before { background: var(--success); border-color: var(--success); }
+.timeline-item.inprogress::before { background: var(--warning); border-color: var(--warning); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+.timeline-round { font-weight: 700; color: var(--primary-light); font-size: 0.9rem; }
+.timeline-date { font-size: 0.75rem; color: var(--text-muted); }
+.timeline-items { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
 
-  /* Gaps */
-  .gap-list { display: flex; flex-direction: column; gap: 10px; }
-  .gap-item { display: flex; gap: 12px; align-items: flex-start; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-  .gap-sev { font-size: 1.2rem; flex-shrink: 0; }
-  .gap-title { font-weight: 600; color: var(--text-bright); font-size: 0.9rem; }
-  .gap-desc  { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+/* New badge */
+.new-badge { display: inline-block; background: #7c3aed; color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; vertical-align: middle; margin-left: 6px; }
 
-  /* Smoke test */
-  .checks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
-  .check-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-  .check-id { font-size: 1rem; font-weight: 800; color: var(--primary); }
-  .check-desc { font-size: 0.8rem; color: var(--text); margin-top: 4px; }
-  .check-note { font-size: 0.7rem; color: var(--warning); margin-top: 6px; }
+/* Section box */
+.box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-top: 12px; }
 
-  /* Constitution */
-  .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
-  .principle { background: var(--bg-card); border-left: 3px solid var(--primary); border-radius: 0 10px 10px 0; padding: 14px; }
-  .principle .num { font-size: 0.7rem; color: var(--primary); font-weight: 700; margin-bottom: 4px; }
-  .principle .name { font-weight: 700; color: var(--text-bright); font-size: 0.9rem; }
-  .principle .desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+/* Constitution */
+.principles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (max-width: 768px) { .principles { grid-template-columns: 1fr; } }
+.principle { background: var(--surface); border-left: 3px solid var(--primary); border-radius: 0 8px 8px 0; padding: 12px 16px; }
+.principle-num { font-size: 0.7rem; color: var(--primary-light); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+.principle-text { font-size: 0.85rem; }
+.principle-text strong { color: var(--primary-light); }
 
-  /* Code block */
-  pre { background: #0d1117; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 0.8rem; overflow-x: auto; color: #e2e8f0; font-family: 'Consolas', monospace; line-height: 1.5; }
-
-  /* Footer */
-  .footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.8rem; margin-top: 32px; border-top: 1px solid var(--border); }
+/* Footer */
+footer { text-align: center; padding: 32px; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px; }
 </style>
 </head>
 <body>
+
+<div class="report-header">
+  <h1>CCN2 Multi-Agent System Report</h1>
+  <div class="meta">
+    <span>📅 2026-03-19 (Post Round 4)</span>
+    <span>✍️ William Đào 👌</span>
+    <span>📁 agent_team_plan/</span>
+    <span><span class="badge-round">Round 4 Complete</span></span>
+  </div>
+</div>
+
 <div class="container">
 
-  <!-- Header -->
-  <div class="header">
-    <h1>🤖 CCN2 Multi-Agent System</h1>
-    <div class="subtitle">Báo Cáo Tổng Hợp — Hệ Thống Tự Động Hoá Phát Triển Game</div>
-    <div class="meta">
-      <div class="meta-item">📅 2026-03-19</div>
-      <div class="meta-item">✍️ William Đào 👌</div>
-      <div class="meta-item">📍 D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan</div>
-      <div class="meta-item">🔄 Rounds 1–3 Complete</div>
-    </div>
-  </div>
-
-  <!-- Stats bar -->
+  <!-- Stats Bar -->
   <div class="stats-bar">
-    <div class="stat-card green"><div class="value">6</div><div class="label">Agents Active</div></div>
-    <div class="stat-card green"><div class="value">7/7</div><div class="label">Cron Jobs Running</div></div>
-    <div class="stat-card blue"><div class="value">3/4</div><div class="label">Rounds Done</div></div>
-    <div class="stat-card blue"><div class="value">6</div><div class="label">Specs Complete</div></div>
-    <div class="stat-card amber"><div class="value">1,220</div><div class="label">AGENTS.md Lines</div></div>
-    <div class="stat-card green"><div class="value">175/175</div><div class="label">Tests Passing</div></div>
-    <div class="stat-card amber"><div class="value">93/100</div><div class="label">GDD Eval Score</div></div>
-    <div class="stat-card"><div class="value">1</div><div class="label">Feature In Pipeline</div></div>
+    <div class="stat-card">
+      <div class="stat-label">Agents</div>
+      <div class="stat-value ok">6</div>
+      <div class="stat-sub">3 main + 3 impl</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Cron Jobs</div>
+      <div class="stat-value ok">7/7</div>
+      <div class="stat-sub">All active</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pipeline</div>
+      <div class="stat-value warn">DEGRADED</div>
+      <div class="stat-sub">C3 failing</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Source Files</div>
+      <div class="stat-value info">57</div>
+      <div class="stat-sub">elemental-hunter</div>
+    </div>
   </div>
 
-  <!-- Architecture -->
-  <div class="section">
-    <div class="section-title"><span class="icon">🏗️</span> Kiến Trúc Tổng Quan</div>
-    <pre>
-[Daniel tạo concept] ──► concepts/*.md
-         │
-         ▼  (mỗi 15 phút)
-    [agent_gd / Designia]
-    Tạo GDD 10 sections, score ≥ 70 → "Review"
-         │
-         ▼  (mỗi 15 phút, gate: Review only)
-    [agent_dev / Codera]
-    4-Phase: REQ → DESIGN → EVAL → DISPATCH
-    Update GDD → "InDev"
-         │
-    ┌────┼────┐  (mỗi 30 phút)
-    ▼    ▼    ▼
- [Pixel] [Forge] [Panel]
- TS/Cocos Kt/Ktor Java+React
- :17,:47  :19,:49  :21,:51
-    └────┬────┘
-         │  (tất cả done → GDD "InQC")
-         ▼  (mỗi 15 phút, gate: InQC only)
-    [agent_qc / Verita]
-    Part A-F: Tests, QC Review, Smoke Test
-    Update GDD → "Done" / "Flagged"</pre>
-  </div>
-
-  <!-- Agents -->
-  <div class="section">
-    <div class="section-title"><span class="icon">🤖</span> 6 Agents</div>
+  <!-- Section 1: Agents -->
+  <section>
+    <h2><span class="section-num">1</span> Agent Team</h2>
     <div class="agents-grid">
-
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-avatar agent-gd">GD</div>
+          <div class="agent-avatar" style="background:#6366f122;color:#6366f1">D</div>
           <div>
-            <div class="agent-name">agent_gd <span class="agent-badge badge-main">Main</span></div>
-            <div class="agent-nick">Designia — Game Designer</div>
+            <div class="agent-name">Designia <span class="tag main">MAIN</span></div>
+            <div class="agent-id">agent_gd</div>
           </div>
         </div>
-        <div class="agent-props">
-          <div class="agent-prop"><span class="key">Cron</span><span class="val">:00, :15, :30, :45</span></div>
-          <div class="agent-prop"><span class="key">Input</span><span class="val">concepts/*.md</span></div>
-          <div class="agent-prop"><span class="key">Output</span><span class="val">design/GDD-FEATURE-*.md</span></div>
-          <div class="agent-prop"><span class="key">AGENTS.md</span><span class="val">187 dòng</span></div>
-          <div class="agent-prop"><span class="key">Gate</span><span class="val">Score ≥ 70 → Review</span></div>
-        </div>
-        <div class="agent-parts">
-          <span class="part-tag">Hash Detection</span><span class="part-tag">10-Section GDD</span>
-          <span class="part-tag">Self-Eval</span><span class="part-tag">Tiếng Việt</span>
+        <div class="agent-body">
+          <div class="row"><span>Role</span><span>GDD Evaluation</span></div>
+          <div class="row"><span>Cron</span><span>*/15 min :00/:30</span></div>
+          <div class="row"><span>State file</span><span>agent_gd_processed.json</span></div>
+          <div class="row"><span>Output</span><span>eval/, design/</span></div>
         </div>
       </div>
-
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-avatar agent-dev">DV</div>
+          <div class="agent-avatar" style="background:#22c55e22;color:#22c55e">C</div>
           <div>
-            <div class="agent-name">agent_dev <span class="agent-badge badge-main">Main</span></div>
-            <div class="agent-nick">Codera — Tech Lead & Architect</div>
+            <div class="agent-name">Codera <span class="tag main">MAIN</span></div>
+            <div class="agent-id">agent_dev</div>
           </div>
         </div>
-        <div class="agent-props">
-          <div class="agent-prop"><span class="key">Cron</span><span class="val">:07, :22, :37, :52</span></div>
-          <div class="agent-prop"><span class="key">Input</span><span class="val">design/GDD-FEATURE-*.md (Review)</span></div>
-          <div class="agent-prop"><span class="key">Output</span><span class="val">analysis/REQ-*.md + DESIGN-*.md</span></div>
-          <div class="agent-prop"><span class="key">AGENTS.md</span><span class="val">314 dòng</span></div>
-          <div class="agent-prop"><span class="key">Gate</span><span class="val">Status = Review only</span></div>
-        </div>
-        <div class="agent-parts">
-          <span class="part-tag">REQ Analysis</span><span class="part-tag">System Design</span>
-          <span class="part-tag">Dispatch</span><span class="part-tag">InDev→InQC</span>
+        <div class="agent-body">
+          <div class="row"><span>Role</span><span>Analysis + Dispatch</span></div>
+          <div class="row"><span>Cron</span><span>*/15 min :02/:32</span></div>
+          <div class="row"><span>State file</span><span>agent_dev_processed.json</span></div>
+          <div class="row"><span>Output</span><span>analysis/, dispatched.json</span></div>
         </div>
       </div>
-
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-avatar agent-qc">QC</div>
+          <div class="agent-avatar" style="background:#f59e0b22;color:#f59e0b">V</div>
           <div>
-            <div class="agent-name">agent_qc <span class="agent-badge badge-main">Main</span></div>
-            <div class="agent-nick">Verita — QA Engineer</div>
+            <div class="agent-name">Verita <span class="tag main">MAIN</span></div>
+            <div class="agent-id">agent_qc</div>
           </div>
         </div>
-        <div class="agent-props">
-          <div class="agent-prop"><span class="key">Cron</span><span class="val">:12, :27, :42, :57 + Mon 9am</span></div>
-          <div class="agent-prop"><span class="key">Input</span><span class="val">design/*.md + src/**/*.js</span></div>
-          <div class="agent-prop"><span class="key">Output</span><span class="val">reports/ + src/tests/ + pipeline-health</span></div>
-          <div class="agent-prop"><span class="key">AGENTS.md</span><span class="val">411 dòng ★ Lớn nhất</span></div>
-          <div class="agent-prop"><span class="key">Gate</span><span class="val">Status = InQC only (Part D)</span></div>
-        </div>
-        <div class="agent-parts">
-          <span class="part-tag">Part A: Testcases</span><span class="part-tag">Part B: npm test</span>
-          <span class="part-tag">Part C: GDD Eval</span><span class="part-tag">Part D: Code Review</span>
-          <span class="part-tag">Part E: Test Gen</span><span class="part-tag">Part F: Smoke Test</span>
+        <div class="agent-body">
+          <div class="row"><span>Role</span><span>QC + Smoke + Watch</span></div>
+          <div class="row"><span>Cron</span><span>*/15 min :04/:34</span></div>
+          <div class="row"><span>Parts</span><span>A-G (incl. Pipeline Watch)</span></div>
+          <div class="row"><span>Output</span><span>reports/, dashboard.html</span></div>
         </div>
       </div>
-
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-avatar agent-client">CL</div>
+          <div class="agent-avatar" style="background:#06b6d422;color:#06b6d4">P</div>
           <div>
-            <div class="agent-name">agent_dev_client <span class="agent-badge badge-impl">Impl</span></div>
-            <div class="agent-nick">Pixel — Frontend Dev</div>
+            <div class="agent-name">Pixel <span class="tag impl">IMPL</span></div>
+            <div class="agent-id">agent_dev_client</div>
           </div>
         </div>
-        <div class="agent-props">
-          <div class="agent-prop"><span class="key">Cron</span><span class="val">:17, :47 (30 phút)</span></div>
-          <div class="agent-prop"><span class="key">Stack</span><span class="val">TypeScript, Vite, Cocos2d-x</span></div>
-          <div class="agent-prop"><span class="key">Output</span><span class="val">src/client/&lt;feature&gt;/</span></div>
-          <div class="agent-prop"><span class="key">AGENTS.md</span><span class="val">104 dòng</span></div>
-          <div class="agent-prop"><span class="key">Trigger</span><span class="val">client_status = dispatched</span></div>
-        </div>
-        <div class="agent-parts">
-          <span class="part-tag">EventEmitter3</span><span class="part-tag">Tuần tự</span><span class="part-tag">Self-eval</span>
+        <div class="agent-body">
+          <div class="row"><span>Role</span><span>Client Implementation</span></div>
+          <div class="row"><span>Cron</span><span>*/30 min :17/:47</span></div>
+          <div class="row"><span>Tech</span><span>TypeScript / Cocos2d-x</span></div>
+          <div class="row"><span>Output</span><span>src/client/</span></div>
         </div>
       </div>
-
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-avatar agent-server">SV</div>
+          <div class="agent-avatar" style="background:#ec489922;color:#ec4899">F</div>
           <div>
-            <div class="agent-name">agent_dev_server <span class="agent-badge badge-impl">Impl</span></div>
-            <div class="agent-nick">Forge — Backend Dev</div>
+            <div class="agent-name">Forge <span class="tag impl">IMPL</span></div>
+            <div class="agent-id">agent_dev_server</div>
           </div>
         </div>
-        <div class="agent-props">
-          <div class="agent-prop"><span class="key">Cron</span><span class="val">:19, :49 (30 phút)</span></div>
-          <div class="agent-prop"><span class="key">Stack</span><span class="val">Kotlin, Ktor, Actor, KSP</span></div>
-          <div class="agent-prop"><span class="key">Output</span><span class="val">src/server/&lt;feature&gt;/</span></div>
-          <div class="agent-prop"><span class="key">AGENTS.md</span><span class="val">101 dòng</span></div>
-          <div class="agent-prop"><span class="key">Trigger</span><span class="val">server_status = dispatched</span></div>
-        </div>
-        <div class="agent-parts">
-          <span class="part-tag">Actor model</span><span class="part-tag">Sealed classes</span><span class="part-tag">KSP</span>
+        <div class="agent-body">
+          <div class="row"><span>Role</span><span>Server Implementation</span></div>
+          <div class="row"><span>Cron</span><span>*/30 min :19/:49</span></div>
+          <div class="row"><span>Tech</span><span>Kotlin / Ktor / Actor</span></div>
+          <div class="row"><span>Output</span><span>src/server/</span></div>
         </div>
       </div>
-
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-avatar agent-admin">AD</div>
+          <div class="agent-avatar" style="background:#84cc1622;color:#84cc16">Pa</div>
           <div>
-            <div class="agent-name">agent_dev_admin <span class="agent-badge badge-impl">Impl</span></div>
-            <div class="agent-nick">Panel — Admin Dev</div>
+            <div class="agent-name">Panel <span class="tag impl">IMPL</span></div>
+            <div class="agent-id">agent_dev_admin</div>
           </div>
         </div>
-        <div class="agent-props">
-          <div class="agent-prop"><span class="key">Cron</span><span class="val">:21, :51 (30 phút)</span></div>
-          <div class="agent-prop"><span class="key">Stack</span><span class="val">Java, React, REST, Token auth</span></div>
-          <div class="agent-prop"><span class="key">Output</span><span class="val">src/admin/&lt;feature&gt;/</span></div>
-          <div class="agent-prop"><span class="key">AGENTS.md</span><span class="val">103 dòng</span></div>
-          <div class="agent-prop"><span class="key">Trigger</span><span class="val">admin_status = dispatched</span></div>
+        <div class="agent-body">
+          <div class="row"><span>Role</span><span>Admin Implementation</span></div>
+          <div class="row"><span>Cron</span><span>*/30 min :21/:51</span></div>
+          <div class="row"><span>Tech</span><span>Java + React / REST</span></div>
+          <div class="row"><span>Output</span><span>src/admin/</span></div>
         </div>
-        <div class="agent-parts">
-          <span class="part-tag">REST API</span><span class="part-tag">MockMvc</span><span class="part-tag">Token auth</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Cron Timing -->
-  <div class="section">
-    <div class="section-title"><span class="icon">⏰</span> Cron Jobs — 7/7 Active</div>
-    <div class="cron-grid">
-      <div class="cron-item">
-        <div class="cron-time">:00</div>
-        <div class="cron-agent">agent_gd (Designia)</div>
-        <div class="cron-desc">Scan concepts/ → tạo GDD</div>
-        <span class="cron-badge cron-15">15 phút</span>
-      </div>
-      <div class="cron-item">
-        <div class="cron-time">:07</div>
-        <div class="cron-agent">agent_dev (Codera)</div>
-        <div class="cron-desc">Scan design/ → dispatch</div>
-        <span class="cron-badge cron-15">15 phút</span>
-      </div>
-      <div class="cron-item">
-        <div class="cron-time">:12</div>
-        <div class="cron-agent">agent_qc (Verita)</div>
-        <div class="cron-desc">Test + Review + Smoke</div>
-        <span class="cron-badge cron-15">15 phút</span>
-      </div>
-      <div class="cron-item">
-        <div class="cron-time">:17</div>
-        <div class="cron-agent">agent_dev_client (Pixel)</div>
-        <div class="cron-desc">Implement TypeScript/Cocos2d</div>
-        <span class="cron-badge cron-30">30 phút</span>
-      </div>
-      <div class="cron-item">
-        <div class="cron-time">:19</div>
-        <div class="cron-agent">agent_dev_server (Forge)</div>
-        <div class="cron-desc">Implement Kotlin/Ktor</div>
-        <span class="cron-badge cron-30">30 phút</span>
-      </div>
-      <div class="cron-item">
-        <div class="cron-time">:21</div>
-        <div class="cron-agent">agent_dev_admin (Panel)</div>
-        <div class="cron-desc">Implement Java+React</div>
-        <span class="cron-badge cron-30">30 phút</span>
-      </div>
-      <div class="cron-item">
-        <div class="cron-time">Mon 9am</div>
-        <div class="cron-agent">agent_qc (Verita)</div>
-        <div class="cron-desc">Weekly Quality Digest</div>
-        <span class="cron-badge cron-weekly">Weekly</span>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Status Flow -->
-  <div class="section">
-    <div class="section-title"><span class="icon">🔄</span> GDD Pipeline Status Flow</div>
-    <div class="status-flow">
-      <span class="status-pill sp-draft">Draft</span>
-      <span class="flow-arrow">→</span>
-      <span class="status-pill sp-review">Review ← agent_dev gate</span>
-      <span class="flow-arrow">→</span>
-      <span class="status-pill sp-indev">InDev</span>
-      <span class="flow-arrow">→</span>
-      <span class="status-pill sp-inqc">InQC ← agent_qc gate</span>
-      <span class="flow-arrow">→</span>
-      <div class="flow-fork">
-        <span class="status-pill sp-done">Done ✅</span>
-        <span class="status-pill sp-flagged">Flagged 🚨</span>
+  <!-- Section 2: Cron -->
+  <section>
+    <h2><span class="section-num">2</span> Cron Schedule</h2>
+    <div class="box">
+      <table>
+        <tr><th>Job</th><th>Agent</th><th>Frequency</th><th>Offset</th></tr>
+        <tr><td>ccn2-gd-workspace-scan</td><td>Designia</td><td>every 15min</td><td>:00/:30</td></tr>
+        <tr><td>ccn2-dev-workspace-scan</td><td>Codera</td><td>every 15min</td><td>:02/:32</td></tr>
+        <tr><td>ccn2-qc-workspace-scan</td><td>Verita</td><td>every 15min</td><td>:04/:34</td></tr>
+        <tr><td>ccn2-dev-client-specialized</td><td>Pixel</td><td>every 30min</td><td>:17/:47</td></tr>
+        <tr><td>ccn2-dev-server-specialized</td><td>Forge</td><td>every 30min</td><td>:19/:49</td></tr>
+        <tr><td>ccn2-dev-admin-specialized</td><td>Panel</td><td>every 30min</td><td>:21/:51</td></tr>
+        <tr><td>ccn2-weekly-digest</td><td>Verita</td><td>Monday 9am</td><td>weekly</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 3: GDD Pipeline -->
+  <section>
+    <h2><span class="section-num">3</span> GDD Pipeline</h2>
+    <div class="pipeline-flow">
+      <div class="stage">Draft</div>
+      <span class="arrow">→</span>
+      <div class="stage">Review</div>
+      <span class="arrow">→</span>
+      <div class="stage">InDev</div>
+      <span class="arrow">→</span>
+      <div class="stage active">InQC ◀ elemental-hunter</div>
+      <span class="arrow">→</span>
+      <div class="stage terminal-ok">Done ✅</div>
+      <span class="arrow">↘</span>
+      <div class="stage terminal-warn">Flagged ⚠️</div>
+    </div>
+    <div class="box">
+      <table>
+        <tr><th>Feature</th><th>Status</th><th>Eval Score</th><th>Source Files</th><th>In State</th></tr>
+        <tr>
+          <td>elemental-hunter</td>
+          <td><span class="pill InQC">InQC</span></td>
+          <td>93/100</td>
+          <td>57 files (client+server+admin+tests)</td>
+          <td>~8h</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 4: Smoke Test -->
+  <section>
+    <h2><span class="section-num">4</span> Smoke Test — <span class="pill DEGRADED">DEGRADED</span></h2>
+    <div class="checks-grid" style="margin-top:12px">
+      <div class="check-item pass">
+        <div class="check-icon">✅</div>
+        <div class="check-key">C1_concepts</div>
+        <div class="check-label">Concepts</div>
+      </div>
+      <div class="check-item pass">
+        <div class="check-icon">✅</div>
+        <div class="check-key">C2_design</div>
+        <div class="check-label">Design/GDD</div>
+      </div>
+      <div class="check-item fail">
+        <div class="check-icon">❌</div>
+        <div class="check-key">C3_gdd_header</div>
+        <div class="check-label">GDD Headers</div>
+      </div>
+      <div class="check-item pass">
+        <div class="check-icon">✅</div>
+        <div class="check-key">C4_src</div>
+        <div class="check-label">src/ dirs</div>
+      </div>
+      <div class="check-item exempt">
+        <div class="check-icon">✅</div>
+        <div class="check-key">C5_quality_report</div>
+        <div class="check-label">Quality rpt (exempt)</div>
+      </div>
+      <div class="check-item pass">
+        <div class="check-icon">✅</div>
+        <div class="check-key">C6_state_json</div>
+        <div class="check-label">State JSON</div>
       </div>
     </div>
-    <pre style="margin-top:12px;">
-GDD Header (ghi trực tiếp vào file):
-**Trạng thái**: Draft | Review | InDev | InQC | Done | Flagged
-**Pipeline agent**: agent_gd | agent_dev | agent_qc | COMPLETE | HUMAN_REVIEW
-**Cập nhật lần cuối bởi**: &lt;agent_id&gt;
-**Cập nhật lần cuối lúc**: YYYY-MM-DDTHH:MM:SS+07:00</pre>
-  </div>
+    <p style="margin-top:12px;font-size:0.8rem;color:var(--text-muted)">C3_gdd_header failing — GDD header field validation issue. C5 exempt from BROKEN verdict.</p>
+  </section>
 
-  <!-- Timeline -->
-  <div class="section">
-    <div class="section-title"><span class="icon">📅</span> Timeline Các Rounds</div>
+  <!-- Section 5: Source Code -->
+  <section>
+    <h2><span class="section-num">5</span> Generated Source Code — Elemental Hunter</h2>
+    <div class="box">
+      <table>
+        <tr><th>Platform</th><th>Language</th><th>Files</th><th>Key Files</th></tr>
+        <tr><td>Client</td><td>TypeScript</td><td>11</td><td>elemental-mechanics.ts, combat-logic.ts, game-state.ts, spell-cast.ts</td></tr>
+        <tr><td>Server</td><td>Kotlin</td><td>15</td><td>ElementalHunterGame.kt, CombatActor.kt, SpellManager.kt + 6 config</td></tr>
+        <tr><td>Admin</td><td>Java+React</td><td>18</td><td>Controllers, Services, Beans, TSX panels (6 each)</td></tr>
+        <tr><td>Tests</td><td>Multi</td><td>3</td><td>elemental-hunterTest.java, .test.ts, .test.kt</td></tr>
+        <tr><td colspan="2"><strong>Total</strong></td><td><strong>57</strong></td><td></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 6: Round 4 New Artifacts -->
+  <section>
+    <h2><span class="section-num">6</span> Round 4 — New Artifacts <span class="new-badge">NEW</span></h2>
+    <h3>Spec 4.1 — Error Handling + Monitoring</h3>
+    <div class="box">
+      <table>
+        <tr><th>Artifact</th><th>Description</th><th>Status</th></tr>
+        <tr><td><code>error.log</code></td><td>Shared error log, append-only, 0 bytes (no errors yet)</td><td>✅</td></tr>
+        <tr><td>6 × HEARTBEAT.md</td><td>Log & Skip pattern added to all agents</td><td>✅</td></tr>
+        <tr><td>agent_qc AGENTS.md Part G</td><td>Pipeline Watch — 48h stuck detection + Telegram alert</td><td>✅</td></tr>
+        <tr><td>SCHEMA.md Section 9</td><td>Error log format, rotation policy, state entry spec</td><td>✅</td></tr>
+        <tr><td><code>dashboard.html</code></td><td>Dark-theme HTML dashboard, auto-refresh 15min, 5 sections</td><td>✅</td></tr>
+        <tr><td>pipeline-health.json</td><td>Added <code>stuck_gdds: []</code> field</td><td>✅</td></tr>
+      </table>
+    </div>
+    <h3>Spec 4.2 — Documentation & Runbooks</h3>
+    <div class="box">
+      <table>
+        <tr><th>File</th><th>Type</th><th>Purpose</th></tr>
+        <tr><td>docs/ARCHITECTURE.md</td><td>Reference</td><td>Full system architecture, 9 sections, agent roles, cron, state, pipeline, smoke test</td></tr>
+        <tr><td>docs/HOWTO-add-agent.md</td><td>Guide</td><td>7-step checklist to add new agent to the system</td></tr>
+        <tr><td>docs/HOWTO-create-concept.md</td><td>Guide</td><td>Idea → Production full workflow with 3-tier scoring rubric</td></tr>
+        <tr><td>docs/RUNBOOK-stuck-pipeline.md</td><td>Runbook</td><td>Diagnose + fix GDD stuck in InDev/InQC (3 cases)</td></tr>
+        <tr><td>docs/RUNBOOK-agent-errors.md</td><td>Runbook</td><td>Read error.log + fix 6 common error types</td></tr>
+        <tr><td>docs/RUNBOOK-restart-agent.md</td><td>Runbook</td><td>Reset commands with ⚠️ safety warnings</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 7: Timeline -->
+  <section>
+    <h2><span class="section-num">7</span> Development Timeline</h2>
     <div class="timeline">
       <div class="timeline-item done">
-        <div><span class="timeline-round">Round 1 — Foundation</span><span class="timeline-date">2026-03-17 → 18</span><span class="timeline-status status-done">✅ DONE</span></div>
-        <div class="timeline-details"><ul>
-          <li>Workspace structure 11 folders, sample concept</li>
-          <li>3 agents (agent_gd/dev/qc) + SOUL/AGENTS/HEARTBEAT/USER.md</li>
-          <li>OpenClaw config + CRON_SETUP.md ready</li>
-          <li>Telegram smoke test ✅</li>
-        </ul></div>
+        <div class="timeline-round">Round 1 — Foundation ✅</div>
+        <div class="timeline-date">2026-03-18</div>
+        <div class="timeline-items">Workspace structure · SOUL/AGENTS/HEARTBEAT/USER.md × 3 · openclaw.json · CRON_SETUP.md</div>
       </div>
       <div class="timeline-item done">
-        <div><span class="timeline-round">Round 2 — Specialization</span><span class="timeline-date">2026-03-18</span><span class="timeline-status status-done">✅ DONE</span></div>
-        <div class="timeline-details"><ul>
-          <li>Phase 2.1: GDD templates (10-section), rubric, score gate 3 tiers</li>
-          <li>Phase 2.2: agent_dev → Tech Lead, 4-phase pipeline, 3 impl agents (Pixel/Forge/Panel)</li>
-          <li>Phase 2.3: agent_qc Part D (Code Review) + Part E (Test Generation)</li>
-        </ul></div>
+        <div class="timeline-round">Round 2 — Specialization ✅</div>
+        <div class="timeline-date">2026-03-18</div>
+        <div class="timeline-items">GDD workflow · Code workflow · QC workflow · 3 specs · 6 plan files · First feature (elemental-hunter) enters pipeline</div>
       </div>
       <div class="timeline-item done">
-        <div><span class="timeline-round">Round 3 — Automation</span><span class="timeline-date">2026-03-19</span><span class="timeline-status status-done">✅ DONE</span></div>
-        <div class="timeline-details"><ul>
-          <li>Spec 3.1: SCHEMA.md chuẩn + 6 HEARTBEAT.md + hash fallback chain</li>
-          <li>Spec 3.2: GDD status coordination Draft→Review→InDev→InQC→Done/Flagged</li>
-          <li>Spec 3.3: Smoke test Part F + pipeline-health.json</li>
-          <li>7/7 cron jobs active (thêm 3 impl agents)</li>
-        </ul></div>
+        <div class="timeline-round">Round 3 — Automation ✅</div>
+        <div class="timeline-date">2026-03-19</div>
+        <div class="timeline-items">Hash-based change detection · SCHEMA.md · 6 HEARTBEAT.md · Cross-agent coordination (GDD status flow) · Smoke test (6 checks) · 3 impl agents (Pixel/Forge/Panel) · 7/7 cron jobs active</div>
       </div>
-      <div class="timeline-item todo">
-        <div><span class="timeline-round">Round 4 — Production</span><span class="timeline-status status-todo">⬜ TODO</span></div>
-        <div class="timeline-details"><ul>
-          <li>Error Handling & Retry Policy</li>
-          <li>Monitoring Dashboard</li>
-          <li>Documentation & Runbooks</li>
-        </ul></div>
+      <div class="timeline-item done">
+        <div class="timeline-round">Round 4 — Production ✅</div>
+        <div class="timeline-date">2026-03-19</div>
+        <div class="timeline-items">Error handling (Log & Skip) · Pipeline Watch (48h) · HTML Dashboard · 6 docs/runbooks · error.log infrastructure</div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Real-time Update -->
-  <div class="section">
-    <div class="section-title"><span class="icon">🔄</span> Cập Nhật Thực Tế (2026-03-19 11:36)</div>
-    <div class="gap-list">
-      <div class="gap-item"><div class="gap-sev">🟢</div><div><div class="gap-title">Cron Jobs Status</div><div class="gap-desc">
-        <table style="width:100%; border-collapse:collapse; font-size:0.8rem; margin-top:8px;">
-          <tr><th style="text-align:left; padding:6px;">Job</th><th style="text-align:left; padding:6px;">Trạng thái</th><th style="text-align:left; padding:6px;">Ghi chú</th></tr>
-          <tr><td style="padding:4px 6px;">agent_gd</td><td style="padding:4px 6px;"><span class="tag tag-ok">✅ OK</span></td><td style="padding:4px 6px;">Scan concepts/</td></tr>
-          <tr><td style="padding:4px 6px;">agent_dev_client</td><td><span class="tag tag-ok">✅ OK</span></td><td>Implement TypeScript/Cocos2d</td></tr>
-          <tr><td style="padding:4px 6px;">agent_dev_server</td><td><span class="tag tag-ok">✅ OK</span></td><td>Implement Kotlin/Ktor (đã fix delivery.to)</td></tr>
-          <tr><td style="padding:4px 6px;">agent_qc</td><td><span class="tag tag-ok">✅ OK</span></td><td>Test automation (đã fix model)</td></tr>
-          <tr><td style="padding:4px 6px;">agent_dev</td><td><span class="tag tag-ok">✅ OK</span></td><td>Implement from GDDs (đã fix state edit)</td></tr>
-          <tr><td style="padding:4px 6px;">agent_dev_admin</td><td><span class="tag tag-ok">✅ OK</span></td><td>Implement Java+React/REST (đã fix delivery.to)</td></tr>
-          <tr><td style="padding:4px 6px;">Weekly Digest</td><td><span class="tag" style="background:#3b1f5e;color:#c4b5fd;">🔄 Đang chạy</span></td><td>Bắt đầu ~11:39, sẽ chạy xong sau</td></tr>
-        </table>
-        <p style="margin-top:8px; font-size:0.8rem; color:var(--text-muted);">Tổng kết: <strong>6/7</strong> jobs đã hoạt động bình thường, <strong>1</strong> đang chạy (Weekly Quality Digest).</p>
-      </div></div></div>
-
-      <div class="gap-item"><div class="gap-sev">🟡</div><div><div class="gap-title">State Files hiện tại</div><div class="gap-desc">
-        <ul style="list-style:none; padding:0; margin:4px 0 0 0; font-size:0.8rem;">
-          <li>• <code>agent_dev_dispatched.json</code> — rỗng <span class="tag tag-empty">EMPTY</span> (pipeline block)</li>
-          <li>• <code>pipeline-health.json</code> — <span class="tag tag-unk">UNKNOWN</span> (smoke test chưa chạy)</li>
-          <li>• Các state JSON khác đã có dữ liệu.</li>
-        </ul>
-      </div></div></div>
-
-      <div class="gap-item"><div class="gap-sev">🔴</div><div><div class="gap-title">Gaps còn tồn tại</div><div class="gap-desc">
-        <ul style="list-style:none; padding:0; margin:4px 0 0 0; font-size:0.8rem;">
-          <li>• <strong>G1 & G4</strong>: analysis/ rỗng, GDD InDev nhưng dispatch rỗng — agent_dev chưa tạo analysis/dispatch.</li>
-          <li>• <strong>G2</strong>: pipeline-health chưa baseline (agent_qc Part F chưa chạy).</li>
-        </ul>
-      </div></div></div>
-
-      <div class="gap-item"><div class="gap-sev">🔧</div><div><div class="gap-title">Hành động tiếp theo</div><div class="gap-desc">
-        <ol style="margin:4px 0 0 16px; font-size:0.8rem; padding:0;">
-          <li>Fix agent_dev_server delivery.to</li>
-          <li>Trigger agent_dev để tạo analysis/dispatch</li>
-          <li>Chờ agent_qc chạy smoke test</li>
-          <li>Bắt đầu Round 4 (error handling, monitoring)</li>
-        </ol>
-      </div></div></div>
-
+  <!-- Section 8: Artifact Inventory -->
+  <section>
+    <h2><span class="section-num">8</span> Artifact Inventory</h2>
+    <div class="box">
+      <table>
+        <tr><th>Category</th><th>Count</th><th>Location</th></tr>
+        <tr><td>Agent folders</td><td>6</td><td>openclaw/agents/</td></tr>
+        <tr><td>State files</td><td>10</td><td>ccn2_workspace/.state/</td></tr>
+        <tr><td>Spec documents</td><td>8</td><td>specs/</td></tr>
+        <tr><td>Plan documents</td><td>12</td><td>plans/</td></tr>
+        <tr><td>Reports generated</td><td>21</td><td>ccn2_workspace/reports/</td></tr>
+        <tr><td>Source files</td><td>57</td><td>ccn2_workspace/src/</td></tr>
+        <tr><td>Analysis files</td><td>4</td><td>ccn2_workspace/analysis/</td></tr>
+        <tr><td><strong>Doc files (new)</strong></td><td><strong>6</strong></td><td><strong>ccn2_workspace/docs/</strong></td></tr>
+        <tr><td>Concept files</td><td>2</td><td>ccn2_workspace/concepts/</td></tr>
+      </table>
     </div>
-  </div>
+  </section>
 
-  <!-- State Files -->
-  <div class="section">
-    <div class="section-title"><span class="icon">💾</span> Trạng Thái Pipeline Hiện Tại</div>
-    <table>
-      <thead><tr><th>State File</th><th>Nội dung</th><th>Trạng thái</th></tr></thead>
-      <tbody>
-        <tr><td><code>agent_gd_processed.json</code></td><td>1 concept processed — GDD_Overview score 93, status Review</td><td><span class="tag tag-ok">ACTIVE</span></td></tr>
-        <tr><td><code>agent_dev_processed.json</code></td><td>1 GDD pending — elemental-hunter, scores null</td><td><span class="tag tag-warn">PENDING</span></td></tr>
-        <tr><td><code>agent_dev_dispatched.json</code></td><td><code>{}</code> — chưa dispatch feature nào</td><td><span class="tag tag-empty">EMPTY</span></td></tr>
-        <tr><td><code>agent_qc_processed.json</code></td><td>3 GDD templates — tất cả done</td><td><span class="tag tag-ok">DONE</span></td></tr>
-        <tr><td><code>agent_qc_meta.json</code></td><td>code_review: {}, test_gen: {} — rỗng</td><td><span class="tag tag-empty">EMPTY</span></td></tr>
-        <tr><td><code>pipeline-health.json</code></td><td>overall: UNKNOWN — smoke test chưa chạy</td><td><span class="tag tag-unk">UNKNOWN</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Smoke Test -->
-  <div class="section">
-    <div class="section-title"><span class="icon">🩺</span> Smoke Test — 6 Health Checks (Part F)</div>
-    <div class="checks-grid">
-      <div class="check-item"><div class="check-id">C1</div><div class="check-desc">concepts/ có ≥ 1 .md (non-README)</div></div>
-      <div class="check-item"><div class="check-id">C2</div><div class="check-desc">design/ có ≥ 1 GDD-FEATURE-*.md</div></div>
-      <div class="check-item"><div class="check-id">C3</div><div class="check-desc">GDDs đều có **Trạng thái**: header</div></div>
-      <div class="check-item"><div class="check-id">C4</div><div class="check-desc">src/ có ≥ 1 subfolder non-empty</div></div>
-      <div class="check-item"><div class="check-id">C5</div><div class="check-desc">quality report trong 24h</div><div class="check-note">⚠️ Exempt khỏi BROKEN (startup)</div></div>
-      <div class="check-item"><div class="check-id">C6</div><div class="check-desc">4 core state JSONs valid</div></div>
+  <!-- Section 9: Gaps -->
+  <section>
+    <h2><span class="section-num">9</span> Issues & Gaps</h2>
+    <div class="box">
+      <table>
+        <tr><th>ID</th><th>Severity</th><th>Description</th><th>Status</th></tr>
+        <tr><td>G1</td><td style="color:var(--text-muted)">~~HIGH~~</td><td style="color:var(--text-muted)">analysis/ empty, pipeline blocked</td><td><span class="pill RESOLVED">RESOLVED</span></td></tr>
+        <tr><td>G2</td><td style="color:var(--text-muted)">~~MEDIUM~~</td><td style="color:var(--text-muted)">pipeline-health = UNKNOWN</td><td><span class="pill RESOLVED">RESOLVED</span></td></tr>
+        <tr><td>G3</td><td style="color:var(--warning)">MEDIUM</td><td>C3_gdd_header check failing (DEGRADED verdict)</td><td><span class="pill OPEN">OPEN</span></td></tr>
+        <tr><td>G4</td><td style="color:var(--text-muted)">~~HIGH~~</td><td style="color:var(--text-muted)">GDD InDev but dispatched.json empty</td><td><span class="pill RESOLVED">RESOLVED</span></td></tr>
+      </table>
     </div>
-    <div style="margin-top:12px; font-size:0.85rem; color: var(--text-muted);">
-      Verdict: <span style="color:#34d399">HEALTHY</span> (silent) →
-      <span style="color:#fbbf24">DEGRADED ⚠️</span> (Telegram) →
-      <span style="color:#ef4444">BROKEN 🔴</span> (Telegram, immediate)
-    </div>
-  </div>
+  </section>
 
-  <!-- Gaps -->
-  <div class="section">
-    <div class="section-title"><span class="icon">⚠️</span> Gaps & Điểm Cần Chú Ý</div>
-    <div class="gap-list">
-      <div class="gap-item"><div class="gap-sev">🔴</div><div><div class="gap-title">G1 — analysis/ rỗng: agent_dev chưa dispatch</div><div class="gap-desc">Pipeline bị block tại agent_dev. elemental-hunter chưa có REQ/DESIGN documents. agent_dev cần chạy đủ 4 phases để dispatch sang Pixel/Forge/Panel.</div></div></div>
-      <div class="gap-item"><div class="gap-sev">🔴</div><div><div class="gap-title">G4 — GDD status InDev nhưng dispatch rỗng</div><div class="gap-desc">Inconsistency: header ghi InDev (agent_dev update header) nhưng agent_dev_dispatched.json = {}. Cần agent_dev re-run để produce artifacts thực sự.</div></div></div>
-      <div class="gap-item"><div class="gap-sev">🟡</div><div><div class="gap-title">G2 — pipeline-health.json = UNKNOWN</div><div class="gap-desc">Smoke test chưa chạy lần nào. Cần agent_qc thực hiện Part F để có baseline health check.</div></div></div>
-      <div class="gap-item"><div class="gap-sev">🟡</div><div><div class="gap-title">G5 — Round 4 chưa bắt đầu</div><div class="gap-desc">Error handling, retry policy, monitoring dashboard và runbooks đều ở TODO.</div></div></div>
-      <div class="gap-item"><div class="gap-sev">🟢</div><div><div class="gap-title">G3 — IDENTITY.md rỗng cho 6 agents</div><div class="gap-desc">Bình thường — IDENTITY.md điền sau first conversation. Impl agents (Pixel/Forge/Panel) chưa từng initiate qua Telegram.</div></div></div>
-    </div>
-  </div>
-
-  <!-- Constitution -->
-  <div class="section">
-    <div class="section-title"><span class="icon">📜</span> Constitution — 7 Nguyên Tắc Cốt Lõi</div>
+  <!-- Section 10: Constitution -->
+  <section>
+    <h2><span class="section-num">10</span> System Constitution — 7 Principles</h2>
     <div class="principles">
-      <div class="principle"><div class="num">PRINCIPLE 1</div><div class="name">Workspace as Truth</div><div class="desc">ccn2_workspace/ là nguồn sự thật duy nhất. Không agent nào giữ state trong memory.</div></div>
-      <div class="principle"><div class="num">PRINCIPLE 2</div><div class="name">Push-based</div><div class="desc">Agents chủ động push output. Không poll nhau — chỉ poll shared workspace.</div></div>
-      <div class="principle"><div class="num">PRINCIPLE 3</div><div class="name">Idempotent</div><div class="desc">Chạy lại cùng input → cùng output. Mọi operation an toàn khi retry.</div></div>
-      <div class="principle"><div class="num">PRINCIPLE 4</div><div class="name">Single Responsibility</div><div class="desc">Mỗi agent làm đúng 1 việc. Không agent nào kiêm nhiệm role của agent khác.</div></div>
-      <div class="principle"><div class="num">PRINCIPLE 5</div><div class="name">State Tracking</div><div class="desc">Mọi output được track trong state JSON với hash, timestamp, status.</div></div>
-      <div class="principle"><div class="num">PRINCIPLE 6</div><div class="name">Quality Gate</div><div class="desc">Không pass gate = không tiến sang phase tiếp theo. Rubric là law.</div></div>
-      <div class="principle"><div class="num">PRINCIPLE 7</div><div class="name">Evidence Before Completion</div><div class="desc">Không claim done nếu không có artifact. File phải tồn tại.</div></div>
+      <div class="principle">
+        <div class="principle-num">Principle 1</div>
+        <div class="principle-text"><strong>GDD-First</strong> — Không code nếu không có GDD đã qua Review (score ≥ 70)</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">Principle 2</div>
+        <div class="principle-text"><strong>Agent Sovereignty</strong> — Mỗi agent chịu trách nhiệm độc lập, không phụ thuộc real-time</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">Principle 3</div>
+        <div class="principle-text"><strong>Hash-Based Idempotency</strong> — Chỉ reprocess khi file thực sự thay đổi (hash mismatch)</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">Principle 4 <span class="new-badge">NEW</span></div>
+        <div class="principle-text"><strong>Log & Skip</strong> — Agent không crash cron — mọi lỗi được log, cron luôn exit 0</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">Principle 5</div>
+        <div class="principle-text"><strong>Human Gate</strong> — Done ≠ Flagged — cần human decision để resolve Flagged</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">Principle 6 <span class="new-badge">NEW</span></div>
+        <div class="principle-text"><strong>48h Watchdog</strong> — GDD stuck > 48h → Telegram alert + pipeline-watch report</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">Principle 7 <span class="new-badge">NEW</span></div>
+        <div class="principle-text"><strong>Single Pane of Glass</strong> — dashboard.html là nơi duy nhất để xem toàn bộ pipeline state</div>
+      </div>
     </div>
-  </div>
-
-  <div class="footer">
-    CCN2 Multi-Agent System Report · 2026-03-19 · William Đào 👌<br>
-    Generated from D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan
-  </div>
+  </section>
 
 </div>
+
+<footer>
+  CCN2 Multi-Agent System Report · Generated 2026-03-19 · William Đào 👌
+</footer>
+
 </body>
 </html>

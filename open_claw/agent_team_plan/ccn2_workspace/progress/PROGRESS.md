@@ -100,9 +100,24 @@
 | E2E Integration Test (Spec 3.3) | ✅ DONE | smoke-test-TEMPLATE.md + pipeline-health.json + agent_qc Part F (6 checks, C5 exempt) |
 
 ## Round 4 — Production
+
+> Last updated: 2026-03-19 (Spec 4.1 IN PROGRESS)
+
+### Spec 4.1 — Error Handling + Monitoring
+
+| # | Deliverable | Status | File | Notes |
+|---|-------------|--------|------|-------|
+| D1 | Create `error.log` | ✅ DONE | `ccn2_workspace/.state/error.log` | Empty file, ready for append |
+| D2 | Error Handling section → 6 HEARTBEAT.md | ✅ DONE | All 6 agent HEARTBEAT.md | Log & Skip pattern; agent_qc has rotation note |
+| D3 | Part G (Pipeline Watch) → agent_qc/AGENTS.md | ✅ DONE | `openclaw/agents/agent_qc/AGENTS.md` | 48h stuck detection, Telegram alert, cleanup |
+| D4 | SCHEMA.md Section 9 (Error Log) | ✅ DONE | `ccn2_workspace/.state/SCHEMA.md` | Format, rotation policy, state entry spec |
+| D5 | dashboard.html | ✅ DONE | `ccn2_workspace/reports/dashboard.html` | Dark theme, 6 agent cards, smoke checks, 15-min auto-refresh |
+| D6 | pipeline-health.json `stuck_gdds` field | ✅ DONE | `ccn2_workspace/.state/pipeline-health.json` | Added `"stuck_gdds": []` |
+| G1 | elemental-hunter analysis files | ✅ DONE | `ccn2_workspace/analysis/REQ-*.md` + `DESIGN-*.md` | Already existed (created by agent_dev) — pipeline unblocked |
+
 | Phase | Status |
 |-------|--------|
-| Error Handling | ⬜ TODO |
+| Error Handling (Spec 4.1) | 🔄 IN PROGRESS |
 | Monitoring | ⬜ TODO |
 | Documentation & Runbooks | ⬜ TODO |
 
