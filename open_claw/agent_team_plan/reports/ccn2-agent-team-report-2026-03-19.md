@@ -213,6 +213,46 @@ Monday 9am:
 
 ---
 
+## 8. Cập Nhật Thực Tế (2026-03-19 11:36)
+
+### Tình hình Cron Jobs (số liệu mới nhất)
+
+| Job | Trạng thái | Ghi chú |
+|-----|------------|--------|
+| agent_gd | ✅ OK | Scan concepts/ chạy bình thường |
+| agent_dev_client | ✅ OK | Implement TypeScript/Cocos2d |
+| agent_dev_server | ❌ LỖI | **Lỗi**: `Delivering to Telegram requires target <chatId>` — thiếu `delivery.to` trong cron config |
+| agent_qc | ✅ OK | Test automation đã OK (trước đó lỗi model, đã fix) |
+| agent_dev | ✅ OK | Implement from GDDs đã OK (trước đó lỗi edit state, đã fix) |
+| agent_dev_admin | ✅ OK | Implement Java+React/REST (đã fix delivery.to) |
+| Weekly Quality Digest | ⏳ Chưa chạy | Lịch: Thứ 2 9am |
+
+**Tổng kết**: 5/7 jobs đang chạy tốt, chỉ còn 1 job lỗi (agent_dev_server) và 1 job chưa đến lịch.
+
+### State Files hiện tại
+
+- `agent_dev_dispatched.json` — vẫn `{}` (chưa dispatch feature nào) → pipeline block tại agent_dev.
+- `pipeline-health.json` — `UNKNOWN` (smoke test chưa chạy lần nào).
+- Các state JSON khác (`agent_gd_processed.json`, `agent_dev_processed.json`, `agent_qc_processed.json`, `agent_qc_meta.json`) đã có dữ liệu.
+
+### Gaps còn tồn tại
+
+- **G1** (analysis/ rỗng) và **G4** (GDD InDev nhưng dispatch rỗng) — nguyên nhân: agent_dev chưa hoàn thành Phase 1-4 để tạo `analysis/REQ-*.md` và `analysis/DESIGN-*.md` và update `agent_dev_dispatched.json`.
+- **G2** — pipeline-health chưa có baseline do agent_qc chưa chạy Part F (smoke test).
+
+### Hành động tiếp theo
+
+1. **Fix agent_dev_server**: cập nhật cron config thêm `delivery.to: "526521221"` (nếu chưa).
+2. **Trigger agent_dev** thêm lần nữa để nó tạo analysis và dispatch.
+3. **Chạy smoke test** — chờ agent_qc chạy Part F.
+4. **Round 4** (Production) cần thêm error handling & monitoring.
+
+---
+
+*Kết thúc cập nhật thực tế.*
+
+---
+
 ## 5. State Management
 
 ### Schema Chuẩn (SCHEMA.md)

@@ -451,6 +451,51 @@ GDD Header (ghi trực tiếp vào file):
     </div>
   </div>
 
+  <!-- Real-time Update -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔄</span> Cập Nhật Thực Tế (2026-03-19 11:36)</div>
+    <div class="gap-list">
+      <div class="gap-item"><div class="gap-sev">🟢</div><div><div class="gap-title">Cron Jobs Status</div><div class="gap-desc">
+        <table style="width:100%; border-collapse:collapse; font-size:0.8rem; margin-top:8px;">
+          <tr><th style="text-align:left; padding:6px;">Job</th><th style="text-align:left; padding:6px;">Trạng thái</th><th style="text-align:left; padding:6px;">Ghi chú</th></tr>
+          <tr><td style="padding:4px 6px;">agent_gd</td><td style="padding:4px 6px;"><span class="tag tag-ok">✅ OK</span></td><td style="padding:4px 6px;">Scan concepts/</td></tr>
+          <tr><td style="padding:4px 6px;">agent_dev_client</td><td><span class="tag tag-ok">✅ OK</span></td><td>Implement TypeScript/Cocos2d</td></tr>
+          <tr><td style="padding:4px 6px;">agent_dev_server</td><td><span class="tag" style="background:#450a0a;color:#fca5a5;">❌ LỖI</span></td><td>Delivering to Telegram requires target &lt;chatId&gt; (thiếu delivery.to)</td></tr>
+          <tr><td style="padding:4px 6px;">agent_qc</td><td><span class="tag tag-ok">✅ OK</span></td><td>Test automation (đã fix model)</td></tr>
+          <tr><td style="padding:4px 6px;">agent_dev</td><td><span class="tag tag-ok">✅ OK</span></td><td>Implement from GDDs (đã fix state edit)</td></tr>
+          <tr><td style="padding:4px 6px;">agent_dev_admin</td><td><span class="tag tag-ok">✅ OK</span></td><td>Implement Java+React/REST (đã fix delivery.to)</td></tr>
+          <tr><td style="padding:4px 6px;">Weekly Digest</td><td><span class="tag tag-empty">⏳ Chưa chạy</span></td><td>Lịch: Thứ 2 9am</td></tr>
+        </table>
+        <p style="margin-top:8px; font-size:0.8rem; color:var(--text-muted);">Tổng kết: <strong>5/7</strong> jobs đang chạy tốt, <strong>1</strong> lỗi, <strong>1</strong> chưa đến lịch.</p>
+      </div></div></div>
+
+      <div class="gap-item"><div class="gap-sev">🟡</div><div><div class="gap-title">State Files hiện tại</div><div class="gap-desc">
+        <ul style="list-style:none; padding:0; margin:4px 0 0 0; font-size:0.8rem;">
+          <li>• <code>agent_dev_dispatched.json</code> — rỗng <span class="tag tag-empty">EMPTY</span> (pipeline block)</li>
+          <li>• <code>pipeline-health.json</code> — <span class="tag tag-unk">UNKNOWN</span> (smoke test chưa chạy)</li>
+          <li>• Các state JSON khác đã có dữ liệu.</li>
+        </ul>
+      </div></div></div>
+
+      <div class="gap-item"><div class="gap-sev">🔴</div><div><div class="gap-title">Gaps còn tồn tại</div><div class="gap-desc">
+        <ul style="list-style:none; padding:0; margin:4px 0 0 0; font-size:0.8rem;">
+          <li>• <strong>G1 & G4</strong>: analysis/ rỗng, GDD InDev nhưng dispatch rỗng — agent_dev chưa tạo analysis/dispatch.</li>
+          <li>• <strong>G2</strong>: pipeline-health chưa baseline (agent_qc Part F chưa chạy).</li>
+        </ul>
+      </div></div></div>
+
+      <div class="gap-item"><div class="gap-sev">🔧</div><div><div class="gap-title">Hành động tiếp theo</div><div class="gap-desc">
+        <ol style="margin:4px 0 0 16px; font-size:0.8rem; padding:0;">
+          <li>Fix agent_dev_server delivery.to</li>
+          <li>Trigger agent_dev để tạo analysis/dispatch</li>
+          <li>Chờ agent_qc chạy smoke test</li>
+          <li>Bắt đầu Round 4 (error handling, monitoring)</li>
+        </ol>
+      </div></div></div>
+
+    </div>
+  </div>
+
   <!-- State Files -->
   <div class="section">
     <div class="section-title"><span class="icon">💾</span> Trạng Thái Pipeline Hiện Tại</div>
