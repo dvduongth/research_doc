@@ -1,34 +1,35 @@
 {
   "GDD-TEMPLATE.md": {
     "hash": "2A75840A5B3AEED697243D223FFADBEA",
-    "processedAt": "2026-03-19T09:00:00+07:00",
+    "processedAt": "2026-03-19T11:22:00+07:00",
     "status": "done",
     "notes": "Template file — processed for reference only"
   },
   "GDD-TEMPLATE-FEATURE.md": {
-    "hash": "0CD1AA05D016C4F5C59A84D6F651A795",
-    "processedAt": "2026-03-19T09:00:00+07:00",
+    "hash": "36A29926E84132D5C59CE1D0C7C5DF94",
+    "processedAt": "2026-03-19T11:22:00+07:00",
     "status": "done",
     "notes": "Template file — processed for reference only"
   },
   "GDD-TEMPLATE-GAME.md": {
-    "hash": "56ECD07B56CC1753C62F4CCC8D580F16",
-    "processedAt": "2026-03-19T09:00:00+07:00",
+    "hash": "6202ECF83CC0E70266F3FD9F7D281664",
+    "processedAt": "2026-03-19T11:22:00+07:00",
     "status": "done",
     "notes": "Template file — processed for reference only"
   },
   "GDD-FEATURE-elemental-hunter": {
-    "hash": "81CDD1201A0D7769EE4817A0154425E9",
-    "processedAt": "2026-03-19T10:55:00+07:00",
+    "hash": "E6FCF660F255D5F37111625D17EEBC37",
+    "processedAt": "2026-03-19T11:22:00+07:00",
     "testcases": "reports/testcases-elemental-hunter.md",
     "testFile": "src/tests/elemental-hunter.test.js",
     "status": "done",
-    "evalScore": 92,
-    "evalDate": "2026-03-19T10:55:00+07:00",
+    "evalScore": 99,
+    "evalDate": "2026-03-19T11:22:00+07:00",
     "result": "ĐẠT"
   },
   "sourceHashes": {
-    "src/elemental-hunter.js": "5898A01DD190A1157EF285CBCA1999E7"
+    "src/elemental-hunter.js": "D9D2D25F0F0BEC3EC2A295D170CF19DD",
+    "src/rules.js": "6F2871AE4D3A9193442BEB4DBE5F1B6B"
   },
   "test_gen": {
     "elemental-hunter": {

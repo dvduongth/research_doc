@@ -1,0 +1,13 @@
+{
+  "maxConsecutiveRolls": 3,
+  "doubleRollCooldownRounds": 2,
+  "comboT1AtkBonus": 150,
+  "comboT3AtkMultiplier": 1.5,
+  "ultimateCostExtraRoll": 50,
+  "powerRollAccuracy": 0.20,
+  "tileRewardAtk": 30,
+  "tileRewardMag": 10,
+  "tokenCount": 3,
+  "magCap": 100,
+  "maxElementQueue": 8
+}

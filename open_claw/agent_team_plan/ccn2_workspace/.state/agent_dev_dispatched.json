@@ -6,7 +6,10 @@
     "client_score": 79,
     "client_output": "src/client/elemental-hunter/",
     "client_eval": "eval/CODE-EVAL-client-elemental-hunter-2026-03-19.md",
-    "server_status": "dispatched",
+    "server_status": "done",
+    "server_score": 83,
+    "server_output": "src/server/elemental-hunter/",
+    "server_eval": "eval/CODE-EVAL-server-elemental-hunter-2026-03-19.md",
     "admin_status": "dispatched"
   }
 }
