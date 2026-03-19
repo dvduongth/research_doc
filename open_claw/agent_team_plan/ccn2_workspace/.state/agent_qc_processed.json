@@ -1,7 +1,20 @@
 {
-  "gdd:GDD-TEMPLATE.md": "2A75840A5B3AEED697243D223FFADBEA",
-  "gdd:GDD-TEMPLATE-FEATURE.md": "0CD1AA05D016C4F5C59A84D6F651A795",
-  "gdd:GDD-TEMPLATE-GAME.md": "56ECD07B56CC1753C62F4CCC8D580F16",
-  "code_review": {},
-  "test_gen": {}
+  "GDD-TEMPLATE.md": {
+    "hash": "2A75840A5B3AEED697243D223FFADBEA",
+    "processedAt": "2026-03-19T09:00:00+07:00",
+    "status": "done",
+    "notes": "Template file — processed for reference only"
+  },
+  "GDD-TEMPLATE-FEATURE.md": {
+    "hash": "0CD1AA05D016C4F5C59A84D6F651A795",
+    "processedAt": "2026-03-19T09:00:00+07:00",
+    "status": "done",
+    "notes": "Template file — processed for reference only"
+  },
+  "GDD-TEMPLATE-GAME.md": {
+    "hash": "56ECD07B56CC1753C62F4CCC8D580F16",
+    "processedAt": "2026-03-19T09:00:00+07:00",
+    "status": "done",
+    "notes": "Template file — processed for reference only"
+  }
 }
