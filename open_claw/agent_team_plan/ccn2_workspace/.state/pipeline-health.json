@@ -1,0 +1,17 @@
+{
+  "_schema": "pipeline-health v1.0 — updated by agent_qc after each WORKSPACE_SCAN",
+  "last_run": null,
+  "overall": "UNKNOWN",
+  "passed": 0,
+  "failed": 0,
+  "checks": {
+    "C1_concepts": "pending",
+    "C2_design": "pending",
+    "C3_gdd_header": "pending",
+    "C4_src": "pending",
+    "C5_quality_report": "pending",
+    "C6_state_json": "pending"
+  },
+  "last_report": null,
+  "notes": "Initialized — awaiting first smoke test run by agent_qc"
+}

@@ -3,10 +3,10 @@
 **Version**: v1
 **Ngày tạo**: 2026-03-19
 **Cập nhật**: 2026-03-19
-**Trạng thái**: Review
-**Pipeline agent**: agent_gd
-**Cập nhật lần cuối bởi**: agent_gd
-**Cập nhật lần cuối lúc**: 2026-03-19T10:35:00+07:00
+**Trạng thái**: InDev
+**Pipeline agent**: agent_dev
+**Cập nhật lần cuối bởi**: agent_dev
+**Cập nhật lần cuối lúc**: 2026-03-19T10:07:00+07:00
 **Tác giả**: agent_gd (Designia)
 
 ## Nhật ký thay đổi

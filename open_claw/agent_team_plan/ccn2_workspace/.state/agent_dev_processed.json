@@ -1,4 +1,14 @@
 {
+  "GDD-FEATURE-elemental-hunter.md": {
+    "hash": "2B83EB94312F40945523035B5770EFDB",
+    "processedAt": "2026-03-19T10:07:00+07:00",
+    "req_score": null,
+    "req_status": "pending",
+    "design_score": null,
+    "design_status": "pending",
+    "combined_score": null,
+    "overall_status": "pending"
+  },
   "GDD-gdd-overview-v2-elemental-hunter.md": {
     "hash": "7C863E2DD4BBFF8C515595315FEA7BFE",
     "processedAt": "2026-03-18T18:52:00+07:00",
