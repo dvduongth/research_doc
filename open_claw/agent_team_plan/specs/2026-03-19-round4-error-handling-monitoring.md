@@ -54,7 +54,7 @@ Tất cả 6 agents. Mỗi HEARTBEAT.md bổ sung section **"## Error Handling"*
 - Status="error" instruction
 
 ### Cron exit code
-Agent luôn exit 0 sau khi log error — không làm OpenClaw retry storm.
+Agent luôn exit 0 sau khi log error — rationale: OpenClaw cron retry khi exit non-zero, gây retry storm nếu lỗi persistent. Với Log & Skip, cron luôn "thành công" ở mức process; failure được track qua state file status="error" và error.log. Áp dụng cho tất cả 6 HEARTBEAT jobs.
 
 ---
 

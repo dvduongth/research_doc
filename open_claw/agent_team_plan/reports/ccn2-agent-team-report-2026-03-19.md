@@ -221,13 +221,13 @@ Monday 9am:
 |-----|------------|--------|
 | agent_gd | ✅ OK | Scan concepts/ chạy bình thường |
 | agent_dev_client | ✅ OK | Implement TypeScript/Cocos2d |
-| agent_dev_server | ❌ LỖI | **Lỗi**: `Delivering to Telegram requires target <chatId>` — thiếu `delivery.to` trong cron config |
+| agent_dev_server | ✅ OK | Implement Kotlin/Ktor (đã fix delivery.to) |
 | agent_qc | ✅ OK | Test automation đã OK (trước đó lỗi model, đã fix) |
 | agent_dev | ✅ OK | Implement from GDDs đã OK (trước đó lỗi edit state, đã fix) |
 | agent_dev_admin | ✅ OK | Implement Java+React/REST (đã fix delivery.to) |
-| Weekly Quality Digest | ⏳ Chưa chạy | Lịch: Thứ 2 9am |
+| Weekly Quality Digest | 🔄 Đang chạy | Bắt đầu ~11:39, sẽ chạy xong sau |
 
-**Tổng kết**: 5/7 jobs đang chạy tốt, chỉ còn 1 job lỗi (agent_dev_server) và 1 job chưa đến lịch.
+**Tổng kết**: 6/7 jobs đã hoạt động bình thường, 1 đang chạy (Weekly Quality Digest).
 
 ### State Files hiện tại
 
