@@ -22,9 +22,24 @@
     "processedAt": "2026-03-19T10:55:00+07:00",
     "testcases": "reports/testcases-elemental-hunter.md",
     "testFile": "src/tests/elemental-hunter.test.js",
-    "status": "done"
+    "status": "done",
+    "evalScore": 92,
+    "evalDate": "2026-03-19T10:55:00+07:00",
+    "result": "ĐẠT"
   },
   "sourceHashes": {
     "src/elemental-hunter.js": "5898A01DD190A1157EF285CBCA1999E7"
+  },
+  "test_gen": {
+    "elemental-hunter": {
+      "req_hash": "9D603F615655623FA3625F55D9E096D4",
+      "design_hash": "8D532B6BD7042617EC45F34922597B23",
+      "generated_at": "2026-03-19T10:55:00+07:00",
+      "files": [
+        "src/tests/client/elemental-hunter.test.ts",
+        "src/tests/server/elemental-hunter.test.kt",
+        "src/tests/admin/elemental-hunterTest.java"
+      ]
+    }
   }
 }
