@@ -100,13 +100,14 @@ Draft → Review → InDev → InQC → Done
 | Done | agent_qc review pass | agent_qc | GDD status = InQC |
 | Flagged | agent_qc review fail (human required) | agent_qc | GDD status = InQC |
 
-**Key GDD header fields** (trong mỗi GDD-FEATURE-*.md):
+**Key GDD header fields** (trong mỗi GDD-FEATURE-*.md — canonical source: `ccn2_workspace/design/GDD-TEMPLATE-FEATURE.md`):
 ```
 **Trạng thái**: Draft | Review | InDev | InQC | Done | Flagged
 **Pipeline agent**: agent_gd | agent_dev | agent_qc
 **Cập nhật lần cuối bởi**: <agent_id>
 **Cập nhật lần cuối lúc**: ISO8601+07:00
 ```
+Note: Đây là bộ fields tiếng Việt từ `GDD-TEMPLATE-FEATURE.md` (updated Round 3/Spec 3.2). Dùng đúng tên field này trong runbooks và manual override.
 
 #### Error Handling
 - **Approach**: Log & Skip — mỗi agent wrap HEARTBEAT trong try/catch
@@ -214,16 +215,18 @@ Minimum required: title, description, core mechanics, win conditions
 Thời gian: tối đa 15 phút (1 cron cycle)
 agent_gd tạo: ccn2_workspace/eval/GDD-EVAL-<name>-YYYY-MM-DD.md
 
-Scoring rubric (100 điểm):
-- Originality: 20pt
-- Feasibility: 25pt
-- Fun factor: 20pt
-- Technical clarity: 20pt
-- Completeness: 15pt
+Scoring rubric (100 điểm — 6 criteria, source: `ccn2_workspace/eval/GDD-EVAL-RUBRIC.md`):
+- Đầy đủ: 25pt
+- Cụ thể: 25pt
+- Khả năng triển khai: 20pt
+- Trường hợp ngoại lệ: 15pt
+- Kịch bản kiểm thử: 10pt
+- Chỉ số đánh giá: 5pt
 
-Kết quả:
-- Score < 70 → concept giữ ở Draft, cần revise → quay lại Step 1
-- Score ≥ 70 → auto-promoted → design/GDD-FEATURE-<name>.md (status=Review)
+Kết quả (3 tiers):
+- Score < 50  → concept bị reject, không tạo file gì → pipeline không tiến
+- Score 50-69 → tạo eval file, concept giữ ở Draft, cần revise → quay lại Step 1
+- Score ≥ 70  → auto-promoted → design/GDD-FEATURE-<name>.md (status=Review)
 
 ### Step 3 — agent_dev analysis (tự động)
 Trigger: GDD status = Review
@@ -389,8 +392,16 @@ echo '{"overall": "UNKNOWN", "checks": {}, "stuck_gdds": []}' > ccn2_workspace/.
 ## Reset dispatch state
 
 Path: ccn2_workspace/.state/agent_dev_dispatched.json
-⚠️ WARNING: Chỉ reset khi chắc chắn impl agents chưa bắt đầu — nếu impl agents đang
-   xử lý, reset sẽ khiến agent_dev dispatch lại, dẫn đến duplicate work.
+⚠️ WARNING: Chỉ reset khi impl agents chưa bắt đầu xử lý.
+Điều kiện an toàn để reset: kiểm tra 3 state files sau — tất cả đều KHÔNG có entry
+nào với status="in_progress":
+  - ccn2_workspace/.state/agent_dev_client_processed.json
+  - ccn2_workspace/.state/agent_dev_server_processed.json
+  - ccn2_workspace/.state/agent_dev_admin_processed.json
+
+Nếu bất kỳ file nào có status="in_progress" → KHÔNG reset, chờ impl agent hoàn thành
+(status → "done" hoặc "error") rồi mới reset.
+
 echo '{}' > ccn2_workspace/.state/agent_dev_dispatched.json
 
 ## Verify sau khi restart
