@@ -19,5 +19,5 @@ src/
 
 ## Running Tests
 ```bash
-cd D:/workspace/CCN2/clientccn2 && npm test
+cd D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan\ccn2_workspace\ && npm test
 ```
