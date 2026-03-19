@@ -91,9 +91,13 @@ agent_dev populates `ccn2_workspace/.state/agent_dev_dispatched.json`:
 
 **Automatic** — impl agents pick up dispatched features.
 
-- `agent_dev_client` → `ccn2_workspace/src/<name>/client/`
-- `agent_dev_server` → `ccn2_workspace/src/<name>/server/`
-- `agent_dev_admin` → `ccn2_workspace/src/<name>/admin/`
+| Layer | Agent | Output Path | Format |
+|-------|-------|-------------|--------|
+| Client | agent_dev_client (Pixel) | `playtest/client/src/<feature>.js` | Vanilla JS, global object literal |
+| Server | agent_dev_server (Forge) | `playtest/server/src/main/kotlin/playtest/` | Kotlin, `package playtest` |
+| Admin | agent_dev_admin (Panel) | `ccn2_workspace/src/admin/<feature>/` | Java Bean + React TSX |
+
+**Playtest = Single Source of Truth**: Client và Server agents ghi trực tiếp vào `playtest/` — đây là code chạy được, không phải staging.
 
 When all 3 layers done → agent_dev detects → GDD `Trạng thái → InQC`
 

@@ -57,7 +57,22 @@ Find the file entry, change `"status"` to `"pending"`:
 
 agent_qc will repopulate on next run:
 
-    echo '{"overall":"UNKNOWN","checks":{"C1_concepts":"pending","C2_design":"pending","C3_gdd_header":"pending","C4_src":"pending","C5_quality_report":"pending","C6_state_json":"pending"},"stuck_gdds":[],"last_updated":""}' > ccn2_workspace/.state/pipeline-health.json
+    echo '{"overall":"UNKNOWN","checks":{"C1_concepts":"pending","C2_design":"pending","C3_gdd_header":"pending","C4_src":"pending","C5_quality_report":"pending","C6_state_json":"pending","C7_playtest":"SKIP"},"stuck_gdds":[],"last_updated":""}' > ccn2_workspace/.state/pipeline-health.json
+
+**C7_playtest** default là `"SKIP"` (distribution chưa build). Forge sẽ update thành PASS/FAIL sau khi chạy smoke-test.ps1 -Mode full.
+
+---
+
+## Reset bug-tracker.json
+
+WARNING: Reset sẽ xoá toàn bộ bug history. Chỉ dùng khi toàn bộ bugs đã closed hoặc cần debug.
+
+    echo '{}' > ccn2_workspace/.state/bug-tracker.json
+
+Nếu chỉ muốn reopen 1 bug cụ thể (để retriage):
+
+1. Edit `bug-tracker.json`: set `"status": "open"` cho bug ID đó
+2. Codera sẽ tự detect và retriage lần scan sau
 
 ---
 

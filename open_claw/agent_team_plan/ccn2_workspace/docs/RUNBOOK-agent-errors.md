@@ -40,6 +40,10 @@
 | `PermissionDenied` | File locked by another process | Wait 1 cron cycle (15-30 min); natural retry |
 | `HeaderParseError` | GDD header field missing or malformed | Fix GDD vs `ccn2_workspace/design/GDD-TEMPLATE-FEATURE.md` |
 | `TimeoutError` | LLM response timeout | OpenClaw auto-retries after N failures; check SOUL.md timeout config |
+| `BugFileCorrupt` | Bug report thiếu `**Domain**` hoặc `**Status**` field | Sửa bug file theo template `bugs/BUG-TEMPLATE.md`; Codera sẽ tự retry scan sau |
+| `BugTrackerParseError` | `bug-tracker.json` bị corrupt | `echo '{}' > ccn2_workspace/.state/bug-tracker.json` (mất history nhưng bugs vẫn còn trong `bugs/` folder) |
+| `ProtectedFileOverwrite` | Agent cố ghi vào protected file | Kiểm tra AGENTS.md/HEARTBEAT.md của agent — protected list bị thiếu; restore file từ git |
+| `PlaytestSmokeError` | smoke-test.ps1 crash (không phải FAIL) | Check PowerShell execution policy; xem `reports/playtest-smoke-<latest>.md` |
 
 ---
 

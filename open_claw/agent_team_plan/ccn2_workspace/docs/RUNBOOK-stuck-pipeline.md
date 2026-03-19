@@ -68,6 +68,43 @@ If missing: agent_dev hasn't run analysis yet → force reprocess via Case C.
 
 ---
 
+## Case D — Bug Stuck (không được fix sau 24h)
+
+**Symptom**: Bug trong `bug-tracker.json` ở status `assigned` hoặc `in_progress` quá lâu mà không chuyển sang `fixed`.
+
+**Step 1**: Xác định bug nào bị stuck
+
+    # Xem toàn bộ bug-tracker
+    cat ccn2_workspace/.state/bug-tracker.json
+
+Tìm entries có `status: "assigned"` hoặc `"in_progress"` với `assigned_at` quá 24h.
+
+**Step 2**: Check dispatched.json xem có entry bugfix không
+
+    grep "bugfix" ccn2_workspace/.state/agent_dev_dispatched.json
+
+- Không có entry → Codera chưa triage → kiểm tra `agent_dev` state file + error.log
+- Có entry nhưng status = "in_progress" lâu → dev agent bị crash giữa chừng
+
+**Step 3**: Recovery
+
+    # Option A — Reset về open để Codera retriage
+    # Edit bug-tracker.json: "status": "open"
+    # Codera sẽ tự tạo lại dispatched.json entry lần scan sau
+
+    # Option B — Tự dispatch thủ công
+    # Edit agent_dev_dispatched.json:
+    # - Thêm entry bugfix với domain đúng
+    # - Set <layer>_status = "dispatched"
+    # - Edit bug-tracker.json: "status": "assigned"
+
+**Step 4**: Verify sau 1 cron cycle
+
+    grep "<bug-id>" ccn2_workspace/.state/bug-tracker.json
+    # Expect: "status": "fixed"
+
+---
+
 ## Case C — Manual Override
 
 Edit GDD header fields in `ccn2_workspace/design/GDD-FEATURE-<name>.md`:

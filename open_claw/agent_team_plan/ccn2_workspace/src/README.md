@@ -1,21 +1,44 @@
 # src/ — Implementation Code
 
-agent_dev writes here. agent_qc reads here.
+## Status theo sub-folder
 
-## Structure
+| Folder | Status | Owner | Ghi chú |
+|--------|--------|-------|---------|
+| `src/server/` | ⚠️ DEPRECATED | — | Agents nay ghi thang vao `playtest/server/src/main/kotlin/playtest/` |
+| `src/client/` | ⚠️ DEPRECATED | — | Agents nay ghi thang vao `playtest/client/src/` |
+| `src/admin/` | ✅ ACTIVE | agent_dev_admin (Panel) | Java + React staging cho admintool |
+| `src/tests/` | ✅ ACTIVE | agent_qc (Verita) | Jest + Kotlin test files |
+| `src/rules.js` | ✅ ACTIVE | agent_dev (Codera) | CCN2 board game rules constants |
+| `src/elemental-hunter.js` | ✅ ACTIVE | agent_dev (Codera) | CCN2 board game logic |
+
+---
+
+## Single Source of Truth (sau migration Option B)
+
 ```
-src/
-├── <feature>.js          ← Implementation (agent_dev)
-└── tests/
-    └── <feature>.test.js ← Jest tests (agent_qc writes, agent_dev writes skeleton)
+Server features → playtest/server/src/main/kotlin/playtest/
+                  package playtest
+                  Protected: Types.kt, WsMessage.kt, Main.kt, GameRoom.kt, GameRoomManager.kt
+                  Agent-owned: ArtifactHandler.kt, BalanceConfig.kt, BoardBuilder.kt,
+                               CharacterConfig.kt, CombatEngine.kt, ElementEngine.kt,
+                               GameConfig.kt, LevelConfig.kt, MovementValidator.kt, RNGService.kt
+
+Client features → playtest/client/src/<feature>.js
+                  Vanilla JS, global object literal var FeatureName = { ... }
+                  Protected: core/ws-client.js, core/board-renderer.js, core/game-ui.js
+                  index.html: add <script src="src/<feature>.js"> sau core scripts
+
+Admin features  → src/admin/<feature>/   (unchanged — no playtest equivalent)
+                  Java Bean + Service + Controller + React TSX
 ```
 
-## CCN2 Architecture Rules (agent_dev enforces)
-- NO ES6 modules (no import/export)
-- All constants in CONFIG object (from rules.js)
-- Global state via CONFIG, not module-level vars
-- Event bus: `gv.bus` for new code (NOT signalMgr)
-- Script load order: rules → utils → entities → board → input → game → ui → main
+---
+
+## CCN2 Board Game Rules (src/rules.js, src/elemental-hunter.js)
+
+Cac file nay la cho CCN2 board game (round 1 workflow), KHONG phai playtest Elemental Hunter:
+- `rules.js` — CCN2 game constants (CONFIG object)
+- `elemental-hunter.js` — CCN2 board game logic (var ElementalHunter = { ... })
 
 ## Running Tests
 ```bash

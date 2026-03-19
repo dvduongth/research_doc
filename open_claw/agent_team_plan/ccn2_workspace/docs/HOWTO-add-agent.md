@@ -60,7 +60,9 @@ Minimum 6 parts required:
 | E | Constraints | What agent must NOT do |
 | F | Output Format | What files it creates/modifies; exact formats |
 
-**Special agents**: `agent_qc` also needs **Part F: Smoke Test** (6 checks) and **Part G: Pipeline Watch** (48h stuck detection)
+**Special agents**:
+- `agent_qc` cần thêm: **Part F: Smoke Test** (C1-C7), **Part G: Pipeline Watch** (48h), **Part H: Dashboard**, **Part I: Playtest Smoke**, **Part J: Bug Detection & Verify**
+- **Dev agents** (client/server/admin) cần thêm: **Bug Fix Workflow** section — đọc `bug_file` thay REQ/DESIGN, ghi Fix Notes, update bug-tracker.json
 
 ---
 
