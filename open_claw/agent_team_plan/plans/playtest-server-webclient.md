@@ -36,9 +36,10 @@
 | `playtest/server/src/main/kotlin/playtest/BalanceConfig.kt` | Repackage | Package only |
 | `playtest/server/src/main/kotlin/playtest/CharacterConfig.kt` | Repackage | Package only |
 | `playtest/server/src/main/kotlin/playtest/LevelConfig.kt` | Repackage | Package only |
-| `playtest/server/src/main/kotlin/playtest/config/balance.json` | Copy | From `ccn2_workspace/src/server/elemental-hunter/config/` |
-| `playtest/server/src/main/kotlin/playtest/config/character.json` | Copy | From source |
-| `playtest/server/src/main/kotlin/playtest/config/level.json` | Copy | From source |
+| `playtest/server/src/main/resources/config/balance.json` | Copy | From `ccn2_workspace/src/server/elemental-hunter/config/` — resources dir, NOT kotlin dir |
+| `playtest/server/src/main/resources/config/character.json` | Copy | Same |
+| `playtest/server/src/main/resources/config/level.json` | Copy | Same |
+| `playtest/server/src/main/kotlin/playtest/Types.kt` | Create new | All shared type definitions (extracted from original GameRoom.kt) |
 | `playtest/server/src/main/kotlin/playtest/WsMessage.kt` | Create new | Protocol DTOs (sealed classes) |
 | `playtest/server/src/main/kotlin/playtest/GameRoom.kt` | Rewrite | Actor model, no bitzero-kotlin |
 | `playtest/server/src/main/kotlin/playtest/GameRoomManager.kt` | Rewrite | ConcurrentHashMap + WS session registry |
@@ -176,6 +177,17 @@ ls "D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan\playtest\server\gradl
 
 Expected: `gradle-wrapper.jar`, `gradle-wrapper.properties` listed.
 
+- [ ] **Step 4.3: Check Gradle wrapper is compatible with Kotlin 2.3.0**
+
+```powershell
+Get-Content "D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan\playtest\server\gradle\wrapper\gradle-wrapper.properties"
+```
+
+Check the `distributionUrl` line. Kotlin 2.3.0 requires **Gradle 8.6+**. If the wrapper uses Gradle < 8.6, update the line:
+```
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.10.2-bin.zip
+```
+
 ---
 
 ### Task 5: Repackage 10 Game Logic Files
@@ -195,12 +207,12 @@ Files to repackage (10 files — logic unchanged, package declaration only):
 
 - [ ] **Step 5.1: Copy + repackage each file**
 
-For each file, the change is:
+For each file, the changes are:
 - Line 1: `package com.ccn2.server.elementalhunter` → `package playtest`
-- Remove any import of `com.ccn2.server.elementalhunter.*`
+- Remove ALL imports from `com.ccn2.server.elementalhunter` (both wildcard `.*` and named `import com.ccn2...ClassName`)
 - All other code stays identical
 
-PowerShell script to do all 10 at once:
+PowerShell script to handle both wildcard and named imports:
 ```powershell
 $srcDir = "D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan\ccn2_workspace\src\server\elemental-hunter"
 $dstDir = "D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan\playtest\server\src\main\kotlin\playtest"
@@ -213,12 +225,20 @@ $files = @(
 
 foreach ($f in $files) {
     $content = Get-Content "$srcDir\$f" -Raw
+    # Fix package declaration
     $content = $content -replace 'package com\.ccn2\.server\.elementalhunter', 'package playtest'
-    $content = $content -replace 'import com\.ccn2\.server\.elementalhunter\.\*', ''
-    Set-Content "$dstDir\$f" $content
+    # Remove ALL imports from the old package (wildcard and named)
+    $content = $content -replace 'import com\.ccn2\.server\.elementalhunter[^\n]*\n', ''
+    Set-Content "$dstDir\$f" $content -NoNewline
     Write-Host "Repackaged: $f"
 }
 ```
+
+> **After running**: manually inspect each file for any remaining `com.ccn2` references:
+```powershell
+Select-String -Path "$dstDir\*.kt" -Pattern "com\.ccn2"
+```
+Expected: no matches.
 
 > ⚠️ Do NOT copy: `GameRoom.kt`, `GameRoomManager.kt`, `ElementalHunterModule.kt`, `ElementalHunterRequestHandler.kt`, `ElementalHunterEventListener.kt` — these will be rewritten or not used.
 
@@ -229,6 +249,102 @@ Select-String -Path "$dstDir\*.kt" -Pattern "^package"
 ```
 
 Expected: all 10 files show `package playtest`.
+
+---
+
+### Task 5.5: Create Types.kt (Shared Type Definitions)
+
+**Files:**
+- Create: `playtest/server/src/main/kotlin/playtest/Types.kt`
+
+> **Why**: The original `GameRoom.kt` (which we are REWRITING, not repackaging) contained all shared enums and data classes at the bottom. The repackaged files (`BoardBuilder.kt`, `CombatEngine.kt`, etc.) reference these types. They must be available in `package playtest`.
+>
+> **Critical**: The original `TileType` enum is `ELEMENTAL, EMPTY, SAFE_ZONE, START, NORMAL` — but `BoardBuilder.kt` uses `TileType.FINAL_GOAL` which does NOT exist in the original. Add `FINAL_GOAL` to fix this generated-code bug.
+
+- [ ] **Step 5.5.1: Write Types.kt**
+
+```kotlin
+package playtest
+
+import kotlinx.serialization.Serializable
+
+// ========== Enums ==========
+
+@Serializable
+enum class GamePhase { LOBBY, PLAYING, ENDED }
+
+@Serializable
+enum class TileType {
+    ELEMENTAL, EMPTY, SAFE_ZONE, START, NORMAL,
+    FINAL_GOAL  // ← added: referenced by BoardBuilder.kt but missing from original enum
+}
+
+@Serializable
+enum class ElementType { FIRE, ICE, GRASS, ROCK }
+
+@Serializable
+enum class ArtifactType { SWAP, CHANGE, CHARGE }
+
+@Serializable
+enum class ComboType { C3, C4 }
+
+@Serializable
+enum class EndReason { KO, ROUND_LIMIT }
+
+// ========== Core Data Models ==========
+
+@Serializable
+data class TileState(
+    val tileId: Int,
+    val tileType: TileType,
+    val baseElement: ElementType?,
+    val currentElement: ElementType?
+)
+
+@Serializable
+data class TokenState(
+    val tokenId: String,
+    val owner: String,
+    val tileId: Int,
+    val atk: Int,
+    val frozenRounds: Int
+)
+
+// NOTE: NOT @Serializable — PlayerState is never sent directly over WS.
+// Pair<Int,Int> has no built-in kotlinx.serialization serializer; adding @Serializable would cause compile error.
+data class PlayerState(
+    val playerId: String,
+    val hp: Int,
+    val mag: Int,
+    val magCap: Int,
+    val elementQueue: ArrayDeque<ElementType>,
+    val elementAffinity: ElementType,
+    val comboCount: Int,
+    val comboTier: Int,
+    val tileGainMultiplier: Int,
+    val doubleRollCooldown: Int,
+    val consecutiveRollsThisTurn: Int,
+    val ultimateExtraRolls: Int,
+    val emptyTileVisits: Int,
+    val kickCount: Int,
+    val finishedHorseCount: Int,
+    val selectedTokenId: String?,
+    val lastDiceResult: Pair<Int, Int>?  // kotlin.Pair not serializable — keep as is, not serialized directly
+)
+
+@Serializable
+data class ComboRewards(val atkBonus: Int = 0, val magBonus: Int = 0)
+```
+
+> **Note on duplicates**: `GameConfig.kt`, `BalanceConfig.kt`, `CharacterConfig.kt`, `LevelConfig.kt` also define some of these — the repackaged files will be the authoritative source for config classes. `Types.kt` only defines game-state types. If the repackaged config files re-declare `ElementType` etc., remove the duplicate from Types.kt (keep Types.kt as the single source).
+
+- [ ] **Step 5.5.2: Verify no duplicate class definitions**
+
+```powershell
+Select-String -Path "$dstDir\*.kt" -Pattern "^enum class ElementType" | Select-Object -Property Path,Line
+```
+
+Expected: exactly ONE file defines each enum. If duplicates appear, remove from the config `.kt` files and keep only `Types.kt`.
 
 ---
 
@@ -440,7 +556,6 @@ package playtest
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.flow.*
 import kotlin.random.Random
 
 /**
@@ -752,7 +867,7 @@ private fun Application.configureCors() {
 }
 
 private fun Application.configureRouting() {
-    val config = GameConfig.load()
+    val config = GameConfig.default()  // GameConfig.kt only has default(), not load()
 
     routing {
 
@@ -810,7 +925,9 @@ private suspend fun handleClientMessage(room: GameRoom, playerId: String, text: 
         val action = json["action"]?.jsonPrimitive?.content ?: return
 
         when (action) {
-            "JOIN"         -> room.submit(GameRoom.Cmd.Join(playerId))
+            // JOIN is handled automatically on WS connect via handleJoin in the WS block.
+            // Ignore explicit JOIN messages to avoid double-join race condition.
+            "JOIN"         -> { /* no-op: server auto-joins on WS connect */ }
             "ROLL_DICE"    -> room.submit(GameRoom.Cmd.RollDice(playerId))
             "SELECT_TOKEN" -> {
                 val tokenId = json["tokenId"]?.jsonPrimitive?.content ?: return
@@ -1010,8 +1127,9 @@ function connect() {
     log('Connected to ' + roomId + ' as ' + myPlayerId, 'event');
     document.getElementById('connect-overlay').style.display = 'none';
     document.getElementById('controls').style.display = 'flex';
-    // Auto JOIN is sent server-side on WS connect; send explicit JOIN for reconnect support
-    send({ action: 'JOIN', playerId: myPlayerId });
+    // NOTE: Server auto-triggers JOIN on WS connect. Do NOT send explicit JOIN here
+    // to avoid double-JOIN race condition corrupting playerIds list.
+    // The server's handleJoin() is idempotent for same playerId but not for duplicate slot filling.
   };
 
   ws.onclose = () => { setStatus(false); log('Disconnected', 'error'); };
@@ -1204,9 +1322,15 @@ function renderBoard(board, players) {
     if (!pos) return;
     const x = pos.col * TW, y = pos.row * TH;
 
-    // Tile background
-    const elemColor = tile.element !== 'NONE' ? ELEMENT_COLORS[tile.element] : null;
-    ctx.fillStyle = elemColor || TILE_COLORS[tile.tileType] || TILE_COLORS['NORMAL'];
+    // Tile background — SAFE_ZONE takes priority over ELEMENTAL color
+    // (tiles 0-2 and 51-53 are both SAFE_ZONE and ELEMENTAL; show safe zone color)
+    let tileColor;
+    if (tile.tileType === 'SAFE_ZONE' || tile.tileType === 'FINAL_GOAL' || tile.tileType === 'EMPTY') {
+      tileColor = TILE_COLORS[tile.tileType];
+    } else {
+      tileColor = (tile.element !== 'NONE' ? ELEMENT_COLORS[tile.element] : null) || TILE_COLORS[tile.tileType] || TILE_COLORS['NORMAL'];
+    }
+    ctx.fillStyle = tileColor;
     ctx.fillRect(x+1, y+1, TW-2, TH-2);
 
     // Tile border

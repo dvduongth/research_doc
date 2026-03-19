@@ -420,7 +420,7 @@ Your specialty: writing comprehensive test cases from GDDs and running automated
 1. List src/**/*.js (exclude src/tests/)
 2. Compute hashes, compare with state
 3. If any changed:
-   a. Run: `cd D:/PROJECT/CCN2/clientccn2 && npm test 2>&1`
+   a. Run: `cd D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan\ccn2_workspace && npm test 2>&1`
    b. Parse output: extract pass count, fail count, errors
    c. Create reports/quality-<YYYY-MM-DD-HH-mm>.md
    d. Update state
@@ -508,7 +508,7 @@ Part A — GDDs:
 Part B — Code:
 3. Check src/**/*.js hashes (exclude tests/)
 4. If code changed:
-   a. cd D:/PROJECT/CCN2/clientccn2 && npm test
+   a. cd D:\PROJECT\CCN2\research_doc\open_claw\agent_team_plan\ccn2_workspace && npm test
    b. Parse results
    c. Create reports/quality-<datetime>.md
    d. Telegram: pass or fail

@@ -1,0 +1,8 @@
+{
+  "affinity": "FIRE",
+  "atk": 30,
+  "mag": 10,
+  "hp": 1000,
+  "ultimateType": "Extra Roll",
+  "ultimateCost": 50
+}
