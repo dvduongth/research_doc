@@ -696,6 +696,11 @@ eval/CODE-EVAL-RUBRIC.md       ← Tiêu chí + trọng số cho code (3 mode: R
         ▼
 AGENTS.md / HEARTBEAT.md       ← Score gates: ngưỡng FAIL / WARNING / PASS
 ```
+```markdown
+Cron Job      = "Đồng hồ báo thức"   → KÍCH HOẠT agent
+AGENTS.md     = "Bản hướng dẫn"      → agent ĐỌC và THỰC THI khi bị kích hoạt
+.state/*.json = "Sổ tay nhớ việc"    → STATE persists giữa các session
+```
 ---
 
 ## ✅ KẾT LUẬN & KHUYẾN NGHỊ
