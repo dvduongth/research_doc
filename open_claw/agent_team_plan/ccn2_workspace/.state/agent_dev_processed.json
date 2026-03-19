@@ -1,17 +1,19 @@
 {
   "GDD-FEATURE-elemental-hunter.md": {
-    "hash": "2B83EB94312F40945523035B5770EFDB",
-    "processedAt": "2026-03-19T10:07:00+07:00",
-    "req_score": null,
-    "req_status": "pending",
-    "design_score": null,
-    "design_status": "pending",
-    "combined_score": null,
-    "overall_status": "pending"
+    "hash": "81CDD1201A0D7769EE4817A0154425E9",
+    "processedAt": "2026-03-19T10:54:00+07:00",
+    "req_score": 98,
+    "req_status": "done",
+    "design_score": 97,
+    "design_status": "done",
+    "combined_score": 97.4,
+    "overall_status": "dispatched",
+    "notes": "REQ, DESIGN, DESIGN-EVAL completed. Dispatched to client/server/admin. Combined score 97.4 meets dispatch threshold (≥70)."
   },
   "GDD-gdd-overview-v2-elemental-hunter.md": {
     "hash": "7C863E2DD4BBFF8C515595315FEA7BFE",
     "processedAt": "2026-03-18T18:52:00+07:00",
+    "status": "skipped",
     "notes": "Master game overview for Elemental Hunter / CCN2. Contains full game spec (board, tokens, turn structure, combos, combat, artifacts, levels). NOT a feature-specific GDD — requires breaking into individual feature GDDs (GDD-FEATURE-*.md) for implementation."
   }
 }

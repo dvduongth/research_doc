@@ -1,1 +1,9 @@
-{}
+{
+  "elemental-hunter": {
+    "dispatched_at": "2026-03-19T10:54:00+07:00",
+    "gdd_file": "GDD-FEATURE-elemental-hunter.md",
+    "client_status": "dispatched",
+    "server_status": "dispatched",
+    "admin_status": "dispatched"
+  }
+}

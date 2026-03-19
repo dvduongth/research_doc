@@ -1,17 +1,17 @@
 {
   "_schema": "pipeline-health v1.0 — updated by agent_qc after each WORKSPACE_SCAN",
-  "last_run": null,
-  "overall": "UNKNOWN",
-  "passed": 0,
-  "failed": 0,
+  "last_run": "2026-03-19T10:07:00+07:00",
+  "overall": "DEGRADED",
+  "passed": 5,
+  "failed": 1,
   "checks": {
-    "C1_concepts": "pending",
-    "C2_design": "pending",
-    "C3_gdd_header": "pending",
-    "C4_src": "pending",
-    "C5_quality_report": "pending",
-    "C6_state_json": "pending"
+    "C1_concepts": "pass",
+    "C2_design": "pass",
+    "C3_gdd_header": "pass",
+    "C4_src": "fail",
+    "C5_quality_report": "pass",
+    "C6_state_json": "pass"
   },
-  "last_report": null,
-  "notes": "Initialized — awaiting first smoke test run by agent_qc"
+  "last_report": "reports/smoke-test-2026-03-19-10-07.md",
+  "notes": "C4 FAIL: src/ has no implementation subfolders yet (client/server/admin). Expected after cron jobs 5-7 run for the first time. Pipeline otherwise healthy."
 }

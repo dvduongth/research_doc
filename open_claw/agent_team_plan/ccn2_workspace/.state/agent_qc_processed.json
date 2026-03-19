@@ -16,5 +16,15 @@
     "processedAt": "2026-03-19T09:00:00+07:00",
     "status": "done",
     "notes": "Template file — processed for reference only"
+  },
+  "GDD-FEATURE-elemental-hunter": {
+    "hash": "81CDD1201A0D7769EE4817A0154425E9",
+    "processedAt": "2026-03-19T10:55:00+07:00",
+    "testcases": "reports/testcases-elemental-hunter.md",
+    "testFile": "src/tests/elemental-hunter.test.js",
+    "status": "done"
+  },
+  "sourceHashes": {
+    "src/elemental-hunter.js": "5898A01DD190A1157EF285CBCA1999E7"
   }
 }
