@@ -658,6 +658,45 @@ Write state back
 - **Report**: `reports/quality-2026-03-19-07-57.md`
 
 ---
+### Bug Flow System
+```markdown
+Human thấy bug
+│
+│ Tạo bugs/BUG-<domain>-<name>-<date>.md
+▼
+[open] ──────────────────────────────────────────────
+│
+│ agent_dev (Codera) — Bug Triage (sau Phase 4)
+│ Route theo domain → dispatched.json entry
+▼
+[assigned]
+│
+├── domain=gd     → agent_gd (Designia) self-scans bugs/
+├── domain=client/playtest-client → agent_dev_client (Pixel)
+├── domain=server/playtest-server → agent_dev_server (Forge)
+└── domain=admin  → agent_dev_admin (Panel)
+│
+▼
+[in_progress] → [fixed]
+│              │
+│              │ agent_qc (Verita) — Part J.2 Verify
+│              ├── verified=true  → [closed] ✅ Telegram
+│              └── verified=false → [reopen] ⚠️ Telegram
+│                        │
+└──────────────────── Re-fix loop
+```
+
+---
+### Kiến trúc đánh giá
+```markdown
+eval/GDD-EVAL-RUBRIC.md        ← Tiêu chí + trọng số cho GDD
+eval/CODE-EVAL-RUBRIC.md       ← Tiêu chí + trọng số cho code (3 mode: REQ, DESIGN, Client/Server/Admin)
+        │
+        │ agents tự đọc rubric và self-eval
+        ▼
+AGENTS.md / HEARTBEAT.md       ← Score gates: ngưỡng FAIL / WARNING / PASS
+```
+---
 
 ## ✅ KẾT LUẬN & KHUYẾN NGHỊ
 

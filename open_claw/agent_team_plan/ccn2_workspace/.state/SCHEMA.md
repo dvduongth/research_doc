@@ -157,7 +157,115 @@ FOR EACH file trong thư mục scan:
 
 ---
 
-## 8. Validation Checklist (tự check trước khi ghi state)
+## 8. Pipeline Health — C7_playtest
+
+`pipeline-health.json` có thêm field `C7_playtest` được cập nhật bởi `playtest/scripts/smoke-test.ps1`:
+
+```json
+{
+  "checks": {
+    "C1_concepts":       "PASS",
+    "C2_design":         "PASS",
+    "C3_gdd_header":     "PASS",
+    "C4_src":            "PASS",
+    "C5_quality_report": "PASS",
+    "C6_state_json":     "PASS",
+    "C7_playtest":       "PASS|FAIL|SKIP"
+  }
+}
+```
+
+**C7_playtest values:**
+
+| Value | Ý nghĩa | Verdict impact |
+|-------|---------|----------------|
+| `PASS` | 4/4 HTTP checks pass, server start OK | Counts toward HEALTHY |
+| `FAIL` | ≥1 check fail HOẶC server không start trong 30s | DEGRADED (không phải BROKEN) |
+| `SKIP` | Distribution chưa build (`build/install/` chưa tồn tại) | Exempt — không ảnh hưởng verdict |
+
+**Owner**: `playtest/scripts/smoke-test.ps1` — ghi trực tiếp vào `pipeline-health.json`.
+**Triggered by**:
+- `agent_qc` (Verita): Mode=quick, sau Part H mỗi WORKSPACE_SCAN
+- `agent_dev_server` (Forge): Mode=full, sau mỗi `feature.server_status = "done"`
+
+**Default khi chưa build**: `"SKIP"` — safe default, không làm degraded pipeline.
+
+---
+
+## 10. Bug Tracker — `bug-tracker.json`
+
+**Path**: `ccn2_workspace/.state/bug-tracker.json`
+**Owner**: All agents read; agent_dev (triage) + dev agents (fix) + agent_qc (verify) ghi.
+
+### Entry format
+
+```json
+{
+  "BUG-<domain>-<slug>-<YYYY-MM-DD>": {
+    "domain": "gd | client | server | admin | playtest-client | playtest-server",
+    "severity": "critical | high | medium | low",
+    "status": "open | assigned | in_progress | fixed | verified | closed | reopen",
+    "bug_file": "bugs/BUG-<domain>-<slug>-<YYYY-MM-DD>.md",
+    "reported_by": "human | agent_qc | agent_dev_server | ...",
+    "reported_at": "ISO8601+07:00",
+    "assigned_to": "agent_dev_client | agent_dev_server | agent_dev_admin | agent_gd | null",
+    "assigned_at": "ISO8601+07:00 | null",
+    "fixed_at": "ISO8601+07:00 | null",
+    "verified_at": "ISO8601+07:00 | null",
+    "closed_at": "ISO8601+07:00 | null"
+  }
+}
+```
+
+### Status transitions
+
+```
+open        → assigned   (agent_dev triages, routes to dev agent)
+assigned    → in_progress (dev agent picks up)
+in_progress → fixed      (dev agent completes fix)
+fixed       → verified   (agent_qc confirms fix works)
+fixed       → reopen     (agent_qc verify fails — bug still present)
+verified    → closed     (agent_qc auto-closes after verified)
+reopen      → in_progress (dev agent re-picks up)
+```
+
+### Domain → Agent mapping
+
+| Domain | Assigned to |
+|--------|-------------|
+| `gd` | agent_gd (Designia) — self-scans bugs/, NOT via dispatched.json |
+| `client` | agent_dev_client (Pixel) — via dispatched.json |
+| `server` | agent_dev_server (Forge) — via dispatched.json |
+| `admin` | agent_dev_admin (Panel) — via dispatched.json |
+| `playtest-client` | agent_dev_client (Pixel) — via dispatched.json |
+| `playtest-server` | agent_dev_server (Forge) — via dispatched.json |
+
+### Dispatched.json entry for bugfix (non-gd domains)
+
+```json
+{
+  "bugfix-<slug>-<YYYY-MM-DD>": {
+    "type": "bugfix",
+    "dispatched_at": "ISO8601+07:00",
+    "bug_id": "BUG-<domain>-<slug>-<YYYY-MM-DD>",
+    "bug_file": "bugs/BUG-<domain>-<slug>-<YYYY-MM-DD>.md",
+    "domain": "<domain>",
+    "client_status": "dispatched | skipped",
+    "server_status": "dispatched | skipped",
+    "admin_status":  "dispatched | skipped"
+  }
+}
+```
+
+**Rules:**
+- Đúng 1 layer `dispatched`, các layer còn lại `skipped`
+- `playtest-client` → `client_status=dispatched`
+- `playtest-server` → `server_status=dispatched`
+- Dev agent đọc `bug_file` thay vì `req_path`/`design_path`
+
+---
+
+## 11. Validation Checklist (tự check trước khi ghi state)
 
 - [ ] Tất cả entries có đủ 3 required fields: `hash`, `processedAt`, `status`
 - [ ] `hash` là string 32 ký tự hex uppercase HOẶC bắt đầu bằng `SIZE` (pseudo)

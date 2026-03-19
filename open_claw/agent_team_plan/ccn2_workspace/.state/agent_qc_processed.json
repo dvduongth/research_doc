@@ -45,10 +45,10 @@
     }
   },
   "lastTestRun": {
-    "timestamp": "2026/03/19T07:34:19Z",
-    "total": 175,
-    "passed": 175,
-    "failed": 0,
-    "report": "reports/quality-2026-03-19-14-27.md"
+    "timestamp": "2026-03-19T08:27:00Z",
+    "total": 3,
+    "passed": 0,
+    "failed": 3,
+    "report": "reports/quality-2026-03-19-15-27.md"
   }
 }

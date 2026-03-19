@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎮 Elemental Hunter Playtest</title>
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --border: #334155;
+    --primary: #6366f1; --success: #22c55e; --warn: #f59e0b;
+    --danger: #ef4444; --text: #f1f5f9; --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: monospace; height: 100vh; display: flex; flex-direction: column; }
+  header { background: var(--surface); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+  header h1 { font-size: 16px; }
+  #status { font-size: 13px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--danger); }
+  .dot.connected { background: var(--success); }
+  main { flex: 1; display: grid; grid-template-columns: 1fr 320px; overflow: hidden; }
+  #board-container { background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--border); padding: 10px; gap: 8px; }
+  canvas { border: 1px solid var(--border); border-radius: 4px; }
+  #right-panel { display: flex; flex-direction: column; overflow: hidden; }
+  #info-panel { background: var(--surface); padding: 12px; overflow-y: auto; flex: 1; border-bottom: 1px solid var(--border); }
+  #log-panel { background: var(--bg); padding: 12px; overflow-y: auto; height: 200px; }
+  .player-card { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px; margin-bottom: 8px; font-size: 12px; }
+  .player-card.active { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+  .player-card h3 { font-size: 13px; margin-bottom: 4px; }
+  .player-card .row { display: flex; justify-content: space-between; margin-top: 3px; color: var(--muted); }
+  .player-card .row span:last-child { color: var(--text); }
+  #controls { padding: 10px 12px; border-top: 1px solid var(--border); background: var(--surface); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  button { background: var(--primary); color: white; border: none; border-radius: 4px; padding: 6px 12px; font-family: monospace; font-size: 12px; cursor: pointer; transition: opacity 0.2s; }
+  button:hover:not(:disabled) { opacity: 0.85; }
+  button:disabled { opacity: 0.3; cursor: not-allowed; }
+  button.secondary { background: var(--surface); border: 1px solid var(--border); }
+  #roll-display { color: var(--warn); font-size: 13px; font-weight: bold; }
+  .log-entry { font-size: 11px; color: var(--muted); margin-bottom: 2px; line-height: 1.4; }
+  .log-entry .time { color: var(--primary); margin-right: 6px; }
+  .log-entry.event { color: var(--text); }
+  .log-entry.error { color: var(--danger); }
+  .log-entry.win { color: var(--warn); font-weight: bold; font-size: 13px; }
+  #connect-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  #connect-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 28px; width: 340px; }
+  #connect-box h2 { margin-bottom: 6px; font-size: 18px; }
+  #connect-box p { color: var(--muted); font-size: 12px; margin-bottom: 20px; }
+  #connect-box label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+  #connect-box input { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 4px; font-family: monospace; font-size: 14px; margin-bottom: 14px; }
+  #connect-box input:focus { outline: none; border-color: var(--primary); }
+  #connect-box button { width: 100%; padding: 10px; font-size: 14px; }
+  #turn-indicator { font-size: 12px; color: var(--warn); padding: 4px 0; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div id="connect-overlay">
+  <div id="connect-box">
+    <h2>🎮 Elemental Hunter</h2>
+    <p>Standalone playtest server — connect 2 tabs to play</p>
+    <label>Room ID</label>
+    <input id="inp-room" type="text" value="room1" placeholder="room1">
+    <label>Player ID</label>
+    <input id="inp-player" type="text" value="p1" placeholder="p1 or p2">
+    <button onclick="connect()">⚡ Connect</button>
+  </div>
+</div>
+
+<header>
+  <h1>🎮 Elemental Hunter Playtest</h1>
+  <div id="status"><div class="dot" id="dot"></div><span id="status-text">Disconnected</span></div>
+</header>
+
+<main>
+  <div id="board-container">
+    <canvas id="board" width="520" height="480"></canvas>
+    <div style="font-size:11px;color:var(--muted)">🟥 P1 tokens &nbsp; 🟦 P2 tokens &nbsp; ★ Safe &nbsp; ⚡ Elemental &nbsp; 🏁 Final Goal</div>
+  </div>
+  <div id="right-panel">
+    <div id="info-panel">
+      <div id="turn-indicator">Waiting for players...</div>
+      <div id="players-area"><div style="color:var(--muted);font-size:12px">No players yet</div></div>
+    </div>
+    <div id="controls" style="display:none">
+      <button id="btn-roll" onclick="sendRoll()" disabled>🎲 Roll</button>
+      <button id="btn-tokenA" onclick="sendSelect('tokenA')" disabled>Token A</button>
+      <button id="btn-tokenB" onclick="sendSelect('tokenB')" disabled>Token B</button>
+      <button id="btn-move" onclick="sendMove()" disabled>▶ Move</button>
+      <span id="roll-display"></span>
+    </div>
+    <div id="log-panel"><div id="log"></div></div>
+  </div>
+</main>
+
+<script>
+// ===== State =====
+let ws = null, myPlayerId = '', lastRoll = 0, selectedToken = null;
+let currentTurn = '', gamePhase = 'LOBBY';
+let boardData = [], playersData = [];
+
+// ===== Connection =====
+function connect() {
+  const roomId = document.getElementById('inp-room').value.trim() || 'room1';
+  myPlayerId = document.getElementById('inp-player').value.trim() || 'p1';
+  const url = `ws://localhost:8181/game/ws/${roomId}/${myPlayerId}`;
+  log(`Connecting to ${url}...`);
+  ws = new WebSocket(url);
+  ws.onopen = () => {
+    setStatus(true);
+    log(`Connected as ${myPlayerId}`, 'event');
+    document.getElementById('connect-overlay').style.display = 'none';
+    document.getElementById('controls').style.display = 'flex';
+  };
+  ws.onclose = () => { setStatus(false); log('Disconnected', 'error'); };
+  ws.onerror = () => log('WebSocket error — is the server running on :8181?', 'error');
+  ws.onmessage = evt => {
+    try { handleEvent(JSON.parse(evt.data)); }
+    catch(e) { log('Parse error: ' + e, 'error'); }
+  };
+}
+
+function send(obj) {
+  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj));
+}
+
+// ===== Event Handling =====
+function handleEvent(msg) {
+  const { event, data } = msg;
+  switch (event) {
+    case 'GAME_STATE':
+      boardData = data.board || [];
+      playersData = data.players || [];
+      const room = data.room || {};
+      gamePhase = room.phase || 'LOBBY';
+      currentTurn = room.currentTurn || '';
+      renderPlayers();
+      renderBoard();
+      updateControls();
+      document.getElementById('turn-indicator').textContent =
+        gamePhase === 'PLAYING'
+          ? `Turn: ${currentTurn} ${currentTurn === myPlayerId ? '← YOUR TURN' : ''}`
+          : `Phase: ${gamePhase}`;
+      log(`Game state received — phase: ${gamePhase}, turn: ${currentTurn}`, 'event');
+      break;
+    case 'DICE_RESULT':
+      lastRoll = data.sum;
+      document.getElementById('roll-display').textContent = `🎲 ${data.dice?.join('+')} = ${data.sum}${data.isDouble ? ' (Double!)' : ''}`;
+      log(`${data.playerId} rolled ${data.sum}${data.isDouble ? ' (double!)' : ''}`, 'event');
+      if (data.playerId === myPlayerId) {
+        document.getElementById('btn-tokenA').disabled = false;
+        document.getElementById('btn-tokenB').disabled = false;
+        document.getElementById('btn-roll').disabled = true;
+      }
+      break;
+    case 'TOKEN_SELECTED':
+      selectedToken = data.tokenId;
+      log(`${data.playerId} selected ${data.tokenId}`, 'event');
+      if (data.playerId === myPlayerId) document.getElementById('btn-move').disabled = false;
+      break;
+    case 'MOVE_RESULT':
+      log(`${data.playerId}: ${data.tokenId} moved tile ${data.from} → ${data.to}`, 'event');
+      break;
+    case 'KICK':
+      log(`⚔️ ${data.kickerId} kicked ${data.kickedId}'s ${data.tokenId} → tile ${data.returnedTo}`, 'event');
+      break;
+    case 'TURN_CHANGE':
+      currentTurn = data.currentPlayer;
+      lastRoll = 0; selectedToken = null;
+      document.getElementById('roll-display').textContent = '';
+      document.getElementById('turn-indicator').textContent =
+        `Turn: ${currentTurn} ${currentTurn === myPlayerId ? '← YOUR TURN' : ''}`;
+      updateControls();
+      log(`Turn → ${data.currentPlayer}`, 'event');
+      break;
+    case 'WIN':
+      log(`🏆🏆🏆 ${data.winnerId} WINS! 🏆🏆🏆`, 'win');
+      document.getElementById('turn-indicator').textContent = `🏆 ${data.winnerId} wins!`;
+      disableAll();
+      break;
+    case 'ERROR':
+      log(`⚠️ ${data.message}`, 'error');
+      break;
+  }
+}
+
+// ===== Controls =====
+function sendRoll() { send({ action: 'ROLL_DICE', playerId: myPlayerId }); }
+function sendSelect(tid) { send({ action: 'SELECT_TOKEN', playerId: myPlayerId, tokenId: tid }); }
+function sendMove() { send({ action: 'MOVE', playerId: myPlayerId }); }
+
+function updateControls() {
+  const mine = currentTurn === myPlayerId && gamePhase === 'PLAYING';
+  document.getElementById('btn-roll').disabled = !mine || lastRoll > 0;
+  document.getElementById('btn-tokenA').disabled = !mine || lastRoll === 0;
+  document.getElementById('btn-tokenB').disabled = !mine || lastRoll === 0;
+  document.getElementById('btn-move').disabled = !mine || !selectedToken;
+}
+
+function disableAll() {
+  ['btn-roll','btn-tokenA','btn-tokenB','btn-move'].forEach(id =>
+    document.getElementById(id).disabled = true);
+}
+
+// ===== Players Panel =====
+function renderPlayers() {
+  const area = document.getElementById('players-area');
+  if (!playersData.length) { area.innerHTML = '<div style="color:var(--muted);font-size:12px">Waiting for players...</div>'; return; }
+  area.innerHTML = playersData.map(p => {
+    const isActive = p.playerId === currentTurn;
+    const toks = p.tokens ? p.tokens.split(';').map(t => {
+      const [tid, tile] = t.split(':');
+      return `${tid}@${tile}`;
+    }).join(' · ') : '-';
+    return `<div class="player-card ${isActive ? 'active' : ''}">
+      <h3>${p.playerId === myPlayerId ? '👤' : '🤖'} ${p.playerId} ${isActive ? '◀ ACTIVE' : ''}</h3>
+      <div class="row"><span>HP</span><span>${p.hp}</span></div>
+      <div class="row"><span>Tokens</span><span style="font-size:10px">${toks}</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ===== Board Render (Canvas 61 tiles) =====
+// Tile layout: approximate cross shape on a 13×8 grid
+// ARM_P2 (tiles 0-9): horizontal left, row 3
+// ARM_P1 (tiles 51-60): horizontal right, row 3
+// Center tiles: distributed across rows 1-5
+
+const GRID = (() => {
+  const g = {};
+  // P2 left arm: tiles 0-9, cols 0-9, row 4
+  for (let t=0; t<=9; t++) g[t] = {col: t, row: 4};
+  // Main center loop tiles 10-19: cols 0-9, row 3
+  for (let t=10; t<=19; t++) g[t] = {col: t-10, row: 3};
+  // Upper section: tiles 20-24, cols 4-8, row 1
+  for (let t=20; t<=24; t++) g[t] = {col: (t-20)+4, row: 1};
+  // Upper-mid: tiles 25-29, cols 3-7, row 2
+  for (let t=25; t<=29; t++) g[t] = {col: (t-25)+3, row: 2};
+  // Lower-mid: tiles 30-35, cols 3-8, row 5
+  for (let t=30; t<=35; t++) g[t] = {col: (t-30)+3, row: 5};
+  // Lower: tiles 36-39, cols 4-7, row 6
+  for (let t=36; t<=39; t++) g[t] = {col: (t-36)+4, row: 6};
+  // Lower goal area: tiles 40-44, cols 5-9, row 3 (center-right)
+  for (let t=40; t<=44; t++) g[t] = {col: (t-40)+5, row: 3};  // overlaps, shift right
+  // Right side tiles 40-44 — move to col+6
+  for (let t=40; t<=44; t++) g[t] = {col: (t-40)+9, row: 3};
+  // tiles 45-50: lower-right, cols 9-12, row 4
+  for (let t=45; t<=50; t++) g[t] = {col: (t-45)+9, row: 4};
+  // P1 right arm: tiles 51-60, cols 3-12, row 4 — overlap with P2, shift row
+  for (let t=51; t<=60; t++) g[t] = {col: (t-51)+3, row: 4};
+  // Fix: P1 arm should be distinct from P2 arm
+  // P2 arm (0-9): row 4, cols 0-9 — keep
+  // P1 arm (51-60): row 2, cols 3-12
+  for (let t=51; t<=60; t++) g[t] = {col: (t-51)+2, row: 2};
+  return g;
+})();
+
+const TILE_COLORS = {
+  SAFE_ZONE: '#78350f', ELEMENTAL: '#1e40af', FINAL_GOAL: '#14532d',
+  EMPTY: '#374151', NORMAL: '#1e293b', START: '#78350f'
+};
+const ELEM_COLORS = { FIRE:'#dc2626', ICE:'#2563eb', GRASS:'#16a34a', ROCK:'#78716c', NONE:'#1e40af' };
+const P_COLORS = { p1:'#ef4444', p2:'#3b82f6' };
+
+function renderBoard() {
+  const canvas = document.getElementById('board');
+  const ctx = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+  if (!boardData.length) {
+    ctx.fillStyle='#94a3b8'; ctx.font='14px monospace';
+    ctx.fillText('Waiting for game state...', 20, H/2); return;
+  }
+  const COLS=13, ROWS=8, TW=Math.floor(W/COLS), TH=Math.floor(H/ROWS);
+
+  // Token position map: tileId -> [{pid, tid}]
+  const tokMap = {};
+  playersData.forEach(p => {
+    if (!p.tokens) return;
+    p.tokens.split(';').forEach(t => {
+      const [tid, tile] = t.split(':');
+      const tileN = parseInt(tile);
+      if (!tokMap[tileN]) tokMap[tileN] = [];
+      tokMap[tileN].push({pid: p.playerId, tid});
+    });
+  });
+
+  boardData.forEach(tile => {
+    const tileId = parseInt(tile.tileId);
+    const pos = GRID[tileId];
+    if (!pos) return;
+    const x = pos.col*TW, y = pos.row*TH;
+
+    // Background color — priority: SAFE_ZONE > FINAL_GOAL > ELEMENTAL > others
+    let bg;
+    if (tile.tileType==='SAFE_ZONE'||tile.tileType==='START') bg = TILE_COLORS.SAFE_ZONE;
+    else if (tile.tileType==='FINAL_GOAL') bg = TILE_COLORS.FINAL_GOAL;
+    else if (tile.tileType==='ELEMENTAL' && tile.element!=='NONE') bg = ELEM_COLORS[tile.element]||ELEM_COLORS.NONE;
+    else bg = TILE_COLORS[tile.tileType]||TILE_COLORS.NORMAL;
+
+    ctx.fillStyle=bg; ctx.fillRect(x+1,y+1,TW-2,TH-2);
+    ctx.strokeStyle='#334155'; ctx.lineWidth=1; ctx.strokeRect(x+1,y+1,TW-2,TH-2);
+
+    // Tile ID
+    ctx.fillStyle='#64748b'; ctx.font='8px monospace'; ctx.fillText(tileId,x+2,y+9);
+
+    // Icons
+    ctx.font='10px monospace';
+    if (tile.tileType==='SAFE_ZONE'||tile.tileType==='START') { ctx.fillStyle='#fbbf24'; ctx.fillText('★',x+TW-13,y+11); }
+    if (tile.tileType==='FINAL_GOAL') { ctx.fillStyle='#4ade80'; ctx.fillText('🏁',x+2,y+TH-3); }
+    if (tile.tileType==='ELEMENTAL') { ctx.fillStyle='#fff'; ctx.fillText('⚡',x+TW-14,y+11); }
+
+    // Tokens
+    const toks = tokMap[tileId]||[];
+    toks.forEach((tok,i) => {
+      const cx=x+6+i*11, cy=y+TH-6;
+      ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2);
+      ctx.fillStyle=P_COLORS[tok.pid]||'#fff'; ctx.fill();
+      ctx.strokeStyle='#fff'; ctx.lineWidth=0.5; ctx.stroke();
+    });
+  });
+}
+
+// ===== Log =====
+function log(msg, type='') {
+  const el=document.getElementById('log');
+  const t=new Date().toLocaleTimeString('en',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const d=document.createElement('div');
+  d.className=`log-entry ${type}`;
+  d.innerHTML=`<span class="time">${t}</span>${msg}`;
+  el.prepend(d);
+  if (el.children.length>150) el.removeChild(el.lastChild);
+}
+
+function setStatus(ok) {
+  document.getElementById('dot').className='dot'+(ok?' connected':'');
+  document.getElementById('status-text').textContent=ok?`Connected as ${myPlayerId}`:'Disconnected';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "agent_dev_dispatched.json": {
+    "hash": "SIZE569-HEAD{  \"elemental-hunter\": {\n    \"dispatched_at\": \"2026-03-19T10:54:00+07:00\",\n    \"gdd_file\": \"GDD-FEATURE-elemental-hunter.md\",\n    \"client_status\": \"done_warning\",\n    \"client_score\": 79,\n    \"client_output\": \"src/client/elemental-hunter/\",\n    \"client_eval\": \"eval/CODE-EVAL-client-elemental-hunter-2026-03-19.md\",\n    \"server_status\": \"done\",\n    \"server_score\": 83,\n    \"server_output\": \"src/server/elemental-hunter/\",\n    \"server_eval\": \"eval/CODE-EVAL-server-elemental-hunter-2026-03-19.",
+    "processedAt": "2026-03-19T08:51:00Z",
+    "status": "done"
+  }
+}
