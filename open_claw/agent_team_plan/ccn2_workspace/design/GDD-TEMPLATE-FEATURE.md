@@ -3,7 +3,10 @@
 **Version**: v1
 **Ngày tạo**: YYYY-MM-DD
 **Cập nhật**: YYYY-MM-DD
-**Trạng thái**: Draft | Review | Approved
+**Trạng thái**: Draft | Review | InDev | InQC | Done | Flagged
+**Pipeline agent**: agent_gd | agent_dev | agent_qc | COMPLETE
+**Cập nhật lần cuối bởi**: agent_gd
+**Cập nhật lần cuối lúc**: YYYY-MM-DDTHH:MM:SS+07:00
 **Tác giả**: agent_gd (Designia)
 
 ## Nhật ký thay đổi

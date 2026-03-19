@@ -96,7 +96,7 @@
 |-------|--------|---------|
 | Cron Jobs (6 agents) | 🔄 IN PROGRESS | Jobs 1-3 ✅ active; Jobs 5-7 ⬜ cần add vào OpenClaw (CRON_SETUP.md Job 5,6,7) |
 | File Change Detection (Spec 3.1) | ✅ DONE | SCHEMA.md + 6 HEARTBEAT.md + agent_qc_meta.json + migrate state ×2 |
-| Cross-agent Coordination (Spec 3.2) | ⬜ TODO | |
+| Cross-agent Coordination (Spec 3.2) | ✅ DONE | GDD header 4 fields + status flow Draft→Review→InDev→InQC→Done/Flagged + gate 3 agents |
 | E2E Integration Test (Spec 3.3) | ⬜ TODO | |
 
 ## Round 4 — Production
