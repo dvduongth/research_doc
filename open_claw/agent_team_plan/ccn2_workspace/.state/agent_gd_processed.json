@@ -1,17 +1,17 @@
 {
   "game_gdd_last_synced": null,
   "features_included": [],
-  "ladder-mechanic.md": {
-    "hash": "24A4F715020331FB3599EDA698A308A8",
-    "processedAt": "2026-03-18T10:30:00Z",
-    "lastScore": 100,
-    "status": "Review"
-  },
   "GDD_Overview_v2_ElementalHunter.md": {
-    "hash": "8E77CF4CB2E9CE2C4A9FC7BA448DA23A",
-    "processedAt": "2026-03-18T12:15:00Z",
-    "lastScore": 0,
+    "hash": "3A3547BCBC4BCC9EB57CC545B342563F",
+    "processedAt": "2026-03-19T09:00:00Z",
+    "lastScore": 100,
+    "status": "APPROVED",
+    "reason": "Approved by Daniel as the ONLY authoritative CCN2 ruleset. All feature GDDs must be derived from this concept exclusively."
+  },
+  "README.md": {
+    "hash": "B5872B75EC7B0AEA535792804B299878",
+    "processedAt": "2026-03-18T14:54:00Z",
     "status": "SKIPPED",
-    "reason": "Incompatible with CCN2: describes Elemental Hunter (61-tile cross board, 3 tokens, ATK/MAG/HP mechanics, KO/HP win condition) — does not match CCN2's 44-tile circular board, 2 tokens, DIAMOND currency, and Ladder gate system."
+    "reason": "Documentation file, not a game concept."
   }
 }

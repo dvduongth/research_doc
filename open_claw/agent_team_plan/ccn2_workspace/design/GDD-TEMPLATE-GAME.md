@@ -76,7 +76,13 @@
 <!-- Bao gồm Code Reference nếu có (ví dụ: `player.diamond`, `TileType.LADDER`) -->
 | Thuật ngữ | Định nghĩa | Code Reference |
 |-----------|------------|----------------|
-| DIAMOND | Tiền tệ dùng để mở cổng thắng. Tích lũy khi đáp REWARD tiles. | `player.diamond` |
-| LADDER tile | Ô đích để thắng (4 ô, mỗi màu 1). ID: 41=Xanh lá, 42=Đỏ, 43=Xanh dương, 44=Vàng. | `TileType.LADDER` |
-| Safe Zone | Ô an toàn — token không bị đá ra khi đứng đây. ID: 1, 11, 21, 31. | `TileType.SAFE_ZONE` |
-| REWARD tile | Ô phần thưởng — cấp DIAMOND khi token đáp xuống. ID: 5,10,15,20,25,30,35,40. | `TileType.REWARD` |
+| **Token / Ngựa** | Quân cờ của người chơi. Mỗi player có 3 ngựa. Code: `token`, `TokenState` |
+| **Arm Path** | Đường cánh — 10 ô từ Start đến Main Loop của mỗi player. Code: `ARM_PATHS` |
+| **Main Loop** | Vòng chính nối 4 cánh, ngựa đi theo chiều kim đồng hồ |
+| **Branch Point** | Điểm rẽ nhánh — ngựa của đúng player → vào Goal Path; player khác → tiếp tục Main Loop. Code: `BRANCH_RULES` |
+| **Goal Path** | Đường về đích — 4 ô dẫn vào Final Goal, chỉ ngựa của chủ cánh vào được. Code: `GOAL_PATHS` |
+| **Final Goal** | Ô đích cuối Goal Path. Ngựa đến đây kích hoạt chuỗi Về Đích. Code: `FINAL_GOALS` |
+| **Safe Zone** | Ô an toàn — ngựa không bị Kick khi đứng đây. Code: `TileType.SafeZone` |
+| **Empty Tile** | Ô không có nguyên tố, kích hoạt tương tác Artifact khi ngựa đáp xuống. Code: `EMPTY_TILE_IDS` |
+| **Element / Nguyên tố** | 4 loại: Fire, Ice, Grass, Rock. Thu thập khi ngựa đáp Elemental Tile. Code: `TileType` (Fire, Ice, Grass, Rock) |
+| **Element Queue** | Hàng đợi nguyên tố của mỗi player, dùng để kiểm tra và kích hoạt Combo. Code: `elementQueue` |

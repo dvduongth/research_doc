@@ -516,3 +516,4 @@ Trước khi bắt đầu ván, player chọn 1 trong 3 Level. Level quy định
 | **Pillow** | Character hiện tại (tên tạm thời). Affinity: TBD. ATK: 30. MAG: 10. HP: 1000. Combo Rewards: Power Surge / Double Harvest / Absolute Might. Ultimate: Extra Roll. |
 | **Goal Reward** | Phần thưởng khi ngựa về đích — player chọn 1 nguyên tố thêm vào cuối Queue. |
 | **maxElementQueue** | Kích thước tối đa của Element Queue. Xem Balance file riêng. |
+<!-- Updated: 2026-03-18 21:49:07 -->
