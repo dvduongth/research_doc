@@ -1,4 +1,17 @@
-{
-  "code_review": {},
-  "test_gen": {}
+﻿{
+    "code_review":  {
+
+                    },
+    "test_gen":  {
+                     "elemental-hunter":  {
+                                              "req_hash":  "9D603F615655623FA3625F55D9E096D4",
+                                              "design_hash":  "8D532B6BD7042617EC45F34922597B23",
+                                              "generated_at":  "2026-03-19T12:57:00+07:00",
+                                              "files":  [
+                                                            "src/tests/client/elemental-hunter.test.ts",
+                                                            "src/tests/server/elemental-hunter.test.kt",
+                                                            "src/tests/admin/elemental-hunterTest.java"
+                                                        ]
+                                          }
+                 }
 }

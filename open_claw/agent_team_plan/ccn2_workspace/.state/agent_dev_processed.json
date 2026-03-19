@@ -1,9 +1,9 @@
 {
   "GDD-FEATURE-elemental-hunter.md": {
-    "hash": "385B0DE5686D3BF909E31522F47C3EBF",
-    "processedAt": "2026-03-19T12:52:00+07:00",
-    "status": "skipped",
-    "notes": "Server changes required; client implementation skipped pending server changes.",
+    "hash": "53EA91862F5788049D5D4DBB2CDE6F9D",
+    "processedAt": "2026-03-19T13:08:00+07:00",
+    "status": "processed",
+    "notes": "Client code updated to match current GDD: added queue max size enforcement on element addition, added validation for Change artifact, fixed tileGainMultiplier default, and other minor improvements.",
     "req_score": null,
     "req_status": "pending",
     "design_score": null,

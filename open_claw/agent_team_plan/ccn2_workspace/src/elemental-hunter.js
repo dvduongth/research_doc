@@ -195,12 +195,16 @@ var ElementalHunter = (function() {
         // Ensure queue exists
         if (!player.elementQueue) player.elementQueue = [];
         player.elementQueue.push(element);
+        // Enforce max queue size: if exceeds CONFIG.maxElementQueue, remove oldest
+        if (CONFIG.maxElementQueue && player.elementQueue.length > CONFIG.maxElementQueue) {
+          player.elementQueue.shift();
+        }
 
-        // Affinity check
+        // Affinity check (use default multiplier 1 if not set)
         if (element === player.elementAffinity) {
-          token.atk = (token.atk || 0) + player.character.atk * player.tileGainMultiplier;
+          token.atk = (token.atk || 0) + player.character.atk * (player.tileGainMultiplier || 1);
         } else {
-          player.mag = (player.mag || 0) + player.character.mag * player.tileGainMultiplier;
+          player.mag = (player.mag || 0) + player.character.mag * (player.tileGainMultiplier || 1);
           if (CONFIG.magCap && player.mag > CONFIG.magCap) {
             player.mag = CONFIG.magCap;
           }
@@ -321,6 +325,11 @@ var ElementalHunter = (function() {
         var idx = (options.index !== undefined) ? options.index : 0;
         var newElem = options.newElement;
         if (idx < 0 || idx >= queue.length || !newElem) return;
+        // Validate element is one of the four types
+        var validElements = [ELEMENT.FIRE, ELEMENT.ICE, ELEMENT.GRASS, ELEMENT.ROCK];
+        if (validElements.indexOf(newElem) === -1) return;
+        // Ensure it's a different element
+        if (queue[idx] === newElem) return;
         queue[idx] = newElem;
       } else if (artifactType === 'Charge') {
         var affinity = player.elementAffinity;
@@ -353,6 +362,10 @@ var ElementalHunter = (function() {
       // Add chosen element to end of queue
       if (!player.elementQueue) player.elementQueue = [];
       player.elementQueue.push(chosenElement);
+      // Enforce max queue size
+      if (CONFIG.maxElementQueue && player.elementQueue.length > CONFIG.maxElementQueue) {
+        player.elementQueue.shift();
+      }
 
       // Combo check (element added)
       this._processCombos(player);

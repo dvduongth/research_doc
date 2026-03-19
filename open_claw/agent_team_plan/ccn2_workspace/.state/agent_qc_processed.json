@@ -1,72 +1,47 @@
-{
-  "GDD-TEMPLATE.md": {
-    "hash": "2A75840A5B3AEED697243D223FFADBEA",
-    "processedAt": "2026-03-19T11:22:00+07:00",
-    "status": "done",
-    "notes": "Template file — processed for reference only"
-  },
-  "GDD-TEMPLATE-FEATURE.md": {
-    "hash": "36A29926E84132D5C59CE1D0C7C5DF94",
-    "processedAt": "2026-03-19T11:22:00+07:00",
-    "status": "done",
-    "notes": "Template file — processed for reference only"
-  },
-  "GDD-TEMPLATE-GAME.md": {
-    "hash": "6202ECF83CC0E70266F3FD9F7D281664",
-    "processedAt": "2026-03-19T11:22:00+07:00",
-    "status": "done",
-    "notes": "Template file — processed for reference only"
-  },
-  "GDD-FEATURE-elemental-hunter": {
-    "hash": "671A805E227EC908A93F40BDDAB7B5B9",
-    "processedAt": "2026-03-19T12:42:00+07:00",
-    "testcases": "reports/testcases-elemental-hunter.md",
-    "testFile": "src/tests/elemental-hunter.test.js",
-    "status": "done",
-    "evalScore": 99,
-    "evalDate": "2026-03-19T12:42:00+07:00",
-    "result": "ĐẠT"
-  },
-  "sourceHashes": {
-    "src/elemental-hunter.js": "B1FDE89635CC0F3C613BB14DF2AC4DC0",
-    "src/rules.js": "77AA3C6CC6BC80EBE24CDB04E8164DD2"
-  },
-  "test_gen": {
-    "elemental-hunter": {
-      "req_hash": "046E525380C7484F493C9D69B6CB8221",
-      "design_hash": "946AB55BBBCBE7CC6833116801653889",
-      "generated_at": "2026-03-19T12:42:00+07:00",
-      "files": [
-        "src/tests/client/elemental-hunter.test.ts",
-        "src/tests/server/elemental-hunter.test.kt",
-        "src/tests/admin/elemental-hunterTest.java"
-      ]
-    }
-  },
-  "code_review": {
-    "elemental-hunter": {
-      "reviewed_at": "2026-03-19T12:42:00+07:00",
-      "layers": {
-        "client": {
-          "qc_score": 78,
-          "self_score": 79,
-          "flag": false,
-          "eval_file": "eval/CODE-EVAL-QC-client-elemental-hunter-2026-03-19.md"
-        },
-        "server": {
-          "qc_score": 82,
-          "self_score": 83,
-          "flag": false,
-          "eval_file": "eval/CODE-EVAL-QC-server-elemental-hunter-2026-03-19.md"
-        },
-        "admin": {
-          "qc_score": 100,
-          "self_score": 100,
-          "flag": false,
-          "eval_file": "eval/CODE-EVAL-QC-admin-elemental-hunter-2026-03-19.md"
-        }
-      },
-      "overall": "WARNING"
-    }
-  }
+﻿{
+    "GDD-TEMPLATE.md":  {
+                            "hash":  "2A75840A5B3AEED697243D223FFADBEA",
+                            "processedAt":  "2026-03-19T11:22:00+07:00",
+                            "status":  "done",
+                            "notes":  "Template file â€” processed for reference only"
+                        },
+    "GDD-TEMPLATE-FEATURE.md":  {
+                                    "hash":  "36A29926E84132D5C59CE1D0C7C5DF94",
+                                    "processedAt":  "2026-03-19T11:22:00+07:00",
+                                    "status":  "done",
+                                    "notes":  "Template file â€” processed for reference only"
+                                },
+    "GDD-TEMPLATE-GAME.md":  {
+                                 "hash":  "6202ECF83CC0E70266F3FD9F7D281664",
+                                 "processedAt":  "2026-03-19T11:22:00+07:00",
+                                 "status":  "done",
+                                 "notes":  "Template file â€” processed for reference only"
+                             },
+    "GDD-FEATURE-elemental-hunter":  {
+                                         "hash":  "53EA91862F5788049D5D4DBB2CDE6F9D",
+                                         "processedAt":  "2026-03-19T12:57:00+07:00",
+                                         "testcases":  "reports/testcases-elemental-hunter.md",
+                                         "testFile":  "src/tests/elemental-hunter.test.js",
+                                         "status":  "done",
+                                         "evalScore":  99,
+                                         "evalDate":  "2026-03-19T12:42:00+07:00",
+                                         "result":  "Äáº T",
+                                         "notes":  "Updated testcases from GDD change"
+                                     },
+    "sourceHashes":  {
+                         "src/elemental-hunter.js":  "11C60B1C1DEFE7F74BC28B5A0C8B823C",
+                         "src/rules.js":  "6F2871AE4D3A9193442BEB4DBE5F1B6B"
+                     },
+    "test_gen":  {
+                      "elemental-hunter":  {
+                                             "req_hash":  "9D603F615655623FA3625F55D9E096D4",
+                                             "design_hash":  "8D532B6BD7042617EC45F34922597B23",
+                                             "generated_at":  "2026-03-19T06:17:00Z",
+                                             "files":  [
+                                                 "src/tests/client/elemental-hunter.test.ts",
+                                                 "src/tests/server/elemental-hunter.test.kt",
+                                                 "src/tests/admin/elemental-hunterTest.java"
+                                             ]
+                                         }
+                 }
 }
