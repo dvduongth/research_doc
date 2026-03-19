@@ -10,6 +10,9 @@
     "server_score": 83,
     "server_output": "src/server/elemental-hunter/",
     "server_eval": "eval/CODE-EVAL-server-elemental-hunter-2026-03-19.md",
-    "admin_status": "dispatched"
+    "admin_status": "done",
+    "admin_score": 100,
+    "admin_output": "src/admin/elemental-hunter/",
+    "admin_eval": "eval/CODE-EVAL-admin-elemental-hunter-2026-03-19.md"
   }
 }

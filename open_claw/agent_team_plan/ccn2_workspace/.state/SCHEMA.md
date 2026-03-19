@@ -164,3 +164,33 @@ FOR EACH file trong thư mục scan:
 - [ ] `status` là 1 trong: `pending`, `processing`, `done`, `skipped`, `error`
 - [ ] `processedAt` có timezone (+07:00)
 - [ ] Không có flat entries (`"key": "HASH_STRING"`)
+
+---
+
+## 9. Error Log
+
+**Path**: `ccn2_workspace/.state/error.log`
+**Owner**: All agents append; agent_qc sole rotator
+**Format** (1 line per error, append):
+
+    [ISO8601+07:00] <agent_id> | file=<filename> | error=<ErrorType>: <message>
+
+**Example**:
+
+    [2026-03-19T14:30:00+07:00] agent_dev | file=elemental-hunter.md | error=JSONParseError: Unexpected token
+
+**Rotation policy**:
+- Max 500 lines
+- agent_qc keeps 400 newest lines when exceeded (sole rotator — avoids race condition)
+- Multi-agent concurrent append is safe (single-line OS atomicity)
+
+**State entry on error** (in *_processed.json):
+
+    {
+      "filename": {
+        "hash": "last_known_or_empty",
+        "processedAt": "ISO8601+07:00",
+        "status": "error",
+        "notes": "ErrorType: message"
+      }
+    }
