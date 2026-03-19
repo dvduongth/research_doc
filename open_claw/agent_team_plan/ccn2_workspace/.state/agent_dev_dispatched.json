@@ -2,7 +2,10 @@
   "elemental-hunter": {
     "dispatched_at": "2026-03-19T10:54:00+07:00",
     "gdd_file": "GDD-FEATURE-elemental-hunter.md",
-    "client_status": "dispatched",
+    "client_status": "done_warning",
+    "client_score": 79,
+    "client_output": "src/client/elemental-hunter/",
+    "client_eval": "eval/CODE-EVAL-client-elemental-hunter-2026-03-19.md",
     "server_status": "dispatched",
     "admin_status": "dispatched"
   }
