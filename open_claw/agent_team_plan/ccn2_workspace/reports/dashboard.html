@@ -327,11 +327,11 @@
 
 <header>
   <div>
-    <h1>CCN2 Agent Team â€” Pipeline Dashboard</h1>
+    <h1>CCN2 Agent Team ” Pipeline Dashboard</h1>
   </div>
   <div class="meta">
     <span class="stale-badge" id="staleBadge">STALE</span>
-    <span id="lastRefresh">Loadingâ€¦</span>
+    <span id="lastRefresh">Loading¦</span>
     <span>Auto-refresh: 15 min</span>
   </div>
 </header>
@@ -342,22 +342,22 @@
   <div class="stats-bar">
     <div class="stat-card primary">
       <div class="label">Active Agents</div>
-      <div class="value" id="stat-agents">â€”</div>
+      <div class="value" id="stat-agents">”</div>
       <div class="sub">of 6 configured</div>
     </div>
     <div class="stat-card success">
       <div class="label">Cron Jobs</div>
-      <div class="value" id="stat-cron">â€”</div>
+      <div class="value" id="stat-cron">”</div>
       <div class="sub">running</div>
     </div>
     <div class="stat-card" id="stat-smoke-card">
       <div class="label">Smoke Status</div>
-      <div class="value" id="stat-smoke">â€”</div>
+      <div class="value" id="stat-smoke">”</div>
       <div class="sub" id="stat-smoke-sub">last run</div>
     </div>
     <div class="stat-card" id="stat-stuck-card">
       <div class="label">Stuck GDDs</div>
-      <div class="value" id="stat-stuck">â€”</div>
+      <div class="value" id="stat-stuck">”</div>
       <div class="sub">&gt;48h without update</div>
     </div>
   </div>
@@ -380,7 +380,7 @@
 
   <!-- Smoke Checks -->
   <div class="smoke-grid">
-    <div class="section-header">Smoke Checks â€” Latest Run</div>
+    <div class="section-header">Smoke Checks ” Latest Run</div>
     <table class="checks-table">
       <thead>
         <tr>
@@ -406,15 +406,13 @@
 </main>
 
 <footer>
-  CCN2 Agent Team Dashboard â€” auto-refresh every 15 minutes â€” data from ccn2_workspace/.state/
+  CCN2 Agent Team Dashboard ” auto-refresh every 15 minutes ” data from ccn2_workspace/.state/
 </footer>
 
 <script>
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// DASHBOARD_DATA â€” inject pipeline data here (update via agent_qc)
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// DASHBOARD_DATA ” inject pipeline data here (update via agent_qc)
 const DASHBOARD_DATA = {
-  "generated_at": "2026-03-19T09:29:24.177+07:00",
+  "generated_at": "2026-03-19T09:46:04.379+07:00",
   "agents": {
     "agent_gd": {
       "status": "online",
@@ -489,14 +487,14 @@ const DASHBOARD_DATA = {
   },
   "smoke": {
     "overall": "healthy",
-    "last_run": "2026-03-19T08:42:00Z",
+    "last_run": "2026-03-19T09:45:16.710Z",
     "checks": {
-      "C1_concepts": true,
-      "C2_design": true,
-      "C3_gdd_header": true,
-      "C4_src": true,
-      "C5_quality_report": true,
-      "C6_state_json": true
+      "C1_concepts": 1,
+      "C2_design": 1,
+      "C3_gdd_header": "1/1",
+      "C4_src": "3 subfolders non-empty (of 3)",
+      "C5_quality_report": "12 within 24h UTC",
+      "C6_state_json": "4/4 valid"
     }
   },
   "stuck_gdds": [],
@@ -506,9 +504,9 @@ const DASHBOARD_DATA = {
   ]
 };
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// CHECK_LABELS â€” compound keys matching pipeline-health.json
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 
+// CHECK_LABELS ” compound keys matching pipeline-health.json
+// 
 const CHECK_LABELS = {
   C1_concepts:       "Concepts",
   C2_design:         "Design/GDD",
@@ -519,21 +517,21 @@ const CHECK_LABELS = {
   C7_playtest:       "Playtest HTTP"
 };
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 
 // Agent display metadata
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 
 const AGENT_META = {
-  agent_gd:         { displayName: "agent_gd",         role: "Designia â€” Game Designer" },
-  agent_dev:        { displayName: "agent_dev",         role: "Codera â€” Orchestrator" },
-  agent_dev_client: { displayName: "agent_dev_client",  role: "Pixel â€” Client Dev" },
-  agent_dev_server: { displayName: "agent_dev_server",  role: "Forge â€” Server Dev" },
-  agent_dev_admin:  { displayName: "agent_dev_admin",   role: "Panel â€” Admin Dev" },
-  agent_qc:         { displayName: "agent_qc",          role: "Verita â€” QA" }
+  agent_gd:         { displayName: "agent_gd",         role: "Designia ” Game Designer" },
+  agent_dev:        { displayName: "agent_dev",         role: "Codera ” Orchestrator" },
+  agent_dev_client: { displayName: "agent_dev_client",  role: "Pixel ” Client Dev" },
+  agent_dev_server: { displayName: "agent_dev_server",  role: "Forge ” Server Dev" },
+  agent_dev_admin:  { displayName: "agent_dev_admin",   role: "Panel ” Admin Dev" },
+  agent_qc:         { displayName: "agent_qc",          role: "Verita ” QA" }
 };
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 
 // Render helpers
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 
 function statusDotClass(s) {
   if (s === "online" || s === "done") return "online";
   if (s === "error") return "error";
@@ -551,11 +549,11 @@ function smokeBadge(val) {
 function checkBadge(val) {
   if (val === "pass") return '<span class="badge pass">PASS</span>';
   if (val === "fail") return '<span class="badge fail">FAIL</span>';
-  return '<span class="badge unknown">â€”</span>';
+  return '<span class="badge unknown">”</span>';
 }
 
 function fmtTime(iso) {
-  if (!iso) return "â€”";
+  if (!iso) return "”";
   try {
     const d = new Date(iso);
     return d.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour12: false });
@@ -570,9 +568,9 @@ function isStale(iso, minutesThreshold) {
   } catch { return false; }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 
 // Render functions
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 
 function renderStats() {
   const d = DASHBOARD_DATA;
 
@@ -587,7 +585,7 @@ function renderStats() {
   const smokeEl = document.getElementById("stat-smoke");
   const smokeCard = document.getElementById("stat-smoke-card");
   const overall = d.smoke.overall;
-  smokeEl.textContent = overall || "â€”";
+  smokeEl.textContent = overall || "”";
   if (overall === "pass") { smokeCard.style.borderTopColor = "var(--success)"; smokeEl.style.color = "var(--success)"; }
   else if (overall === "DEGRADED") { smokeCard.style.borderTopColor = "var(--warning)"; smokeEl.style.color = "var(--warning)"; }
   else if (overall === "fail" || overall === "ERROR") { smokeCard.style.borderTopColor = "var(--danger)"; smokeEl.style.color = "var(--danger)"; }
@@ -619,7 +617,7 @@ function renderGDDFlow() {
     const active = activeStages.includes(s) && data.count > 0 ? " active" : "";
     const items = (data.items || []).slice(0, 3).map(i =>
       '<div>' + i.replace(/^GDD-FEATURE-/, "").replace(/\.md$/, "") + '</div>'
-    ).join("") + (data.items && data.items.length > 3 ? '<div>â€¦</div>' : "");
+    ).join("") + (data.items && data.items.length > 3 ? '<div>¦</div>' : "");
     return `<div class="flow-stage${active}">
       <div class="stage-name">${s}</div>
       <div class="stage-count">${data.count}</div>
@@ -707,9 +705,9 @@ function renderHeader() {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 
 // Init
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 
 (function init() {
   renderHeader();
   renderStats();

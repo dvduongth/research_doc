@@ -1,0 +1,3 @@
+# agent_dev_client (Pixel) writes vanilla JS feature modules here.
+# Format: var FeatureName = { ... };  — global object literal, no import/export.
+# Load order: add <script src="src/<feature>.js"> to index.html after core/ scripts.
