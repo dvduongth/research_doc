@@ -104,14 +104,14 @@ var ElementalHunter = (function() {
       }
     }
 
-    // Tier2: first time reaching comboCount >= 2
-    if (player.comboCount >= 2 && !player._tier2Applied) {
+    // Tier2: first time reaching comboCount >= 2 and player level >= 2
+    if (player.level >= 2 && player.comboCount >= 2 && !player._tier2Applied) {
       player.tileGainMultiplier = CONFIG.COMBO_T2_MULTIPLIER;
       player._tier2Applied = true;
     }
 
-    // Tier3: first time reaching comboCount >= 3
-    if (player.comboCount >= 3 && !player._tier3Applied) {
+    // Tier3: first time reaching comboCount >= 3 and player level >= 3
+    if (player.level >= 3 && player.comboCount >= 3 && !player._tier3Applied) {
       for (var t = 0; t < player.tokens.length; t++) {
         player.tokens[t].atk = Math.ceil(player.tokens[t].atk * CONFIG.COMBO_T3_ATK_MULTIPLIER);
       }

@@ -412,26 +412,26 @@
 <script>
 // DASHBOARD_DATA ” inject pipeline data here (update via agent_qc)
 const DASHBOARD_DATA = {
-  "generated_at": "2026-03-19T09:46:04.379+07:00",
+  "generated_at": "2026-03-19T13:59:07.744+07:00",
   "agents": {
     "agent_gd": {
       "status": "online",
-      "lastRun": "2026-03-19T10:35:00.000+07:00",
+      "lastRun": "2026-03-19T14:00:00.000+07:00",
       "processed": 4,
       "skipped": 0,
       "errors": 0
     },
     "agent_dev": {
       "status": "idle",
-      "lastRun": "2026-03-19T06:08:00.000+07:00",
-      "processed": 2,
-      "skipped": 1,
+      "lastRun": "2026-03-19T13:22:00.000+07:00",
+      "processed": 1,
+      "skipped": 0,
       "errors": 0
     },
     "agent_qc": {
-      "status": "online",
+      "status": "idle",
       "lastRun": "2026-03-19T12:42:00.000+07:00",
-      "processed": 7,
+      "processed": 10,
       "skipped": 0,
       "errors": 0
     },
@@ -486,16 +486,9 @@ const DASHBOARD_DATA = {
     }
   },
   "smoke": {
-    "overall": "healthy",
-    "last_run": "2026-03-19T09:45:16.710Z",
-    "checks": {
-      "C1_concepts": 1,
-      "C2_design": 1,
-      "C3_gdd_header": "1/1",
-      "C4_src": "3 subfolders non-empty (of 3)",
-      "C5_quality_report": "12 within 24h UTC",
-      "C6_state_json": "4/4 valid"
-    }
+    "overall": "unknown",
+    "last_run": "",
+    "checks": {}
   },
   "stuck_gdds": [],
   "recent_errors": [
@@ -719,6 +712,8 @@ function renderHeader() {
 </script>
 </body>
 </html>
+
+
 
 
 

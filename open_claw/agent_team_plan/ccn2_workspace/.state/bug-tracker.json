@@ -1,1 +1,15 @@
-{}
+{
+  "BUG-pipeline-smoke-2026-03-19-18-12": {
+    "domain": "pipeline",
+    "severity": "medium",
+    "status": "open",
+    "reported_by": "agent_qc",
+    "reported_at": "2026-03-19T18:12:00+07:00",
+    "assigned_to": null,
+    "bug_file": "bugs/BUG-pipeline-smoke-2026-03-19-18-12.md",
+    "fix_notes": "",
+    "verified_at": null,
+    "closed_at": null,
+    "triage_note": "2026-03-19T18:52:00+07:00 — Domain 'pipeline' unknown, requires human review"
+  }
+}

@@ -1,15 +1,15 @@
-{
-  "last_run": "2026-03-19T09:45:16.710Z",
-  "overall": "HEALTHY",
-  "passed": 6,
-  "failed": 0,
-  "checks": {
-    "C1_concepts": 1,
-    "C2_design": 1,
-    "C3_gdd_header": "1/1",
-    "C4_src": "3 subfolders non-empty (of 3)",
-    "C5_quality_report": "12 within 24h UTC",
-    "C6_state_json": "4/4 valid"
-  },
-  "last_report": "reports\\smoke-test-2026-03-19-09-45-16.md"
+﻿{
+    "passed":  5,
+    "last_run":  "2026-03-19T13:58:39Z",
+    "failed":  1,
+    "overall":  "DEGRADED",
+    "checks":  {
+                   "C1_concepts":  "PASS",
+                   "C2_design":  "PASS",
+                   "C4_src":  "PASS",
+                   "C5_quality_report":  "PASS",
+                   "C6_state_json":  "PASS",
+                   "C3_gdd_header":  "FAIL"
+               },
+    "last_report":  "reports/smoke-test-2026-03-19-20-58.md"
 }
