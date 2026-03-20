@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap Agent Team — Round 5, 6, 7</title>
+  <style>
+    /* ── Design Tokens ── */
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface2: #232640;
+      --border: #2e3250;
+      --accent-r5: #7c3aed;
+      --accent-r6: #0ea5e9;
+      --accent-r7: #10b981;
+      --accent-done: #6b7280;
+      --accent-leader: #f59e0b;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --text-bright: #f8fafc;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --tag-bg: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 80px 0;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #1a0533 0%, #0f172a 50%, #0a1628 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 36px 40px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fcd34d;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-bright);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    header h1 small {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-dim);
+      display: block;
+      margin-top: 4px;
+    }
+
+    header p {
+      color: var(--text-dim);
+      font-size: 14px;
+      max-width: 720px;
+      line-height: 1.6;
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 20px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .meta-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    /* ── Navigation Tabs ── */
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 16px 40px 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-dim);
+      background: transparent;
+      border: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .tab.active {
+      color: var(--text-bright);
+      background: var(--bg);
+      border-bottom: 2px solid var(--accent-r5);
+    }
+
+    /* ── Main Content ── */
+    main {
+      padding: 32px 40px;
+      max-width: 1200px;
+    }
+
+    /* ── Section ── */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Status Overview Cards ── */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .status-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .status-card.done::before { background: var(--accent-done); }
+    .status-card.r5::before   { background: var(--accent-r5); }
+    .status-card.r6::before   { background: var(--accent-r6); }
+    .status-card.r7::before   { background: var(--accent-r7); }
+
+    .status-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .status-card.done .status-label { color: var(--accent-done); }
+    .status-card.r5 .status-label   { color: #a78bfa; }
+    .status-card.r6 .status-label   { color: #38bdf8; }
+    .status-card.r7 .status-label   { color: #34d399; }
+
+    .status-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-bright);
+      margin-bottom: 4px;
+    }
+
+    .status-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-done    { background: rgba(107, 114, 128, 0.2); color: #9ca3af; border: 1px solid rgba(107, 114, 128, 0.3); }
+    .badge-ready   { background: rgba(124, 58, 237, 0.2);  color: #a78bfa; border: 1px solid rgba(124, 58, 237, 0.3); }
+    .badge-planned { background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); }
+    .badge-future  { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    /* ── Comparison Grid ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .compare-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .compare-card.before { border-top: 3px solid #ef4444; }
+    .compare-card.after  { border-top: 3px solid #10b981; }
+
+    .compare-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .compare-card.before .compare-label { color: #ef4444; }
+    .compare-card.after .compare-label  { color: #10b981; }
+
+    .compare-item {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .compare-icon {
+      flex-shrink: 0;
+    }
+
+    /* ── Agents Grid ── */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      position: relative;
+    }
+
+    .agent-card.new-agent {
+      border-color: rgba(245, 158, 11, 0.4);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.08);
+    }
+
+    .agent-card.new-agent::after {
+      content: 'NEW';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      font-size: 8px;
+      font-weight: 800;
+      background: rgba(245, 158, 11, 0.25);
+      color: #fcd34d;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .agent-icon {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .agent-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-bright);
+    }
+
+    .agent-role {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .agent-id {
+      margin-top: 8px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: var(--surface2);
+      font-size: 10px;
+      font-family: monospace;
+      color: #7dd3fc;
+      display: inline-block;
+    }
+
+    /* ── Architecture / Code Blocks ── */
+    .arch-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-dim);
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    .arch-box .hl-human  { color: #f59e0b; font-weight: 600; }
+    .arch-box .hl-leader { color: #fcd34d; font-weight: 700; }
+    .arch-box .hl-r5     { color: #a78bfa; font-weight: 600; }
+    .arch-box .hl-r6     { color: #38bdf8; font-weight: 600; }
+    .arch-box .hl-r7     { color: #34d399; font-weight: 600; }
+    .arch-box .hl-agent  { color: #e2e8f0; }
+    .arch-box .hl-file   { color: #94a3b8; font-style: italic; }
+    .arch-box .hl-arrow  { color: #6b7280; }
+    .arch-box .hl-warn   { color: #f59e0b; font-weight: 600; }
+    .arch-box .hl-new    { color: #fcd34d; font-weight: 600; }
+    .arch-box .hl-parallel { color: #f472b6; font-weight: 600; }
+
+    .cli-block {
+      background: #080b14;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 13px;
+      color: #e2e8f0;
+      overflow-x: auto;
+      margin: 12px 0;
+      white-space: pre-wrap;
+    }
+
+    .cli-block .cmd { color: #a78bfa; }
+    .cli-block .arg { color: #38bdf8; }
+    .cli-block .str { color: #34d399; }
+    .cli-block .cmt { color: #475569; font-style: italic; }
+
+    /* ── Round Cards ── */
+    .round-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .round-header {
+      padding: 24px 28px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .round-header:hover {
+      background: var(--surface2);
+    }
+
+    .round-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .num-r5 { background: rgba(124, 58, 237, 0.2); color: #a78bfa; }
+    .num-r6 { background: rgba(14, 165, 233, 0.15); color: #38bdf8; }
+    .num-r7 { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
+    .round-info h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 4px;
+    }
+
+    .round-info p {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .round-tags {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      background: var(--tag-bg);
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+    }
+
+    .tag.r5 { background: rgba(124, 58, 237, 0.12); color: #c4b5fd; border-color: rgba(124, 58, 237, 0.3); }
+    .tag.r6 { background: rgba(14, 165, 233, 0.1);  color: #7dd3fc; border-color: rgba(14, 165, 233, 0.3); }
+    .tag.r7 { background: rgba(16, 185, 129, 0.1);  color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3); }
+
+    .chevron {
+      color: var(--text-dim);
+      font-size: 18px;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+      margin-top: 12px;
+    }
+
+    .chevron.open {
+      transform: rotate(90deg);
+    }
+
+    .round-body {
+      padding: 0 28px 24px;
+      display: none;
+    }
+
+    .round-body.open {
+      display: block;
+    }
+
+    /* ── Phases ── */
+    .phase {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .phase-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .phase-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .phase-r5 { background: rgba(124, 58, 237, 0.2); color: #a78bfa; }
+    .phase-r6 { background: rgba(14, 165, 233, 0.15); color: #38bdf8; }
+    .phase-r7 { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
+    .phase-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .phase-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* ── Tasks ── */
+    .tasks {
+      padding: 0 20px 16px;
+    }
+
+    .task {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .task-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .task-id {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      min-width: 44px;
+      flex-shrink: 0;
+    }
+
+    .task-desc {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .task-meta {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .task-time {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    /* ── Risk Table ── */
+    .risk-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .risk-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--surface2);
+      color: var(--text-dim);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .risk-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text);
+      vertical-align: top;
+    }
+
+    .risk-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    .risk-high { color: #ef4444; font-weight: 600; }
+    .risk-med  { color: #f59e0b; font-weight: 600; }
+    .risk-low  { color: #10b981; font-weight: 600; }
+
+    /* ── Latency Comparison Bar ── */
+    .latency-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .latency-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .latency-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      min-width: 160px;
+      flex-shrink: 0;
+    }
+
+    .latency-bar-bg {
+      flex: 1;
+      height: 24px;
+      background: var(--surface2);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .latency-bar {
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-dim);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+    }
+
+    footer strong {
+      color: var(--text);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      header, main {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .nav-tabs {
+        padding: 16px 20px 0;
+      }
+
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      .agents-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     HEADER
+     ════════════════════════════════════════════════════════════════════ -->
+<header>
+  <div class="header-badge">🤖 Agent Team Roadmap v2.0 — CLI Verified ✅</div>
+  <h1>
+    Nâng Cấp Hệ Thống Agent Team CCN2
+    <small>Round 5 → 6 → 7 &nbsp;|&nbsp; Phương án chung</small>
+  </h1>
+  <p>
+    Chuyển hóa agent team từ polling-based sang event-driven: CLI direct communication,
+    Leader coordinator, QC song song, sub-ticket tracking, action logging + self-evaluation.
+  </p>
+  <div class="header-meta">
+    <span class="meta-item"><span class="meta-dot" style="background:#6b7280"></span>Round 1–4: DONE</span>
+    <span class="meta-item"><span class="meta-dot" style="background:#7c3aed"></span>Round 5: CLI + Tái cấu trúc</span>
+    <span class="meta-item"><span class="meta-dot" style="background:#0ea5e9"></span>Round 6: Action Logging</span>
+    <span class="meta-item"><span class="meta-dot" style="background:#10b981"></span>Round 7: Ticket System</span>
+    <span class="meta-item">📅 2026-03-20</span>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     NAV TABS
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="nav-tabs">
+  <button class="tab active" onclick="showTab('overview')">Tổng quan</button>
+  <button class="tab" onclick="showTab('team')">Đội hình mới</button>
+  <button class="tab" onclick="showTab('rounds')">Chi tiết Rounds</button>
+  <button class="tab" onclick="showTab('arch')">Kiến trúc</button>
+  <button class="tab" onclick="showTab('risks')">Rủi ro</button>
+</div>
+
+<main>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     TAB: OVERVIEW
+     ════════════════════════════════════════════════════════════════════ -->
+<div id="tab-overview">
+
+  <!-- Status Cards -->
+  <div class="section">
+    <div class="section-title">Trạng thái hiện tại</div>
+    <div class="status-grid">
+      <div class="status-card done">
+        <div class="status-label">✅ Hoàn thành</div>
+        <div class="status-title">Round 1–4</div>
+        <div class="status-sub">6 agents, bug flow, playtest pipeline, single source of truth</div>
+        <span class="status-badge badge-done">● DONE</span>
+      </div>
+      <div class="status-card r5">
+        <div class="status-label">🚀 Tiếp theo</div>
+        <div class="status-title">Round 5 — CLI + Team</div>
+        <div class="status-sub">CLI protocol, thêm Leader agent, tách QC thành 2 (blackbox + whitebox)</div>
+        <span class="status-badge badge-ready">● SẴN SÀNG</span>
+      </div>
+      <div class="status-card r6">
+        <div class="status-label">📊 Kế tiếp</div>
+        <div class="status-title">Round 6 — Logging</div>
+        <div class="status-sub">Action log JSONL + agent tự đánh giá input/output (self-eval)</div>
+        <span class="status-badge badge-planned">● PLANNED</span>
+      </div>
+      <div class="status-card r7">
+        <div class="status-label">🎯 Tương lai</div>
+        <div class="status-title">Round 7 — Tickets</div>
+        <div class="status-sub">Ticket + sub-ticket, Leader routing thông minh, notify human</div>
+        <span class="status-badge badge-future">● FUTURE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Before / After -->
+  <div class="section">
+    <div class="section-title">So sánh trước / sau</div>
+    <div class="compare-grid">
+      <div class="compare-card before">
+        <div class="compare-label">❌ Trước (Round 1–4)</div>
+        <div class="compare-item"><span class="compare-icon">⏱️</span>Độ trễ 15 phút giữa mỗi agent (cron polling)</div>
+        <div class="compare-item"><span class="compare-icon">🕵️</span>Không biết agent nghĩ gì, dùng tool gì</div>
+        <div class="compare-item"><span class="compare-icon">📁</span>Human phải tạo file thủ công trong concepts/</div>
+        <div class="compare-item"><span class="compare-icon">🔗</span>Agents không giao tiếp trực tiếp</div>
+        <div class="compare-item"><span class="compare-icon">🤖</span>GD kiêm coordinator — dễ quá tải</div>
+        <div class="compare-item"><span class="compare-icon">🔍</span>1 QC làm tất cả — blackbox phải chờ code</div>
+      </div>
+      <div class="compare-card after">
+        <div class="compare-label">✅ Sau (Round 5–7)</div>
+        <div class="compare-item"><span class="compare-icon">⚡</span>Event-driven: CLI call ngay lập tức</div>
+        <div class="compare-item"><span class="compare-icon">📋</span>Action log JSONL + self-evaluation</div>
+        <div class="compare-item"><span class="compare-icon">🎫</span>Human gửi yêu cầu → Leader tự tạo ticket</div>
+        <div class="compare-item"><span class="compare-icon">👑</span>Leader chuyên trách — GD tập trung design</div>
+        <div class="compare-item"><span class="compare-icon">🔀</span>2 QC: blackbox SONG SONG với Dev</div>
+        <div class="compare-item"><span class="compare-icon">📄</span>Sub-ticket riêng cho từng agent — không conflict</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Latency comparison -->
+  <div class="section">
+    <div class="section-title">So sánh thời gian pipeline</div>
+    <div class="latency-bars">
+      <div class="latency-row">
+        <div class="latency-label">Cũ (cron 15' × 5 bước)</div>
+        <div class="latency-bar-bg">
+          <div class="latency-bar" style="width:100%; background: linear-gradient(90deg, #ef4444, #dc2626);">60–90 phút</div>
+        </div>
+      </div>
+      <div class="latency-row">
+        <div class="latency-label">Mới (CLI + song song)</div>
+        <div class="latency-bar-bg">
+          <div class="latency-bar" style="width:20%; background: linear-gradient(90deg, #10b981, #059669);">8–20 phút</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="section">
+    <div class="section-title">Timeline tổng thể</div>
+    <div class="arch-box">
+<span class="hl-agent">Tuần 1 </span> <span class="hl-arrow">──────────────────────────────────────────────────</span>
+  <span class="hl-r5">R5.T1–T5</span>:   Verify CLI + tạo Leader + tách QC             <span class="hl-file">~8h</span>
+  <span class="hl-r5">R5.T6–T11</span>:  Update 6 agents cũ                             <span class="hl-file">~4h</span>
+
+<span class="hl-agent">Tuần 2 </span> <span class="hl-arrow">──────────────────────────────────────────────────</span>
+  <span class="hl-r5">R5.T12–T15</span>: Workspace + cron + test + docs                <span class="hl-file">~4h</span>
+  <span class="hl-r6">R6.T1–T8</span>:   Schema + update 8 agents với logging           <span class="hl-file">~8h</span>
+
+<span class="hl-agent">Tuần 3 </span> <span class="hl-arrow">──────────────────────────────────────────────────</span>
+  <span class="hl-r6">R6.T9–T11</span>:  Dashboard Action Logs + test                   <span class="hl-file">~5.5h</span>
+  <span class="hl-r7">R7.T1–T5</span>:   Ticket schema + templates                      <span class="hl-file">~2.5h</span>
+
+<span class="hl-agent">Tuần 4 </span> <span class="hl-arrow">──────────────────────────────────────────────────</span>
+  <span class="hl-r7">R7.T6–T10</span>:  Leader routing + agent updates                 <span class="hl-file">~8.5h</span>
+  <span class="hl-r7">R7.T11–T12</span>: Dashboard Tickets + test end-to-end            <span class="hl-file">~6h</span>
+
+<span class="hl-arrow">Total: ~47h implement + test</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     TAB: TEAM
+     ════════════════════════════════════════════════════════════════════ -->
+<div id="tab-team" style="display:none">
+
+  <!-- 8 Agent Cards -->
+  <div class="section">
+    <div class="section-title">8 agents trong đội hình mới</div>
+    <div class="agents-grid">
+      <div class="agent-card new-agent">
+        <div class="agent-icon">👑</div>
+        <div class="agent-name">Capita</div>
+        <div class="agent-role">Project Lead</div>
+        <div class="agent-id">agent_leader</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon">🎨</div>
+        <div class="agent-name">Designia</div>
+        <div class="agent-role">Game Designer</div>
+        <div class="agent-id">agent_gd</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon">🏗️</div>
+        <div class="agent-name">Codera</div>
+        <div class="agent-role">Dev Lead</div>
+        <div class="agent-id">agent_dev</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon">⚙️</div>
+        <div class="agent-name">Forge</div>
+        <div class="agent-role">Server Dev</div>
+        <div class="agent-id">agent_dev_server</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon">🎮</div>
+        <div class="agent-name">Pixel</div>
+        <div class="agent-role">Client Dev</div>
+        <div class="agent-id">agent_dev_client</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon">🛠️</div>
+        <div class="agent-name">Panel</div>
+        <div class="agent-role">Admin Dev</div>
+        <div class="agent-id">agent_dev_admin</div>
+      </div>
+      <div class="agent-card new-agent">
+        <div class="agent-icon">🌈</div>
+        <div class="agent-name">Spectra</div>
+        <div class="agent-role">QC Blackbox</div>
+        <div class="agent-id">agent_qc1</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon">🔍</div>
+        <div class="agent-name">Verita</div>
+        <div class="agent-role">QC Whitebox</div>
+        <div class="agent-id">agent_qc2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why restructure -->
+  <div class="section">
+    <div class="section-title">Tại sao đội hình mới?</div>
+    <div class="compare-grid">
+      <div class="compare-card" style="border-top: 3px solid #f59e0b;">
+        <div class="compare-label" style="color:#f59e0b;">👑 Leader tách riêng (Capita)</div>
+        <div class="compare-item"><span class="compare-icon">✓</span>GD không bị overload vừa design vừa quản lý</div>
+        <div class="compare-item"><span class="compare-icon">✓</span>Leader đánh giá cần worker nào, song song hay tuần tự</div>
+        <div class="compare-item"><span class="compare-icon">✓</span>Theo dõi tiến độ, escalate khi stuck, báo cáo human</div>
+        <div class="compare-item"><span class="compare-icon">✓</span>Human chỉ cần tương tác với Leader</div>
+      </div>
+      <div class="compare-card" style="border-top: 3px solid #8b5cf6;">
+        <div class="compare-label" style="color:#8b5cf6;">🌈 2 QC chuyên biệt</div>
+        <div class="compare-item"><span class="compare-icon">✓</span>QC1 (Spectra): blackbox test từ GDD — SONG SONG với Dev</div>
+        <div class="compare-item"><span class="compare-icon">✓</span>QC2 (Verita): whitebox test — cần code, chạy SAU Dev</div>
+        <div class="compare-item"><span class="compare-icon">✓</span>Tiết kiệm 5–10 phút pipeline (blackbox không chờ code)</div>
+        <div class="compare-item"><span class="compare-icon">✓</span>Blackbox play test cuối cùng kiểm tra toàn bộ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chain Call Map -->
+  <div class="section">
+    <div class="section-title">Sơ đồ giao tiếp giữa 8 agents</div>
+    <div class="arch-box">
+<span class="hl-leader">agent_leader</span> (Capita — coordinator)
+  <span class="hl-arrow">→</span> <span class="hl-agent">agent_gd</span>         <span class="hl-file">TASK_READY: viết GDD</span>
+  <span class="hl-arrow">→</span> <span class="hl-agent">agent_qc1</span>        <span class="hl-file">TASK_READY: blackbox test</span>   <span class="hl-parallel">← SONG SONG với dev</span>
+  <span class="hl-arrow">→</span> <span class="hl-agent">agent_dev</span>         <span class="hl-file">TASK_READY: phân tích + dispatch</span>
+  <span class="hl-arrow">→</span> <span class="hl-agent">agent_qc2</span>        <span class="hl-file">REVIEW_REQUESTED: whitebox test</span>
+
+<span class="hl-agent">agent_gd</span> (Designia)
+  <span class="hl-arrow">→</span> <span class="hl-leader">agent_leader</span>     <span class="hl-file">STATUS_UPDATE: GDD done</span>
+
+<span class="hl-agent">agent_dev</span> (Codera — Dev Lead)
+  <span class="hl-arrow">→</span> <span class="hl-agent">agent_dev_server</span> <span class="hl-file">TASK_READY: implement server</span>  <span class="hl-parallel">┐</span>
+  <span class="hl-arrow">→</span> <span class="hl-agent">agent_dev_client</span> <span class="hl-file">TASK_READY: implement client</span>  <span class="hl-parallel">├ SONG SONG</span>
+  <span class="hl-arrow">→</span> <span class="hl-agent">agent_dev_admin</span>  <span class="hl-file">TASK_READY: implement admin</span>   <span class="hl-parallel">┘</span>
+  <span class="hl-arrow">→</span> <span class="hl-leader">agent_leader</span>     <span class="hl-file">STATUS_UPDATE: all layers done</span>
+
+<span class="hl-agent">agent_dev_server / client / admin</span>
+  <span class="hl-arrow">→</span> <span class="hl-agent">agent_dev</span>         <span class="hl-file">STATUS_UPDATE: layer done</span>
+
+<span class="hl-agent">agent_qc1</span> (Spectra) + <span class="hl-agent">agent_qc2</span> (Verita)
+  <span class="hl-arrow">→</span> <span class="hl-leader">agent_leader</span>     <span class="hl-file">STATUS_UPDATE: test done</span>
+    </div>
+  </div>
+
+  <!-- Workspace -->
+  <div class="section">
+    <div class="section-title">Workspace mới</div>
+    <div class="arch-box">
+<span class="hl-file">ccn2_workspace/</span>
+  <span class="hl-new">agents/</span>                       <span class="hl-arrow">Workspace riêng từng agent</span>
+    <span class="hl-file">agent_leader/</span>               <span class="hl-arrow">Routing decisions, ticket drafts</span>
+    <span class="hl-file">agent_gd/</span>                   <span class="hl-arrow">Concept analysis, GDD drafts</span>
+    <span class="hl-file">agent_dev/</span>                  <span class="hl-arrow">Design docs, dispatch plans</span>
+    <span class="hl-file">agent_dev_server/</span>           <span class="hl-arrow">Server workspace</span>
+    <span class="hl-file">agent_dev_client/</span>           <span class="hl-arrow">Client workspace</span>
+    <span class="hl-file">agent_dev_admin/</span>            <span class="hl-arrow">Admin workspace</span>
+    <span class="hl-file">agent_qc1/</span>                  <span class="hl-arrow">Test case drafts</span>
+    <span class="hl-file">agent_qc2/</span>                  <span class="hl-arrow">Test results, reviews</span>
+
+  <span class="hl-new">shared/</span>                       <span class="hl-arrow">Workspace chung — mọi agent đọc/ghi</span>
+    <span class="hl-file">concepts/  design/  analysis/  playtest/  reports/</span>
+
+  <span class="hl-new">tickets/</span>                      <span class="hl-arrow">Hệ thống ticket</span>
+    <span class="hl-file">&lt;user&gt;/</span>
+      <span class="hl-file">ticket-20260320-001.md</span>    <span class="hl-arrow">Ticket chính</span>
+      <span class="hl-file">sub-20260320-001-01.md</span>    <span class="hl-arrow">Sub-ticket cho từng agent</span>
+
+  <span class="hl-new">logs/</span>                         <span class="hl-arrow">Action logs (VCS ignore)</span>
+    <span class="hl-file">&lt;agent_id&gt;/YYYY-MM-DD/*.jsonl</span>
+
+  <span class="hl-file">.state/</span>                       <span class="hl-arrow">State tracking (JSON)</span>
+  <span class="hl-file">docs/</span>                         <span class="hl-arrow">Tài liệu hướng dẫn</span>
+  <span class="hl-file">README.md</span>                     <span class="hl-arrow">Tổng quan repo</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     TAB: ROUNDS
+     ════════════════════════════════════════════════════════════════════ -->
+<div id="tab-rounds" style="display:none">
+
+  <!-- ── Round 5 ── -->
+  <div class="round-card">
+    <div class="round-header" onclick="toggleRound('r5')">
+      <div class="num-r5 round-num">R5</div>
+      <div class="round-info" style="flex:1">
+        <h2>CLI Protocol + Tái Cấu Trúc Đội Hình</h2>
+        <p>CLI direct call, thêm Leader (Capita), tách QC thành Spectra (blackbox) + Verita (whitebox). Giữ cron làm fallback.</p>
+        <div class="round-tags">
+          <span class="tag r5">Event-driven</span>
+          <span class="tag r5">+Leader</span>
+          <span class="tag r5">+QC1/QC2</span>
+          <span class="tag r5">15 tasks</span>
+          <span class="tag r5">~22h</span>
+          <span class="tag r5">BLOCKING</span>
+        </div>
+      </div>
+      <span class="chevron" id="chevron-r5">▶</span>
+    </div>
+    <div class="round-body" id="body-r5">
+
+      <!-- Phase 5.1 -->
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r5">1</span>
+          <div>
+            <div class="phase-title">Verify CLI &amp; Define Protocol</div>
+            <div class="phase-desc">Kiểm tra CLI syntax, viết spec vào SCHEMA.md</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.1</div>
+            <div>
+              <div class="task-desc">✅ Verify CLI syntax — <strong>ĐÃ DONE</strong> (<code>openclaw agent --agent &lt;id&gt; -m "..."</code>)</div>
+              <div class="task-meta">Đã verify trên staging, hoạt động tốt</div>
+            </div>
+            <div class="task-time">30'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.2</div>
+            <div>
+              <div class="task-desc">Viết CLI Protocol Spec vào <code>.state/SCHEMA.md</code></div>
+              <div class="task-meta">Message format, trigger types, context block</div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 5.2 -->
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r5">2</span>
+          <div>
+            <div class="phase-title">Tạo Agents Mới</div>
+            <div class="phase-desc">Tạo Leader (Capita), tách QC thành QC1 (Spectra) + QC2 (Verita)</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.3</div>
+            <div>
+              <div class="task-desc">Tạo agent_leader (Capita): SOUL.md, IDENTITY.md, AGENTS.md, HEARTBEAT.md</div>
+              <div class="task-meta">Core: nhận yêu cầu, tạo ticket, routing, dispatch, theo dõi</div>
+            </div>
+            <div class="task-time">3h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.4</div>
+            <div>
+              <div class="task-desc">Tạo agent_qc1 (Spectra): tách từ Verita — blackbox test, test cases</div>
+              <div class="task-meta">Input: GDD only. Chạy SONG SONG với Dev</div>
+            </div>
+            <div class="task-time">2h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.5</div>
+            <div>
+              <div class="task-desc">Đổi agent_qc → agent_qc2, cập nhật scope (whitebox only)</div>
+              <div class="task-meta">Giữ tên Verita, đổi scope: unit test + code review</div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 5.3 -->
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r5">3</span>
+          <div>
+            <div class="phase-title">Cập Nhật 6 Agents Cũ</div>
+            <div class="phase-desc">Cập nhật chain call: báo Leader thay vì tự chain, nhận dispatch từ Leader</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.6</div>
+            <div>
+              <div class="task-desc">agent_gd HEARTBEAT: STATUS_UPDATE → Leader (thay vì chain agent_dev)</div>
+            </div>
+            <div class="task-time">45'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.7</div>
+            <div>
+              <div class="task-desc">agent_dev HEARTBEAT: nhận từ Leader, STATUS_UPDATE → Leader khi all done</div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.8</div>
+            <div>
+              <div class="task-desc">agent_dev_server HEARTBEAT: STATUS_UPDATE → agent_dev</div>
+            </div>
+            <div class="task-time">30'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.9</div>
+            <div>
+              <div class="task-desc">agent_dev_client HEARTBEAT: STATUS_UPDATE → agent_dev</div>
+            </div>
+            <div class="task-time">30'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.10</div>
+            <div>
+              <div class="task-desc">agent_dev_admin HEARTBEAT: STATUS_UPDATE → agent_dev</div>
+            </div>
+            <div class="task-time">30'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.11</div>
+            <div>
+              <div class="task-desc">agent_dev AGENTS.md: STATUS_UPDATE → Leader khi all layers done</div>
+            </div>
+            <div class="task-time">30'</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 5.4 -->
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r5">4</span>
+          <div>
+            <div class="phase-title">Workspace + Cron + Test + Docs</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.12</div>
+            <div>
+              <div class="task-desc">Setup workspace mới: <code>agents/</code>, <code>shared/</code>, <code>tickets/</code>, <code>logs/</code></div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.13</div>
+            <div>
+              <div class="task-desc">Đổi cron interval: Leader/QC2 15', còn lại 30'</div>
+            </div>
+            <div class="task-time">15'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.14</div>
+            <div>
+              <div class="task-desc">Test end-to-end: concept → Leader → GD → Dev → QC</div>
+              <div class="task-meta">Benchmark: dưới 30 phút total</div>
+            </div>
+            <div class="task-time">2h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T5.15</div>
+            <div>
+              <div class="task-desc">Cập nhật docs/ARCHITECTURE.md + HOWTO</div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Round 6 ── -->
+  <div class="round-card">
+    <div class="round-header" onclick="toggleRound('r6')">
+      <div class="num-r6 round-num">R6</div>
+      <div class="round-info" style="flex:1">
+        <h2>Action Logging &amp; Self-Evaluation</h2>
+        <p>Log JSONL toàn bộ quá trình xử lý. Agent tự đánh giá mức hiểu input và chất lượng output. Human debug được.</p>
+        <div class="round-tags">
+          <span class="tag r6">JSONL Logs</span>
+          <span class="tag r6">Self-eval</span>
+          <span class="tag r6">Dashboard</span>
+          <span class="tag r6">11 tasks</span>
+          <span class="tag r6">~14h</span>
+          <span class="tag r6">Requires: R5</span>
+        </div>
+      </div>
+      <span class="chevron" id="chevron-r6">▶</span>
+    </div>
+    <div class="round-body" id="body-r6">
+
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r6">1</span>
+          <div>
+            <div class="phase-title">Schema &amp; Storage</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.1</div>
+            <div>
+              <div class="task-desc">Viết Action Log Schema vào <code>.state/SCHEMA.md</code></div>
+              <div class="task-meta">action_id, session_id, thinking, confidence, quality_score, ...</div>
+            </div>
+            <div class="task-time">45'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.2</div>
+            <div>
+              <div class="task-desc">Tạo <code>logs/</code> directory + .gitignore</div>
+            </div>
+            <div class="task-time">15'</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r6">2</span>
+          <div>
+            <div class="phase-title">Cập Nhật 8 Agents — Logging + Self-Eval</div>
+            <div class="phase-desc">Mỗi agent log actions + tự đánh giá input confidence và output quality</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.3</div>
+            <div>
+              <div class="task-desc">agent_leader HEARTBEAT: log routing decisions + dispatch</div>
+            </div>
+            <div class="task-time">1.5h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.4</div>
+            <div>
+              <div class="task-desc">agent_gd HEARTBEAT: log actions + self-eval</div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.5</div>
+            <div>
+              <div class="task-desc">agent_dev HEARTBEAT: log phases + chain calls</div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.6</div>
+            <div>
+              <div class="task-desc">agent_dev_server/client/admin: log implement + STATUS_UPDATE</div>
+            </div>
+            <div class="task-time">1.5h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.7</div>
+            <div>
+              <div class="task-desc">agent_qc1 HEARTBEAT: log blackbox test + self-eval</div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.8</div>
+            <div>
+              <div class="task-desc">agent_qc2 HEARTBEAT: log whitebox test + cleanup logs &gt;7 ngày</div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r6">3</span>
+          <div>
+            <div class="phase-title">Dashboard + Test</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.9</div>
+            <div>
+              <div class="task-desc">Dashboard: thêm tab "Action Logs" với timeline, filter, expand, replay</div>
+              <div class="task-meta">Màu: 🔵read 🟢write ⚪hash 🟡eval 🟣chain 🔴error 🟠telegram</div>
+            </div>
+            <div class="task-time">3h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.10</div>
+            <div>
+              <div class="task-desc">Cập nhật docs với action-logs spec</div>
+            </div>
+            <div class="task-time">30'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T6.11</div>
+            <div>
+              <div class="task-desc">Test: chạy 1 feature, kiểm tra log đủ debug info + self-eval scores</div>
+            </div>
+            <div class="task-time">2h</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Round 7 ── -->
+  <div class="round-card">
+    <div class="round-header" onclick="toggleRound('r7')">
+      <div class="num-r7 round-num">R7</div>
+      <div class="round-info" style="flex:1">
+        <h2>Ticket System với Sub-tickets</h2>
+        <p>Human gửi yêu cầu → Leader tạo ticket + sub-tickets tự động. Pipeline tự chạy, tracking từng bước, notify human.</p>
+        <div class="round-tags">
+          <span class="tag r7">Tickets</span>
+          <span class="tag r7">Sub-tickets</span>
+          <span class="tag r7">Leader routing</span>
+          <span class="tag r7">12 tasks</span>
+          <span class="tag r7">~16h</span>
+          <span class="tag r7">Requires: R5+R6</span>
+        </div>
+      </div>
+      <span class="chevron" id="chevron-r7">▶</span>
+    </div>
+    <div class="round-body" id="body-r7">
+
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r7">1</span>
+          <div>
+            <div class="phase-title">Ticket Schema &amp; Templates</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.1</div>
+            <div>
+              <div class="task-desc">Tạo tickets/TICKET-TEMPLATE.md</div>
+              <div class="task-meta">ID, người yêu cầu, nội dung, attachment, resource, trạng thái, tiến độ</div>
+            </div>
+            <div class="task-time">30'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.2</div>
+            <div>
+              <div class="task-desc">Tạo tickets/SUB-TICKET-TEMPLATE.md</div>
+              <div class="task-meta">Parent ticket, agent, nhiệm vụ, input, output, ghi chú</div>
+            </div>
+            <div class="task-time">30'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.3</div>
+            <div>
+              <div class="task-desc">Tạo tickets/README.md hướng dẫn tạo ticket</div>
+            </div>
+            <div class="task-time">30'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.4</div>
+            <div>
+              <div class="task-desc">Viết Ticket Schema vào <code>.state/SCHEMA.md</code></div>
+            </div>
+            <div class="task-time">45'</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.5</div>
+            <div>
+              <div class="task-desc">Khởi tạo <code>.state/ticket-tracker.json</code></div>
+            </div>
+            <div class="task-time">10'</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r7">2</span>
+          <div>
+            <div class="phase-title">Leader Routing + Cập Nhật Agents</div>
+            <div class="phase-desc">Leader tạo sub-tickets, agents nhận sub-ticket + propagate ticket_id</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.6</div>
+            <div>
+              <div class="task-desc">agent_leader HEARTBEAT: scan tickets/ + routing logic</div>
+              <div class="task-meta">Đánh giá cần agent nào, song song hay tuần tự, tạo sub-tickets</div>
+            </div>
+            <div class="task-time">2h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.7</div>
+            <div>
+              <div class="task-desc">agent_leader: tạo sub-tickets tự động theo routing plan</div>
+            </div>
+            <div class="task-time">1.5h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.8</div>
+            <div>
+              <div class="task-desc">Cập nhật 7 worker agents: nhận sub-ticket + propagate ticket_id</div>
+            </div>
+            <div class="task-time">2.5h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.9</div>
+            <div>
+              <div class="task-desc">Tất cả agents: ghi lịch sử vào ticket + sub-ticket sau mỗi step</div>
+            </div>
+            <div class="task-time">1.5h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.10</div>
+            <div>
+              <div class="task-desc">agent_leader: final check + notify human khi ticket done</div>
+            </div>
+            <div class="task-time">1h</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-header">
+          <span class="phase-num phase-r7">3</span>
+          <div>
+            <div class="phase-title">Dashboard + Test End-to-End</div>
+          </div>
+        </div>
+        <div class="tasks">
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.11</div>
+            <div>
+              <div class="task-desc">Dashboard: thêm tab "Tickets" với bảng, filter, progress bar, link logs</div>
+            </div>
+            <div class="task-time">3h</div>
+          </div>
+          <div class="task">
+            <div class="task-check"></div>
+            <div class="task-id">T7.12</div>
+            <div>
+              <div class="task-desc">Test end-to-end: tạo ticket → pipeline → Telegram notify</div>
+            </div>
+            <div class="task-time">3h</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     TAB: ARCHITECTURE
+     ════════════════════════════════════════════════════════════════════ -->
+<div id="tab-arch" style="display:none">
+
+  <!-- Old -->
+  <div class="section">
+    <div class="section-title">Kiến trúc cũ (Round 1–4)</div>
+    <div class="arch-box">
+<span class="hl-human">Human</span> <span class="hl-arrow">──→ tạo file →</span> <span class="hl-file">concepts/feature.md</span>
+         ↓ <span class="hl-arrow">(cron 15 phút)</span>
+<span class="hl-agent">agent_gd</span> <span class="hl-arrow">──scan→ hash change →</span> tạo GDD <span class="hl-arrow">──→</span> <span class="hl-file">design/</span>
+         ↓ <span class="hl-arrow">(cron 15 phút)</span>
+<span class="hl-agent">agent_dev</span> <span class="hl-arrow">──scan→</span> analyze + dispatch <span class="hl-arrow">──→</span> <span class="hl-file">dispatched.json</span>
+         ↓ <span class="hl-arrow">(cron 15 phút ×3)</span>
+<span class="hl-agent">agent_dev_server/client/admin</span> <span class="hl-arrow">──poll→</span> implement <span class="hl-arrow">──→</span> <span class="hl-file">playtest/</span>
+         ↓ <span class="hl-arrow">(cron 15 phút)</span>
+<span class="hl-agent">agent_qc</span> <span class="hl-arrow">──poll→</span> review <span class="hl-arrow">──→</span> <span class="hl-file">reports/</span>
+
+<span class="hl-arrow">Total latency: 60–90 phút</span>  ·  <span class="hl-arrow">6 agents</span>  ·  <span class="hl-arrow">tuần tự</span>
+    </div>
+  </div>
+
+  <!-- New -->
+  <div class="section">
+    <div class="section-title">Kiến trúc mới (Round 5–7)</div>
+    <div class="arch-box">
+<span class="hl-human">Human</span> <span class="hl-r7">──yêu cầu──→</span> <span class="hl-leader">Leader (Capita)</span>
+                         │
+                         ├── <span class="hl-r7">Tạo ticket + sub-tickets</span>
+                         ├── <span class="hl-r6">log_action(routing, eval)</span> <span class="hl-arrow">→</span> <span class="hl-file">logs/agent_leader/</span>
+                         │
+                         ├──→ <span class="hl-agent">GD</span> <span class="hl-file">(sub-ticket-01)</span>: Viết GDD
+                         │     <span class="hl-r6">log_action + self-eval</span>
+                         │     ↓ <span class="hl-arrow">GDD done → STATUS_UPDATE → Leader</span>
+                         │
+                         ├── <span class="hl-leader">Leader dispatch</span> <span class="hl-parallel">SONG SONG:</span>
+                         │    ├──→ <span class="hl-agent">QC1 Spectra</span> <span class="hl-file">(sub-ticket-02)</span>: Blackbox test cases
+                         │    └──→ <span class="hl-agent">Dev Lead</span> <span class="hl-file">(sub-ticket-03)</span>: Analysis + dispatch
+                         │                ↓ <span class="hl-parallel">SONG SONG:</span>
+                         │         ┌──→ <span class="hl-agent">Forge</span> <span class="hl-file">(sub-ticket-04)</span>
+                         │         ├──→ <span class="hl-agent">Pixel</span> <span class="hl-file">(sub-ticket-05)</span>
+                         │         └──→ <span class="hl-agent">Panel</span> <span class="hl-file">(sub-ticket-06)</span> <span class="hl-arrow">(nếu cần)</span>
+                         │                ↓ <span class="hl-arrow">all done → Leader</span>
+                         │
+                         ├──→ <span class="hl-agent">QC2 Verita</span> <span class="hl-file">(sub-ticket-07)</span>: Whitebox test
+                         │
+                         ├──→ <span class="hl-agent">QC1 Spectra</span> <span class="hl-file">(sub-ticket-08)</span>: Blackbox play test (cuối)
+                         │
+                         └── <span class="hl-leader">Leader</span>: <span class="hl-r7">ticket done → Telegram notify human</span>
+
+<span class="hl-arrow">Total latency: 8–20 phút</span>  ·  <span class="hl-new">8 agents</span>  ·  <span class="hl-parallel">song song</span>
+    </div>
+  </div>
+
+  <!-- Example flow -->
+  <div class="section">
+    <div class="section-title">Ví dụ luồng CLI</div>
+    <div class="cli-block">
+<span class="cmt"># Human gửi yêu cầu cho Leader</span>
+<span class="cmd">openclaw agent</span> <span class="arg">--agent agent_leader</span> <span class="str">-m "TICKET: feature=main-gameplay, spec=concepts/main-gameplay.md, priority=High"</span>
+
+<span class="cmt"># Leader tạo ticket + routing → dispatch GD</span>
+<span class="cmd">openclaw agent</span> <span class="arg">--agent agent_gd</span> <span class="str">-m "TASK_READY: ticket_id=ticket-20260320-001, sub_ticket=sub-20260320-001-01.md, feature=main-gameplay"</span>
+
+<span class="cmt"># GD xong → báo Leader</span>
+<span class="cmd">openclaw agent</span> <span class="arg">--agent agent_leader</span> <span class="str">-m "STATUS_UPDATE: ticket_id=ticket-20260320-001, agent=agent_gd, status=done, output=design/GDD-FEATURE-main-gameplay.md"</span>
+
+<span class="cmt"># Leader dispatch SONG SONG: QC1 + Dev Lead</span>
+<span class="cmd">openclaw agent</span> <span class="arg">--agent agent_qc1</span> <span class="str">-m "TASK_READY: ticket_id=ticket-20260320-001, sub_ticket=sub-20260320-001-02.md, gdd_path=design/GDD-FEATURE-main-gameplay.md"</span>
+<span class="cmd">openclaw agent</span> <span class="arg">--agent agent_dev</span> <span class="str">-m "TASK_READY: ticket_id=ticket-20260320-001, sub_ticket=sub-20260320-001-03.md, gdd_path=design/GDD-FEATURE-main-gameplay.md"</span>
+
+<span class="cmt"># Dev Lead dispatch SONG SONG: Server + Client</span>
+<span class="cmd">openclaw agent</span> <span class="arg">--agent agent_dev_server</span> <span class="str">-m "TASK_READY: ticket_id=ticket-20260320-001, sub_ticket=sub-20260320-001-04.md, feature=main-gameplay"</span>
+<span class="cmd">openclaw agent</span> <span class="arg">--agent agent_dev_client</span> <span class="str">-m "TASK_READY: ticket_id=ticket-20260320-001, sub_ticket=sub-20260320-001-05.md, feature=main-gameplay"</span>
+
+<span class="cmt"># All done → Leader gọi QC2 → xong → Leader notify human</span>
+<span class="cmt"># ✅ ticket-20260320-001 HOÀN THÀNH — GDD✅ Blackbox✅ Server✅ Client✅ Whitebox✅</span>
+    </div>
+  </div>
+
+  <!-- Action Log Sample -->
+  <div class="section">
+    <div class="section-title">Action Log + Self-Eval — JSONL sample</div>
+    <div class="cli-block">
+<span class="cmt">// File: logs/agent_gd/2026-03-20/10-02-00-main-gameplay.jsonl</span>
+
+<span class="cmt">// Đánh giá input (đầu session)</span>
+{"action_id":"act-001","action_type":"eval","agent":"agent_gd",
+ "thinking":{"summary":"Input rõ ràng, đủ context","confidence":0.9,
+ "unclear_points":[],"assumptions":["DIAMOND is primary currency"]}}
+
+<span class="cmt">// Đọc concept</span>
+{"action_id":"act-002","action_type":"read_file",
+ "input":{"data":"concepts/main-gameplay.md"},
+ "tool_used":"Read","duration_ms":234,"status":"success"}
+
+<span class="cmt">// Viết GDD</span>
+{"action_id":"act-003","action_type":"write_file",
+ "input":{"data":"design/GDD-FEATURE-main-gameplay.md"},
+ "tool_used":"Write","duration_ms":1200,"status":"success"}
+
+<span class="cmt">// Đánh giá output (cuối session)</span>
+{"action_id":"act-004","action_type":"eval",
+ "thinking":{"summary":"GDD đủ 10 sections, coverage tốt",
+ "quality_score":88,"limitations":["Edge case Z chưa cover"],"within_scope":true}}
+
+<span class="cmt">// Chain call Leader</span>
+{"action_id":"act-005","action_type":"chain_call",
+ "output":{"description":"STATUS_UPDATE → agent_leader, exit 0"},"status":"success"}
+
+<span class="cmt">// Tổng kết</span>
+{"action_id":"SUMMARY","total_actions":5,"total_duration_ms":8500,
+ "input_confidence":0.9,"output_quality":88,"outcome":"success"}
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     TAB: RISKS
+     ════════════════════════════════════════════════════════════════════ -->
+<div id="tab-risks" style="display:none">
+
+  <div class="section">
+    <div class="section-title">Ma trận rủi ro</div>
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>Rủi ro</th>
+          <th>Xác suất</th>
+          <th>Impact</th>
+          <th>Mitigation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CLI syntax chưa xác định chính xác</td>
+          <td class="risk-low">Đã giải quyết</td>
+          <td class="risk-low">✅ RESOLVED</td>
+          <td>Đã verify trên staging: <code>openclaw agent --agent &lt;id&gt; -m "..."</code> hoạt động.</td>
+        </tr>
+        <tr>
+          <td>Leader agent quá phức tạp, khó viết HEARTBEAT</td>
+          <td class="risk-med">Trung bình</td>
+          <td class="risk-high">High</td>
+          <td>Viết đơn giản trước (fixed routing), iterate sau.</td>
+        </tr>
+        <tr>
+          <td>Action logs quá lớn — disk space</td>
+          <td class="risk-med">Trung bình</td>
+          <td class="risk-med">Moderate</td>
+          <td>7-day retention + VCS ignore + QC2 auto-cleanup.</td>
+        </tr>
+        <tr>
+          <td>Agent không follow chain call protocol</td>
+          <td class="risk-med">Trung bình</td>
+          <td class="risk-high">High</td>
+          <td>Test 1 agent trước (GD), rồi roll out.</td>
+        </tr>
+        <tr>
+          <td>Sub-ticket file conflict</td>
+          <td class="risk-low">Thấp</td>
+          <td class="risk-low">Low</td>
+          <td>Mỗi agent chỉ ghi sub-ticket của mình.</td>
+        </tr>
+        <tr>
+          <td>Breaking change làm hỏng cron cũ</td>
+          <td class="risk-low">Thấp</td>
+          <td class="risk-high">High</td>
+          <td>Giữ cron intact làm fallback. Chỉ thêm CLI trên top.</td>
+        </tr>
+        <tr>
+          <td>8 agents quá nhiều — overhead quản lý</td>
+          <td class="risk-low">Thấp</td>
+          <td class="risk-med">Moderate</td>
+          <td>Leader tự quản, human chỉ tương tác Leader.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Câu hỏi cần xác nhận</div>
+    <div class="arch-box">
+<span style="color:#10b981;">✅ Q1</span>: CLI syntax: <code>openclaw agent --agent</code> — <strong>đã verify hoạt động trên staging</strong>.
+     <span class="hl-arrow">→ T5.1 RESOLVED</span>
+
+<span class="hl-warn">❓ Q2</span>: Leader name: Capita hay tên khác? Cần đặt IDENTITY phù hợp.
+     <span class="hl-arrow">→ Ảnh hưởng T5.3</span>
+
+<span class="hl-warn">❓ Q3</span>: QC1 name: Spectra hay tên khác?
+     <span class="hl-arrow">→ Ảnh hưởng T5.4</span>
+
+<span class="hl-warn">❓ Q4</span>: Workspace migration: migrate hiện tại hay tạo mới?
+     <span class="hl-arrow">→ Ảnh hưởng T5.12</span>
+
+<span class="hl-warn">❓ Q5</span>: Cron: giữ hybrid (fallback) hay bỏ hoàn toàn?
+     <span class="hl-arrow">→ Recommend: hybrid</span>
+
+<span class="hl-warn">❓ Q6</span>: Sub-ticket: Leader tự generate hay dùng template cố định?
+     <span class="hl-arrow">→ Ảnh hưởng T7.6–T7.7</span>
+
+<span class="hl-warn">❓ Q7</span>: Monitor: cần agent monitor riêng hay Leader kiêm luôn?
+     <span class="hl-arrow">→ Ảnh hưởng scope Round 7</span>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     FOOTER
+     ════════════════════════════════════════════════════════════════════ -->
+<footer>
+  <strong>CCN2 Agent Team — Round 5, 6, 7 Roadmap v2.0</strong><br>
+  Phương án chung · 2026-03-20
+</footer>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SCRIPTS
+     ════════════════════════════════════════════════════════════════════ -->
+<script>
+  function showTab(name) {
+    document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
+    document.getElementById('tab-' + name).style.display = 'block';
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  function toggleRound(id) {
+    const body = document.getElementById('body-' + id);
+    const chevron = document.getElementById('chevron-' + id);
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    chevron.classList.toggle('open', !isOpen);
+  }
+
+  // Auto-open R5
+  document.addEventListener('DOMContentLoaded', function () {
+    const b = document.getElementById('body-r5');
+    const c = document.getElementById('chevron-r5');
+    if (b) {
+      b.classList.add('open');
+      c.classList.add('open');
+    }
+  });
+</script>
+
+</body>
+</html>
