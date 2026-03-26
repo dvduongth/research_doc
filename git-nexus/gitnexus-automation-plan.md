@@ -7,7 +7,7 @@
 
 ## 1. Mục tiêu & Phạm vi
 
-**Mục tiêu**: Tạo OpenClaw skill `gitnexus-integration` để tự động hóa GitNexus workflow cho CCN2 development.
+**Mục tiêu**: Tạo skill `gitnexus-integration` để tự động hóa GitNexus workflow cho CCN2 development.
 
 **Phạm vi**:
 - Tích hợp GitNexus CLI (npx gitnexus) vào OpenClaw agents
