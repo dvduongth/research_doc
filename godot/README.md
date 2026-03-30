@@ -1,15 +1,19 @@
 # Godot Engine - Nghiên Cứu Kiến Trúc
 
-Thư mục này chứa báo cáo phân tích chi tiết về kiến trúc Godot Engine, được tạo vào ngày 25/03/2026.
+Thư mục này chứa báo cáo phân tích chi tiết về kiến trúc Godot Engine.
+
+Cập nhật lần cuối: **2026-03-30** (thêm source-level analysis từ godot-master 4.7-dev)
 
 ---
 
 ## 📄 Files trong thư mục
 
-| File | Mô tả | Kích thước |
-|------|-------|------------|
-| [`architecture_overview.md`](./architecture_overview.md) | Tổng quan kiến trúc Godot: layered architecture, node/scene system, rendering, physics, audio, networking, i18n, asset pipeline | ~22KB |
-| [`class_taxonomy_api.md`](./class_taxonomy_api.md) | Chi tiết về class hierarchy, important APIs, GDScript conventions, singletons, performance, extension points | ~22KB |
+| File | Mô tả | Nguồn | Kích thước |
+|------|-------|-------|------------|
+| [`architecture_overview.md`](./architecture_overview.md) | Tổng quan kiến trúc Godot: layered architecture, node/scene system, rendering, physics, audio, networking, i18n, asset pipeline | Godot 4.x docs | ~22KB |
+| [`class_taxonomy_api.md`](./class_taxonomy_api.md) | Chi tiết về class hierarchy, important APIs, GDScript conventions, singletons, performance, extension points | Godot 4.x docs | ~22KB |
+| [`godot_source_analysis.md`](./godot_source_analysis.md) | **[MỚI]** Phân tích source code thực tế từ godot-master 4.7-dev: file counts, module structure, C++ patterns, build system, regex parsing patterns cho skill | godot-master scan | ~25KB |
+| [`godot_module_deep_dive.md`](./godot_module_deep_dive.md) | **[MỚI]** Deep dive từng module: core/, scene/, servers/, modules/, editor/ — file listings, class hierarchies, key patterns, files nên đọc/skip | godot-master scan | ~20KB |
 
 ---
 

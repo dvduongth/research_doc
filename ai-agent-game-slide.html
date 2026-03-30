@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Game Development — Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f8f9fc;
+  --surface: #ffffff;
+  --surface-2: #f0f1f5;
+  --surface-3: #e8e9ef;
+  --border: rgba(0,0,0,0.07);
+  --text: #1a1a2e;
+  --text-secondary: #4a4a60;
+  --text-muted: #8a8aa0;
+  --accent: #6366f1;
+  --accent-glow: rgba(99,102,241,0.2);
+  --accent-soft: rgba(99,102,241,0.08);
+  --green: #16a34a;
+  --green-soft: rgba(22,163,74,0.08);
+  --orange: #ea580c;
+  --orange-soft: rgba(234,88,12,0.08);
+  --red: #dc2626;
+  --red-soft: rgba(220,38,38,0.06);
+  --yellow: #ca8a04;
+  --yellow-soft: rgba(202,138,4,0.08);
+  --blue: #2563eb;
+  --blue-soft: rgba(37,99,235,0.07);
+  --cyan: #0891b2;
+  --pink: #db2777;
+  --font: 'Outfit', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+  --shadow-card-hover: 0 4px 16px rgba(99,102,241,0.1), 0 8px 30px rgba(0,0,0,0.06);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ====== SLIDE CONTAINER ====== */
+.slide {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide-inner {
+  max-width: 1300px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* ====== NAVIGATION ====== */
+.nav {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.nav-dot:hover, .nav-dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(99,102,241,0.3);
+  transform: scale(1.3);
+}
+.nav-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--surface-2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.nav-dot:hover::after { opacity: 1; }
+
+/* ====== PROGRESS BAR ====== */
+.progress-bar-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--cyan), var(--pink));
+  z-index: 200;
+  transition: width 0.3s ease;
+  box-shadow: 0 1px 6px rgba(99,102,241,0.25);
+}
+
+/* ====== SLIDE COUNTER ====== */
+.slide-counter {
+  position: fixed;
+  bottom: 24px;
+  left: 40px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+  z-index: 100;
+  font-family: var(--mono);
+  letter-spacing: 0.05em;
+}
+.slide-counter span { color: var(--accent); }
+
+/* ====== KEYBOARD HINT ====== */
+.kb-hint {
+  position: fixed;
+  bottom: 24px;
+  right: 40px;
+  font-size: 11px;
+  color: var(--text-muted);
+  z-index: 100;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.kb-hint kbd {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+/* ====== BACKGROUNDS ====== */
+.bg-mesh {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(99,102,241,0.06), transparent),
+    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(236,72,153,0.04), transparent);
+  z-index: 0;
+}
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 0;
+}
+.bg-gradient-warm {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 30% 40%, rgba(249,115,22,0.06), transparent),
+    radial-gradient(ellipse 50% 50% at 70% 60%, rgba(234,179,8,0.05), transparent);
+  z-index: 0;
+}
+.bg-gradient-cool {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 70% at 50% 30%, rgba(6,182,212,0.06), transparent),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(59,130,246,0.05), transparent);
+  z-index: 0;
+}
+.bg-gradient-green {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 40% 50%, rgba(34,197,94,0.06), transparent),
+    radial-gradient(ellipse 40% 40% at 70% 30%, rgba(6,182,212,0.04), transparent);
+  z-index: 0;
+}
+
+/* ====== TYPOGRAPHY ====== */
+.slide-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.slide-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+h1.hero-title {
+  font-size: clamp(52px, 8vw, 96px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2.slide-title {
+  font-size: clamp(40px, 5.5vw, 64px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+
+h3.section-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.subtitle {
+  font-size: clamp(22px, 2.5vw, 30px);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-weight: 400;
+  max-width: 680px;
+}
+
+p.body-text {
+  font-size: 22px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+/* ====== HERO META ====== */
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+.meta-pill .label {
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ====== CARDS ====== */
+.card-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+.card-grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.card-grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.card:hover {
+  border-color: rgba(99,102,241,0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.card:hover::before { opacity: 1; }
+
+.card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+.card-icon + h4 {
+  margin-bottom: 0;
+}
+.card-grid .card {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  align-items: center;
+  gap: 8px 12px;
+}
+.card-grid .card:not(:has(.card-icon)) {
+  grid-template-columns: 1fr;
+}
+.card-grid .card p {
+  grid-column: 1 / -1;
+}
+.card-icon.accent { background: var(--accent-soft); }
+.card-icon.orange { background: var(--orange-soft); }
+.card-icon.green { background: var(--green-soft); }
+.card-icon.blue { background: var(--blue-soft); }
+.card-icon.red { background: var(--red-soft); }
+.card-icon.yellow { background: var(--yellow-soft); }
+
+.card h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.card p {
+  font-size: 19px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ====== STAT BOXES ====== */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+.stat-value {
+  font-size: 48px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-label {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* ====== TABLE ====== */
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 19px;
+}
+thead th {
+  text-align: left;
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 12px 18px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: rgba(99,102,241,0.03); }
+
+/* ====== CODE BLOCK ====== */
+.code-box {
+  background: #1e1e2e;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  font-family: var(--mono);
+  font-size: 18px;
+  line-height: 1.7;
+  color: #cdd6f4;
+  overflow-x: auto;
+  margin-top: 16px;
+  white-space: pre;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+.code-box .comment { color: var(--text-muted); }
+.code-box .keyword { color: var(--pink); }
+.code-box .string { color: var(--green); }
+
+/* ====== PROGRESS BARS ====== */
+.progress-item {
+  margin-bottom: 16px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.progress-track {
+  height: 10px;
+  background: var(--surface-3);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.progress-fill.orange { background: linear-gradient(90deg, var(--orange), #fbbf24); }
+.progress-fill.blue { background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+.progress-fill.green { background: linear-gradient(90deg, var(--green), #4ade80); }
+
+/* ====== CALLOUT ====== */
+.callout {
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  margin-top: 16px;
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  border-left: 3px solid;
+  background: var(--surface);
+}
+.callout.info { border-left-color: var(--blue); }
+.callout.warning { border-left-color: var(--yellow); }
+.callout.danger { border-left-color: var(--red); }
+.callout.success { border-left-color: var(--green); }
+.callout strong { color: var(--text); }
+.callout em { color: var(--text-secondary); font-style: italic; }
+
+/* ====== COMPARE BLOCK ====== */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+.compare-card {
+  border-radius: var(--radius);
+  padding: 22px;
+  font-size: 19px;
+  line-height: 1.7;
+}
+.compare-card.good {
+  background: var(--green-soft);
+  border: 1px solid rgba(22,163,74,0.15);
+}
+.compare-card.bad {
+  background: var(--red-soft);
+  border: 1px solid rgba(220,38,38,0.15);
+}
+.compare-label {
+  font-weight: 800;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+.compare-card.good .compare-label { color: var(--green); }
+.compare-card.bad .compare-label { color: var(--red); }
+.compare-card p, .compare-card li {
+  color: var(--text-secondary);
+  font-size: 19px;
+}
+
+/* ====== DO / DONT LIST ====== */
+.do-dont-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+.do-card, .dont-card {
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.do-card {
+  background: var(--green-soft);
+  border: 1px solid rgba(22,163,74,0.15);
+}
+.dont-card {
+  background: var(--red-soft);
+  border: 1px solid rgba(220,38,38,0.15);
+}
+.do-card h4 { color: var(--green); font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px; }
+.dont-card h4 { color: var(--red); font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px; }
+.do-card li, .dont-card li {
+  font-size: 19px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 10px;
+  list-style: none;
+  padding-left: 0;
+}
+.do-card li strong, .dont-card li strong { color: var(--text); }
+
+/* ====== STATUS BADGES ====== */
+.badge {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+.badge.done { background: var(--green-soft); color: var(--green); }
+.badge.wip { background: var(--yellow-soft); color: var(--yellow); }
+.star { color: var(--yellow); letter-spacing: 2px; }
+
+/* ====== FORMULA ====== */
+.formula-box {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+  margin-top: 20px;
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 16px rgba(99,102,241,0.12);
+}
+
+/* ====== DIAGRAM ====== */
+.diagram-box {
+  background: #1e1e2e;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 16px;
+  font-family: var(--mono);
+  font-size: 18px;
+  line-height: 1.6;
+  color: #cdd6f4;
+  white-space: pre;
+  overflow-x: auto;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+/* ====== ROADMAP ====== */
+.roadmap-list {
+  list-style: none;
+  margin-top: 16px;
+}
+.roadmap-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 20px;
+  color: var(--text-secondary);
+}
+.roadmap-item:last-child { border-bottom: none; }
+.roadmap-dot {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* ====== ANIMATIONS ====== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+  50% { box-shadow: 0 0 40px var(--accent-glow); }
+}
+
+.anim-target {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.anim-target.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.anim-delay-1 { transition-delay: 0.1s; }
+.anim-delay-2 { transition-delay: 0.2s; }
+.anim-delay-3 { transition-delay: 0.3s; }
+.anim-delay-4 { transition-delay: 0.4s; }
+.anim-delay-5 { transition-delay: 0.5s; }
+.anim-delay-6 { transition-delay: 0.6s; }
+
+/* ====== TWO COLUMNS ====== */
+.two-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ====== ORDERED LIST ====== */
+.styled-list {
+  list-style: none;
+  counter-reset: item;
+}
+.styled-list li {
+  counter-increment: item;
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  padding-left: 32px;
+  position: relative;
+}
+.styled-list li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.styled-list li strong { color: var(--text); }
+
+/* ====== BULLET LIST ====== */
+.bullet-list {
+  list-style: none;
+}
+.bullet-list li {
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+.bullet-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.bullet-list li strong { color: var(--text); }
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .slide { padding: 40px 20px; }
+  .two-cols { grid-template-columns: 1fr; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .do-dont-grid { grid-template-columns: 1fr; }
+  .nav { display: none; }
+  .kb-hint { display: none; }
+  .slide-counter { left: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar-top" id="progressBar" style="width:0%"></div>
+
+<!-- Navigation Dots -->
+<nav class="nav" id="navDots"></nav>
+
+<!-- Slide Counter -->
+<div class="slide-counter" id="slideCounter"><span>01</span> / 13</div>
+
+<!-- Keyboard Hint -->
+<div class="kb-hint"><kbd>↑</kbd><kbd>↓</kbd> hoặc scroll để chuyển slide</div>
+
+<!-- ============================== SLIDE 1: HERO ============================== -->
+<section class="slide" id="slide-0">
+  <div class="bg-mesh"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner" style="text-align:center;">
+    <div class="anim-target">
+      <div class="slide-label" style="justify-content:center;">Case Study Report</div>
+    </div>
+    <h1 class="hero-title anim-target anim-delay-1">AI Agent<br>Game Development</h1>
+    <p class="subtitle anim-target anim-delay-2" style="margin:0 auto 16px;">
+      Quá trình xây dựng AI Agent tự động hóa phát triển game "Meo No" — từ source analysis đến Godot client hoàn chỉnh
+    </p>
+    <div class="meta-pills anim-target anim-delay-3" style="justify-content:center;">
+      <div class="meta-pill"><span class="label">Tác giả</span> Trunglm4</div>
+      <div class="meta-pill"><span class="label">Stack</span> Godot 4.x · GDScript</div>
+      <div class="meta-pill"><span class="label">AI</span> Claude Code CLI · Custom MCP</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 2: MỤC LỤC ============================== -->
+<section class="slide" id="slide-1">
+  <div class="bg-mesh"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Tổng quan</div>
+    <h2 class="slide-title anim-target anim-delay-1">Roadmap dự án</h2>
+    <div class="card-grid cols-2">
+      <div class="card anim-target anim-delay-1">
+        <div class="card-icon accent">01</div>
+        <h4>Tổng quan bài toán</h4>
+        <p>Đề bài, mục tiêu & thách thức</p>
+      </div>
+      <div class="card anim-target anim-delay-1">
+        <div class="card-icon blue">02</div>
+        <h4>Nghiên cứu & Chọn CN</h4>
+        <p>Đánh giá engine, chọn Godot</p>
+      </div>
+      <div class="card anim-target anim-delay-2">
+        <div class="card-icon green">03</div>
+        <h4>Source → Document</h4>
+        <p>Phân tích legacy, sinh docs</p>
+      </div>
+      <div class="card anim-target anim-delay-2">
+        <div class="card-icon orange">04</div>
+        <h4>AI Knowledge Base</h4>
+        <p>Cấu trúc hóa docs cho Agent</p>
+      </div>
+      <div class="card anim-target anim-delay-3">
+        <div class="card-icon red">05</div>
+        <h4>Godot Client</h4>
+        <p>MCP Docs + MCP Editor + Art</p>
+      </div>
+      <div class="card anim-target anim-delay-3">
+        <div class="card-icon yellow">06</div>
+        <h4>Animation & Visual</h4>
+        <p>Scene Understanding pipeline</p>
+      </div>
+      <div class="card anim-target anim-delay-4">
+        <div class="card-icon accent">07</div>
+        <h4>Prompt & Skill</h4>
+        <p>AI build skill cho AI</p>
+      </div>
+      <div class="card anim-target anim-delay-4">
+        <div class="card-icon green">08</div>
+        <h4>Kết quả & Đánh giá</h4>
+        <p>Deliverables & chất lượng</p>
+      </div>
+      <div class="card anim-target anim-delay-5">
+        <div class="card-icon blue">09</div>
+        <h4>Bài học & Roadmap</h4>
+        <p>DO/DON'T & đề xuất tiếp</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 3: TỔNG QUAN ============================== -->
+<section class="slide" id="slide-2">
+  <div class="bg-gradient-warm"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 01</div>
+    <h2 class="slide-title anim-target anim-delay-1">Tổng quan bài toán</h2>
+    
+    <div class="two-cols" style="margin-top:24px;">
+      <div>
+        <h3 class="section-title anim-target anim-delay-1">Đề bài</h3>
+        <p class="body-text anim-target anim-delay-2">Nhận source code game (Cocos2d-JS client) → dùng AI Agent để:</p>
+        <ol class="styled-list anim-target anim-delay-2">
+          <li><strong>Phân tích</strong> source cũ → sinh document (design, architecture)</li>
+          <li><strong>Build ngược lại</strong> game client hoàn chỉnh — do AI thực hiện chính</li>
+        </ol>
+        
+        <h3 class="section-title anim-target anim-delay-3" style="margin-top:24px;">Mục tiêu</h3>
+        <ul class="bullet-list anim-target anim-delay-3">
+          <li>Đọc hiểu source/document → <strong>tự động generate code</strong></li>
+          <li>Tự ghép art assets vào game</li>
+          <li>Tự chạy, debug, test trong Godot Editor</li>
+          <li>Tự đánh giá chất lượng visual và chỉnh sửa</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="section-title anim-target anim-delay-2">Tại sao bài toán này khó?</h3>
+        <div class="card-grid" style="margin-top:8px;">
+          <div class="card anim-target anim-delay-1">
+            <div class="card-icon red">⚡</div><h4>Thiếu training data</h4>
+            <p>Game dev ≠ web dev — AI thiếu data, thiếu tooling cho game engines</p>
+          </div>
+          <div class="card anim-target anim-delay-2">
+            <div class="card-icon yellow">🔧</div><h4>Không có MCP hoàn chỉnh</h4>
+            <p>Không có MCP cho bất kỳ game engine nào</p>
+          </div>
+          <div class="card anim-target anim-delay-3">
+            <div class="card-icon orange">🎨</div><h4>Art integration</h4>
+            <p>Ghép hình, animation, effect — chưa có giải pháp</p>
+          </div>
+          <div class="card anim-target anim-delay-4">
+            <div class="card-icon blue">🔄</div><h4>Version thay đổi</h4>
+            <p>Engine versions thay đổi liên tục, AI không tự tin</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 4: CHỌN CÔNG NGHỆ ============================== -->
+<section class="slide" id="slide-3">
+  <div class="bg-gradient-cool"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 02</div>
+    <h2 class="slide-title anim-target anim-delay-1">Nghiên cứu & Chọn công nghệ</h2>
+    
+    <div class="table-wrapper anim-target anim-delay-2">
+      <table>
+        <thead>
+          <tr><th>Engine</th><th>AI Support</th><th>MCP Status</th><th>Tooling</th><th>Chi phí</th><th>Kết luận</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Unreal</strong></td><td>Hạn chế</td><td>Dự kiến 2026</td><td>Nặng, phức tạp</td><td>Có phí</td><td style="color:var(--red)">❌ Chưa sẵn sàng</td></tr>
+          <tr><td><strong>Unity</strong></td><td>Mới ra MCP</td><td>Chưa hoàn chỉnh</td><td>Tốt nhưng đóng kín</td><td>Có phí</td><td style="color:var(--yellow)">⚠️ Chưa đủ mature</td></tr>
+          <tr><td><strong>Cocos</strong></td><td>Hạn chế</td><td>Không có</td><td>IDE đóng kín</td><td>Free</td><td style="color:var(--red)">❌ Khó cho AI</td></tr>
+          <tr><td style="color:var(--green)"><strong>Godot ✅</strong></td><td style="color:var(--green)">Tiềm năng cao</td><td>Sơ khai</td><td>Open source, đơn giản</td><td>Free</td><td style="color:var(--green)">✅ Phù hợp nhất</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <h3 class="section-title anim-target anim-delay-3" style="margin-top:28px;">Lý do chọn Godot</h3>
+    <div class="card-grid cols-4 anim-target anim-delay-3">
+      <div class="card">
+        <h4>Open-source</h4>
+        <p>AI đọc hiểu engine code, docs đầy đủ</p>
+      </div>
+      <div class="card">
+        <h4>GDScript</h4>
+        <p>Cú pháp giống Python, AI gen chính xác</p>
+      </div>
+      <div class="card">
+        <h4>Lightweight</h4>
+        <p>Setup nhanh, không cần IDE nặng</p>
+      </div>
+      <div class="card">
+        <h4>Scene/Node</h4>
+        <p>Dễ cho AI hiểu và thao tác</p>
+      </div>
+    </div>
+    <div class="callout warning anim-target anim-delay-4">
+      <strong>Trade-off:</strong> Godot chưa có MCP nào hoàn chỉnh → phải tự xây dựng
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 5: SOURCE → DOCS ============================== -->
+<section class="slide" id="slide-4">
+  <div class="bg-mesh"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 03</div>
+    <h2 class="slide-title anim-target anim-delay-1">Source → Document Generation</h2>
+    
+    <div class="two-cols" style="margin-top:24px;">
+      <div>
+        <h3 class="section-title anim-target anim-delay-1">Mục đích</h3>
+        <p class="body-text anim-target anim-delay-2">Từ source code legacy (Cocos2d-JS) → sinh ra tài liệu thiết kế mà AI có thể dùng để build lại game client.</p>
+        
+        <h3 class="section-title anim-target anim-delay-2" style="margin-top:20px;">Cách làm</h3>
+        <ol class="styled-list anim-target anim-delay-2">
+          <li>Feed source code vào Claude → phân tích architecture, game flow, features</li>
+          <li>Sinh <strong>Design docs</strong> — feature list, game flow, UI flow</li>
+          <li>Sinh <strong>Architecture docs</strong> — kiến trúc hệ thống, data models</li>
+          <li>Sinh <strong>Feature specs</strong> — chi tiết từng chức năng</li>
+        </ol>
+        
+        <div class="callout info anim-target anim-delay-3">
+          <strong>Trick:</strong> Không đưa tất cả source code — sàng lọc nội dung trước, context lớn quá → AI không thể gen được.
+        </div>
+      </div>
+      <div>
+        <h3 class="section-title anim-target anim-delay-2">Kết quả</h3>
+        <ul class="bullet-list anim-target anim-delay-3">
+          <li>AI phân tích source code legacy <strong>tương đối tốt</strong></li>
+          <li>Output docs gần như đầy đủ về kiến trúc và chức năng</li>
+          <li>Cần human review và bổ sung chi tiết</li>
+          <li>Docs trở thành <strong>input chính</strong> cho các phase sau</li>
+        </ul>
+        
+        <div class="code-box anim-target anim-delay-3" style="margin-top:20px; font-size:17px;">Phân tích source code [file/folder] này.
+Sinh ra document bao gồm:
+1. Tổng quan kiến trúc
+2. Danh sách features và game flow
+3. Data models
+4. UI/UX flow description
+Format: Markdown, chi tiết đủ để
+developer mới hiểu và implement lại.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 6: AI KNOWLEDGE BASE ============================== -->
+<section class="slide" id="slide-5">
+  <div class="bg-gradient-cool"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 04</div>
+    <h2 class="slide-title anim-target anim-delay-1">AI-Readable Knowledge Base</h2>
+    <p class="subtitle anim-target anim-delay-2" style="margin-bottom:24px;">Cấu trúc hóa docs cho Agent — từ "ngôn ngữ human" sang "ngôn ngữ AI"</p>
+    
+    <div class="two-cols">
+      <div>
+        <div class="code-box anim-target anim-delay-2" style="font-size:17px;">docs/
+├── ARCHITECTURE.md   — Kiến trúc tổng quan
+├── GLOSSARY.md       — Thuật ngữ thống nhất
+├── PDG.md            — Coding standards
+├── SCHEMA.md         — Data models
+├── GAME_LOGIC.md     — Luật chơi, game rules
+└── SCENE_FLOW.md     — UI flow, transitions</div>
+        
+        <div class="compare-grid anim-target anim-delay-3" style="margin-top:16px;">
+          <div class="compare-card bad">
+            <div class="compare-label">❌ Không có Phase 2.5</div>
+            <p>Agent A dùng "diamond", Agent B dùng "gem"<br>→ Conflict, không ghép được</p>
+          </div>
+          <div class="compare-card good">
+            <div class="compare-label">✅ Có Phase 2.5</div>
+            <p>Mọi agent đọc cùng 1 bộ docs chuẩn<br>→ Ghép được ngay, ít conflict</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 class="section-title anim-target anim-delay-2">Nguyên tắc thiết kế docs cho AI</h3>
+        <div class="card-grid" style="margin-top:8px;">
+          <div class="card anim-target anim-delay-2">
+            <h4>Structured > Narrative</h4>
+            <p>Table, schema, enum thay vì paragraph dài</p>
+          </div>
+          <div class="card anim-target anim-delay-3">
+            <h4>Explicit > Implicit</h4>
+            <p>Ghi rõ mọi thứ, AI không đoán giỏi</p>
+          </div>
+          <div class="card anim-target anim-delay-3">
+            <h4>Single source of truth</h4>
+            <p>Mỗi thông tin chỉ nằm 1 chỗ</p>
+          </div>
+          <div class="card anim-target anim-delay-4">
+            <h4>Vừa đủ context</h4>
+            <p>Không dài (lost focus), không ngắn (thiếu)</p>
+          </div>
+        </div>
+        
+       
+      </div>
+    </div>
+    <div class="callout info anim-target anim-delay-4" style="margin-top:16px; font-size:16px;">
+      <strong>Insight:</strong> Giống onboarding document cho dev mới — nhưng tối ưu cho AI. Đầu tư bước này tiết kiệm rất nhiều thời gian fix conflict ở phase sau.
+    </div>
+  </div>
+
+    
+</section>
+
+<!-- ============================== SLIDE 7: MCP DOCS ============================== -->
+<section class="slide" id="slide-6">
+  <div class="bg-gradient-warm"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 05a</div>
+    <h2 class="slide-title anim-target anim-delay-1">MCP Docs — Train AI viết đúng Godot</h2>
+    <p class="subtitle anim-target anim-delay-1" style="margin-bottom:20px;">~15h phát triển</p>
+    
+    <div class="two-cols">
+      <div>
+        <h3 class="section-title anim-target anim-delay-1">Bài toán</h3>
+        <p class="body-text anim-target anim-delay-2">AI train trên Godot docs cũ → gen code sai API, sai syntax giữa các version.</p>
+        
+        <h3 class="section-title anim-target anim-delay-2" style="margin-top:20px;">Quá trình giải quyết</h3>
+        <ol class="styled-list anim-target anim-delay-2">
+          <li>Nghiên cứu sâu hệ thống AI: cách gọi tool, skill files, rule system</li>
+          <li><strong>Nhận ra:</strong> Skill files quá nhiều docs, context window không đủ</li>
+          <li><strong>Giải pháp:</strong> Build MCP Docs Server — searchable API</li>
+        </ol>
+
+        <div class="code-box anim-target anim-delay-3" style="margin-top:16px; font-size:17px;">MCP Docs Server (Godot 4.6)
+├── Qdrant vector database
+├── FastMCP (SSE transport)
+├── API change map (4.0 → 4.6)
+├── Nginx reverse proxy
+└── Docker Compose deployment</div>
+      </div>
+      <div>
+        <h3 class="section-title anim-target anim-delay-2">3 Iterations</h3>
+        <div class="table-wrapper anim-target anim-delay-3">
+          <table>
+            <thead><tr><th>Ver</th><th>Vấn đề</th><th>Fix</th></tr></thead>
+            <tbody>
+              <tr><td>v1</td><td>Docs chưa đủ, search sai</td><td>Bổ sung data, improve chunking</td></tr>
+              <tr><td>v2</td><td>Chunking chưa tối ưu</td><td>Chunking khác, improve model</td></tr>
+              <tr><td style="color:var(--green)">v3 ✅</td><td>Hoạt động chuẩn</td><td>Tối ưu relevance scoring</td></tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="callout success anim-target anim-delay-4" style="margin-top:16px;">
+          <strong>Giá trị:</strong> MCP Docs Server có thể share cho cả team — self-hosted, dùng chung
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 8: MCP EDITOR ============================== -->
+<section class="slide" id="slide-7">
+  <div class="bg-mesh"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 05b</div>
+    <h2 class="slide-title anim-target anim-delay-1">MCP Godot Editor</h2>
+    <p class="subtitle anim-target anim-delay-1" style="margin-bottom:20px;">Control toàn bộ dev pipeline — ~40h+ phát triển</p>
+    
+    <div class="callout danger anim-target anim-delay-2" style="margin-bottom:20px;">
+      <strong>Không có giải pháp nào có sẵn</strong> đáp ứng yêu cầu "AI agent tự động 100%" → Quyết định: <strong>Tự build</strong>
+    </div>
+    
+    <div class="card-grid cols-4 anim-target anim-delay-2">
+      <div class="card">
+        <div class="card-icon orange">📝</div>
+        <h4>Code Generation</h4>
+        <p>Tạo/sửa GDScript files</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">🎭</div>
+        <h4>Scene Management</h4>
+        <p>Tạo scene, add/remove nodes</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">🎨</div>
+        <h4>Art Integration</h4>
+        <p>Import assets, setup textures</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">▶️</div>
+        <h4>Runtime Control</h4>
+        <p>Play/stop/pause từ AI</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">🐛</div>
+        <h4>Debug & Logging</h4>
+        <p>Console output, stack traces</p>
+      </div>
+      <div class="card">
+        <div class="card-icon yellow">📸</div>
+        <h4>Screenshot</h4>
+        <p>Chụp screen để đánh giá</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">🔍</div>
+        <h4>Inspector</h4>
+        <p>Đọc node properties, tree</p>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">🔄</div>
+        <h4>Hot Reload</h4>
+        <p>Apply changes không restart</p>
+      </div>
+    </div>
+    
+    <div class="stat-grid anim-target anim-delay-3" style="margin-top:24px;">
+      <div class="stat-box">
+        <div class="stat-value">180+</div>
+        <div class="stat-label">Commands</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Tự chủ AI</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">3+</div>
+        <div class="stat-label">Ngày phát triển</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">∞</div>
+        <div class="stat-label">Đang tiếp tục update</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 9: ART INTEGRATION ============================== -->
+<section class="slide" id="slide-8">
+  <div class="bg-gradient-green"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 05c</div>
+    <h2 class="slide-title anim-target anim-delay-1">Art Integration — 60% → 99%</h2>
+    
+    <div class="two-cols" style="margin-top:20px;">
+      <div>
+        <h3 class="section-title anim-target anim-delay-1">Quá trình cải thiện</h3>
+        <div style="margin-top:16px;">
+          <div class="progress-item anim-target anim-delay-2">
+            <div class="progress-header"><span>Giai đoạn 1: AI tự ghép</span><span>60%</span></div>
+            <div class="progress-track"><div class="progress-fill orange" style="width:0%" data-width="60%"></div></div>
+          </div>
+          <div class="progress-item anim-target anim-delay-3">
+            <div class="progress-header"><span>Giai đoạn 2: + OpenCV detection</span><span>75%</span></div>
+            <div class="progress-track"><div class="progress-fill blue" style="width:0%" data-width="75%"></div></div>
+          </div>
+          <div class="progress-item anim-target anim-delay-4">
+            <div class="progress-header"><span>Giai đoạn 3: + PS Metadata</span><span>99%</span></div>
+            <div class="progress-track"><div class="progress-fill green" style="width:0%" data-width="99%"></div></div>
+          </div>
+        </div>
+
+        <div class="callout info anim-target anim-delay-4" style="margin-top:16px;">
+          <strong>Đổi hướng tư duy:</strong> Thay vì fix đầu ra (detect position) → fix đầu vào (export kèm metadata)
+        </div>
+      </div>
+      <div>
+        <h3 class="section-title anim-target anim-delay-2">UXP Photoshop Plugin</h3>
+        <p class="body-text anim-target anim-delay-2">Plugin export: PSD layers → PNG + JSON metadata</p>
+        
+        <div class="code-box anim-target anim-delay-3" style="font-size:17px;">{
+  "layer_name": "btn_play",
+  "position": { "x": 540, "y": 960 },
+  "size": { "width": 280, "height": 80 },
+  "parent_group": "lobby_ui",
+  "layer_type": "button",
+  "font": { "family": "Arial", "size": 24 },
+  "effects": ["drop_shadow", "outer_glow"]
+}</div>
+        
+        <div class="card-grid cols-2 anim-target anim-delay-4" style="margin-top:16px;">
+          <div class="card" style="padding:16px;">
+            <h4 style="font-size:13px;">✅ Position & Anchor</h4>
+          </div>
+          <div class="card" style="padding:16px;">
+            <h4 style="font-size:13px;">✅ Typography</h4>
+          </div>
+          <div class="card" style="padding:16px;">
+            <h4 style="font-size:13px;">✅ Layer Hierarchy</h4>
+          </div>
+          <div class="card" style="padding:16px;">
+            <h4 style="font-size:13px;">✅ Tinh chỉnh tối thiểu</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 10: ANIMATION ============================== -->
+<section class="slide" id="slide-9">
+  <div class="bg-gradient-warm"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 06</div>
+    <h2 class="slide-title anim-target anim-delay-1">Animation & Visual Scene Understanding</h2>
+    <div class="callout warning anim-target anim-delay-1" style="margin-bottom:20px;">
+      🟡 <strong>Đang nghiên cứu</strong> — có kết quả ban đầu khả quan
+    </div>
+    
+    <div class="two-cols">
+      <div>
+        <h3 class="section-title anim-target anim-delay-2">Giải pháp: Tách agent theo chuyên môn</h3>
+        <div class="diagram-box anim-target anim-delay-2">┌─────────────────────────────────┐
+│       ORCHESTRATOR AGENT        │
+├──────────┬──────────┬───────────┤
+│ 📊 Logic │ 🎨 Art   │ 💻 Code  │
+│  Agent   │  Agent   │  Agent   │
+│          │          │          │
+│ Flow,    │ Visual   │ Implement│
+│ state    │ quality  │ effect   │
+└──────────┴──────────┴───────────┘</div>
+      </div>
+      <div>
+        <h3 class="section-title anim-target anim-delay-2">Workflow</h3>
+        <ol class="styled-list anim-target anim-delay-3">
+          <li><strong>INPUT</strong> — Capture hình ảnh + Layout art + Logic flow</li>
+          <li><strong>ANALYSIS</strong> — Art Agent phân tích → đề xuất effect, animation</li>
+          <li><strong>SCRIPTING</strong> — Ra kịch bản effect (sequence, timing, easing)</li>
+          <li><strong>IMPLEMENT</strong> — Code Agent ghép vào Godot</li>
+          <li><strong>REVIEW</strong> — Screenshot → Art Review Agent đánh giá → chỉnh sửa</li>
+          <li><strong>DONE</strong> khi đạt quality threshold</li>
+        </ol>
+        
+        <div class="callout success anim-target anim-delay-4">
+          <strong>Key insight:</strong> Ràng buộc agent tốt, context ngắn, đúng trọng tâm → kết quả tốt
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 11: PROMPT & SKILL ============================== -->
+<section class="slide" id="slide-10">
+  <div class="bg-gradient-cool"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 07</div>
+    <h2 class="slide-title anim-target anim-delay-1">Prompt Engineering & Skill System</h2>
+    
+    <div class="two-cols" style="margin-top:20px;">
+      <div>
+        <h3 class="section-title anim-target anim-delay-1">Approach: AI build skill cho AI</h3>
+        <ol class="styled-list anim-target anim-delay-2">
+          <li>Mô tả mục tiêu cho AI</li>
+          <li>AI tự build skill file (SKILL.md) cho sub-agent</li>
+          <li>Human review + chỉnh sửa</li>
+          <li>Iterate cho đến khi đạt <strong>10/10</strong></li>
+        </ol>
+        <div class="callout info anim-target anim-delay-3" style="margin-top:16px;">
+          <strong>Prompt chính:</strong> <em>"Hãy xem xét, bổ sung, và tối ưu, để đạt được agent tự động 10/10"</em>
+        </div>
+        
+        <div class="code-box anim-target anim-delay-4" style="margin-top:16px; font-size:17px;">CLAUDE.md (lean, <500 tokens)
+├── Core rules: ALWAYS/NEVER
+├── Project context summary
+└── Pointers → docs/
+
+.claude/skills/
+├── m-ui-analyzer/SKILL.md
+├── m-asset-matcher/SKILL.md
+├── m-godot-scene-gen/SKILL.md
+└── m-docs-pdg/SKILL.md</div>
+      </div>
+      <div>
+        <h3 class="section-title anim-target anim-delay-2">Nguyên tắc quan trọng</h3>
+        <div class="card-grid anim-target anim-delay-3">
+          <div class="card">
+            <h4>1. Agent thiếu scope → hỏi lại</h4>
+            <p>Không tự suy đoán — hỏi lại khi thiếu thông tin</p>
+          </div>
+          <div class="card">
+            <h4>2. Context ngắn, đúng trọng tâm</h4>
+            <p>Quá nhiều context → AI confused</p>
+          </div>
+          <div class="card">
+            <h4>3. Tách logic vs art agent</h4>
+            <p>Đừng bắt 1 agent làm cả 2</p>
+          </div>
+          <div class="card">
+            <h4>4. Dùng "translator agent"</h4>
+            <p>Agent trung gian biên dịch ý người dùng trước khi giao task</p>
+          </div>
+        </div>
+        <div class="callout info anim-target anim-delay-4" style="margin-top:16px;">
+          <strong>💡</strong> <em>"Bản thân thường hay nói thiếu ngữ cảnh → hãy có 1 con agent ở giữa biên dịch lại để hiểu ý mình trước khi giao cho agent"</em>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 12: KẾT QUẢ ============================== -->
+<section class="slide" id="slide-11">
+  <div class="bg-gradient-green"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 08</div>
+    <h2 class="slide-title anim-target anim-delay-1">Kết quả & Đánh giá</h2>
+    
+    <div class="table-wrapper anim-target anim-delay-2">
+      <table>
+        <thead><tr><th>#</th><th>Deliverable</th><th>Trạng thái</th><th>Chất lượng</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>MCP Docs Server</strong> (Godot 4.6)</td><td><span class="badge done">✅ Done</span></td><td><span class="star">★★★★★</span> Production-ready</td></tr>
+          <tr><td>2</td><td><strong>MCP Godot Editor</strong> (custom)</td><td><span class="badge done">✅ Done</span></td><td><span class="star">★★★★★</span> Core, đang optimize</td></tr>
+          <tr><td>3</td><td><strong>UXP Photoshop Plugin</strong></td><td><span class="badge done">✅ Done</span></td><td><span class="star">★★★★</span> Hoạt động tốt</td></tr>
+          <tr><td>4</td><td><strong>Godot client</strong> (UI screens)</td><td><span class="badge done">✅ Done</span></td><td><span class="star">★★★★</span> 99% art accuracy</td></tr>
+          <tr><td>5</td><td><strong>Animation/Effect</strong> pipeline</td><td><span class="badge wip">🟡 R&D</span></td><td><span class="star">★★★</span> Kết quả ban đầu tốt</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="compare-grid anim-target anim-delay-3" style="margin-top:24px;">
+      <div class="compare-card good">
+        <div class="compare-label">✅ Ưu điểm</div>
+        <ul class="bullet-list" style="margin-top:8px;">
+          <li>Code <strong>clear và đúng ý</strong> khi ràng buộc tốt</li>
+          <li>Consistent style, well-structured</li>
+          <li>Test coverage tốt khi yêu cầu rõ ràng</li>
+        </ul>
+      </div>
+      <div class="compare-card bad">
+        <div class="compare-label">⚠️ Nhược điểm</div>
+        <ul class="bullet-list" style="margin-top:8px;">
+          <li>Cần verify kỹ — AI có thể "tự tin sai"</li>
+          <li>Long context → giảm chất lượng</li>
+          <li>Version-specific knowledge cần MCP hỗ trợ</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="formula-box anim-target anim-delay-4" style="margin-top:24px;">
+      Chất lượng = f(Ràng buộc skill) × f(Context quality) × f(Tooling support)
+    </div>
+    
+    <div class="stat-grid anim-target anim-delay-5" style="margin-top:20px; grid-template-columns: 1fr 1fr;">
+      <div class="stat-box">
+        <div class="stat-value">95-99%</div>
+        <div class="stat-label">Peak limit usage</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">2 tuần</div>
+        <div class="stat-label">Thời gian chạy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SLIDE 13: BÀI HỌC & ROADMAP ============================== -->
+<section class="slide" id="slide-12">
+  <div class="bg-mesh"></div>
+  <div class="bg-grid"></div>
+  <div class="slide-inner">
+    <div class="slide-label anim-target">Phần 09 — 11</div>
+    <h2 class="slide-title anim-target anim-delay-1">Bài học & Roadmap</h2>
+    
+    <div class="do-dont-grid anim-target anim-delay-2">
+      <div class="do-card">
+        <h4>✅ Điều nên làm (DO)</h4>
+        <ul>
+          <li><strong>Luôn chạy test</strong> — đừng tin lời AI, AI xác suất</li>
+          <li><strong>Ràng buộc kỹ CLAUDE.md</strong> — ALWAYS/NEVER rõ ràng</li>
+          <li><strong>Tách agent theo chuyên môn</strong> — logic, art, code riêng</li>
+          <li><strong>Fix ở đầu vào</strong> — metadata từ Photoshop tốt hơn detect bằng OpenCV</li>
+          <li><strong>AI build skill cho AI</strong> → human review → iterate 10/10</li>
+          <li><strong>Translator agent</strong> — biên dịch ý trước khi giao task</li>
+          <li><strong>Invest vào tooling</strong> — MCP Docs + Editor là nền tảng</li>
+        </ul>
+      </div>
+      <div class="dont-card">
+        <h4>❌ Điều cần tránh (DON'T)</h4>
+        <ul>
+          <li><strong>Đừng skip test</strong> — đặc biệt game logic</li>
+          <li><strong>Đừng nhồi quá nhiều context</strong> — AI confused</li>
+          <li><strong>Đừng 1 agent làm mọi thứ</strong> — tách ra</li>
+          <li><strong>Đừng dựa MCP bên thứ 3</strong> — custom phù hợp hơn</li>
+          <li><strong>Đừng kỳ vọng AI đúng 100%</strong> — iterate là bình thường</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="two-cols anim-target anim-delay-3" style="margin-top:24px;">
+      <div>
+        <h3 class="section-title">🎯 Ngắn hạn</h3>
+        <ul class="roadmap-list">
+          <li class="roadmap-item"><div class="roadmap-dot"></div>Hoàn thiện Animation/Effect pipeline</li>
+          <li class="roadmap-item"><div class="roadmap-dot"></div>Document hóa MCP Godot Editor cho team</li>
+          <li class="roadmap-item"><div class="roadmap-dot"></div>Team onboarding — setup workflow cho dev</li>
+          <li class="roadmap-item"><div class="roadmap-dot"></div>Tự động hóa spec → implement pipeline</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="section-title">🚀 Dài hạn</h3>
+        <ul class="roadmap-list">
+          <li class="roadmap-item"><div class="roadmap-dot"></div>Multi-agent orchestrator end-to-end</li>
+          <li class="roadmap-item"><div class="roadmap-dot"></div>Visual QA agent — tự đánh giá UI quality</li>
+        </ul>
+        <div class="callout info" style="margin-top:20px;">
+          <em>Tài liệu này sẽ được cập nhật khi có thêm kết quả.</em>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ====== INTERSECTION OBSERVER FOR ANIMATIONS ======
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      
+      // Animate progress bars
+      entry.target.querySelectorAll('.progress-fill[data-width]').forEach(bar => {
+        setTimeout(() => {
+          bar.style.width = bar.dataset.width;
+        }, 500);
+      });
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.anim-target').forEach(el => observer.observe(el));
+
+// ====== NAVIGATION DOTS ======
+const slides = document.querySelectorAll('.slide');
+const navContainer = document.getElementById('navDots');
+const labels = ['Cover', 'Roadmap', 'Tổng quan', 'Công nghệ', 'Source→Doc', 'Knowledge', 'MCP Docs', 'MCP Editor', 'Art', 'Animation', 'Skill', 'Kết quả', 'Bài học'];
+
+slides.forEach((_, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot';
+  dot.dataset.label = labels[i] || '';
+  dot.addEventListener('click', () => {
+    slides[i].scrollIntoView({ behavior: 'smooth' });
+  });
+  navContainer.appendChild(dot);
+});
+
+// ====== SCROLL TRACKING ======
+const counter = document.getElementById('slideCounter');
+const progressBar = document.getElementById('progressBar');
+const dots = navContainer.querySelectorAll('.nav-dot');
+
+function updateNav() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  progressBar.style.width = progress + '%';
+  
+  let activeIndex = 0;
+  slides.forEach((slide, i) => {
+    const rect = slide.getBoundingClientRect();
+    if (rect.top < window.innerHeight / 2) activeIndex = i;
+  });
+  
+  counter.innerHTML = `<span>${String(activeIndex + 1).padStart(2, '0')}</span> / ${slides.length}`;
+  dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
+}
+
+window.addEventListener('scroll', updateNav, { passive: true });
+updateNav();
+
+// ====== KEYBOARD NAVIGATION ======
+document.addEventListener('keydown', (e) => {
+  const scrollTop = window.scrollY;
+  let activeIndex = 0;
+  slides.forEach((slide, i) => {
+    const rect = slide.getBoundingClientRect();
+    if (rect.top < window.innerHeight / 2) activeIndex = i;
+  });
+  
+  if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+    e.preventDefault();
+    if (activeIndex < slides.length - 1) {
+      slides[activeIndex + 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+    e.preventDefault();
+    if (activeIndex > 0) {
+      slides[activeIndex - 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+});
+</script>
+</body>
+</html>
